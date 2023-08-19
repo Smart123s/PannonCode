@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <title>PE Web1 Mintafeladatsor</title>
+    <!--
+        Pannon Web 1 Elorehozott vizsga Mintafeladatsor (1. 2. feladat)
+        https://mik.uni-pannon.hu/docs/ismell/230731-web-programozas-i-mintafeladatsor.pdf
+    -->
+    <style>
+        header {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            height: 100px;
+        }
+
+        .topMenu {
+            display: flex;
+            justify-content: space-between;
+            vertical-align: top;
+        }
+
+        .topMenu .tsm {
+            padding: 10px 30px;
+            background-color: green;
+            border: 1px solid black;
+            color: white;
+            margin: 20px;
+            width: fit-content;
+            height: fit-content;
+        }
+
+        .topMenu .tsm:hover {
+            background-color: yellow;
+            color: red;
+        }
+
+        .subMenu {
+            display: none;
+        }
+
+        .subMenu:hover,
+        .menuProducts:hover .subMenu {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .subMenu a,
+        .subMenu .smu {
+            color: red;
+            background-color: transparent;
+            border: 0px solid black;
+        }
+
+        .subMenu a {
+            color: black;
+        }
+
+        .subMenu a.smu:hover {
+            color: black;
+            text-decoration: underline;
+            background-color: transparent;
+        }
+
+        .center {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .rndtext {
+            display: flex;
+            justify-content:space-around;
+        }
+
+        p {
+            columns: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="topMenu">
+            <div class="tsm"><a>Rólunk</a></div>
+            <div class="menuProducts">
+                <div class="tsm">
+                    <a>Termékek</a>
+                </div>
+                <div class="subMenu">
+                    <a class="smu">LCD</a>
+                    <a>.</a>
+                    <a class="smu">TFT</a>
+                    <a>.</a>
+                    <a class="smu">Plazma</a>
+                </div>
+            </div>
+            <div class="tsm"><a>Kapocslat</a></div>
+
+        </div>
+    </header>
+    <div class="center"><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg" alt="foto" width="500"></div>
+        <p>
+            Fent tartalmazzon egy 3 elemből álló menüsort, alatta legyen egy tetszőleges kép, majd a kép alatt
+            tetszőleges szöveg 2 hasábban. (7 pont) 2. Az előző feladat menüsorát alakítsa át interaktívvá (ahogy az az
+            1. feladat ábráján látható): ha egy főmenüpont fölé visszük az egeret, az változzon át zöldről sárga
+            színűvé. Ha ez a középső menüpont, akkor jelenjen meg alatta az addig nem látható almenü-sor. Az almenü is
+            viselkedjen interaktívan: ha egy eleme fölé visszük az egeret, változzon a színe pirosról feketére és váljon
+            aláhúzottá. (10 pont) 3. Hozza létre a következő táblázatot (figyeljen a cella-összevonásokra és a
+            színezésre): (8 pont)
+            ont 2. Az előző feladat menüsorát alakítsa át interaktívvá (ahogy az az
+            1. feladat ábráján látható): ha egy főmenüpont fölé visszük az egeret, az változzon át zöldről sárga
+            színűvé. Ha ez a középső menüpont, akkor 
+        </p>
+</body>
+
+</html>
