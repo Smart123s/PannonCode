@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <title>PE Web1 Mintafeladatsor</title>
+    <!--
+        Pannon Web 1 Elorehozott vizsga Mintafeladatsor (4. feladat)
+        https://mik.uni-pannon.hu/docs/ismell/230731-web-programozas-i-mintafeladatsor.pdf
+    -->
+    <!--
+        Example solution at http://books.gigatux.nl/mirror/javascriptandajax/0321430328/ch07lev1sec6.html
+        Columns are not spaced there either
+    -->
+    <script>
+        function c() {
+            document.getElementById("sunroof").disabled = !document.getElementById("doors2").checked
+        }
+    </script>
+</head>
+
+<body>
+    <h4>Car picker</h4>
+    <form>
+        <p>
+            <label for="email">Email Address</label>
+            <input name="email" id="email">
+        </p>
+        <p>
+            <span>Color</span>
+            <select id="color" name="color">
+                <option>red</option>
+            </select>
+        </p>
+        <p>
+            <span>Options</span>
+            <input id="sunroof" name="sunroof" type="checkbox" checked>
+            <label for="sunroof">Sunroof (Two door only)</label>
+            <input id="pwindow" name="pwindow" type="checkbox" checked>
+            <label for="pwindow">Power Windows</label>
+        </p>
+        <p>
+            <span>Doors</span>
+            <input id="doors2" name="doors" type="radio" value="2" onchange="c()" checked>
+            <label for="doors2">Two</label>
+            <input id="doors4" name="doors" type="radio" value="4" onchange="c()">
+            <label for="doors4">Four</label>
+        </p>
+        <p>
+            <label for="dealer">Enter your Zip code or pick the dealer nearest you:</label>
+            <br>
+            <select id="dealer" name="dealer" size="4">
+                <option value="1">California -- Lemon Grove</option>
+                <option value="2">California -- Lomita</option>
+                <option value="3">California -- Long Beach</option>
+                <option value="4">California -- Los Alamitos</option>
+                <option value="5">???</option>
+            </select>
+        </p>
+        <p>
+            <label for="zip">Zip</label>
+            <input name="zip" id="zip">
+        </p>
+        <input type="submit">
+        <input type="reset">
+    </form>
+</body>
+
+</html>
