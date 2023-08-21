@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <title>PE Web1 Mintafeladatsor</title>
+    <!--
+        Pannon Web 1 Elorehozott vizsga Mintafeladatsor (5. feladat)
+        https://mik.uni-pannon.hu/docs/ismell/230731-web-programozas-i-mintafeladatsor.pdf
+    -->
+    <script>
+        var colors = ["red"]
+        function add_color() {
+            let v = document.getElementById("color_in").value
+            colors.push(v)
+            document.getElementById("colors").innerText += "\n" + v
+        }
+
+        function shapeSelect() {
+            let dd = document.getElementById("shapeDetalis")
+            if (document.getElementById("shape").value === "Kör") {
+                document.getElementById("circle_details").style.display = "block"
+                document.getElementById("rectangle_details").style.display = "none"
+            } else {
+                document.getElementById("rectangle_details").style.display = "block"
+                document.getElementById("circle_details").style.display = "none"
+            }
+            
+        }
+
+        function getRandomColor() {
+            return colors[Math.round(Math.random() * (colors.length - 1))]
+        }
+
+        function draw_rectangle() {
+            let da = document.getElementById("drawing_area")
+
+            da.innerHTML = ""
+
+            let a = document.getElementById("side_a").value
+            let b = document.getElementById("side_b").value
+
+            let areap = document.createElement("p");
+            areap.innerText = "Terület: " + (a * b);
+            da.appendChild(areap)
+
+            s = document.createElement("div")
+            s.id = "dshape"
+            s.style.border = "1px solid black"
+            s.style["height"] = a + "cm"
+            s.style["width"]= b + "cm"
+            s.style["background-color"] = getRandomColor()
+            da.appendChild(s)
+        }
+
+        function draw_circle() {
+            let da = document.getElementById("drawing_area")
+
+            da.innerHTML = ""
+
+            let r = document.getElementById("radius").value
+
+            let areap = document.createElement("p");
+            areap.innerText = "Terület: " + (r * r * Math.PI);
+            da.appendChild(areap)
+
+            s = document.createElement("div")
+            s.id = "dshape"
+            s.style.border = "1px solid black"
+            s.style["height"] = r + "cm"
+            s.style["width"]= r + "cm"
+            s.style["border-radius"]= "50%"
+            s.style["background-color"] = getRandomColor()
+            da.appendChild(s)
+        }
+    </script>
+</head>
+
+<body>
+<div id="color_div">
+    <input id="color_in">
+    <button onclick="add_color()">Add color</button>
+    <p id="colors">red</p>
+</div>
+<select id="shape">
+    <option>Kör</option>
+    <option>Téglalap</option>
+</select>
+<button onclick="shapeSelect()">Legördülő menü melletti gomb</button>
+<div id="shapeDetalis">
+    <div id="circle_details"  style="display: none;">
+        <span>Sugár: </span>
+        <input id="radius" type="number">
+        <button onclick="draw_circle()">Draw</button>
+    </div>
+    <div id="rectangle_details" style="display: none;">
+        <span>A oldal: </span>
+        <input id="side_a" type="number">
+        <span>B oldal: </span>
+        <input id="side_b" type="number">
+        <button onclick="draw_rectangle()">Draw</button>
+    </div>
+</div>
+<div id="drawing_area"></div>
+</body>
+
+</html>
