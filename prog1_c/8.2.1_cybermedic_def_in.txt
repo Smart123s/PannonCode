@@ -1,0 +1,5 @@
+192.168.0.1 Gateway
+8.8.8.8 Google
+1.1.1.1 Cloudflare
+9.9.9.9 QuadNine
+78.69.142.32 External
