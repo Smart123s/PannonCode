@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Feladat2</title>
+</head>
+
+<body>
+    <h1>WEBPROG II. Számkitaláló játék</h1>
+    <p>Kérek egy számot 1 és 100 között: <input id="inp"></p>
+    <button onclick="och()">Teszt!</button><br>
+    <input id="outp" style="width: 400px;">
+</body>
+<script>
+    var r = Math.round((Math.random() + 1) * 99)
+    var inp = document.getElementById("inp");
+    var outp = document.getElementById("outp");
+    function och() {
+        if (inp.value == r) {
+            alert("Siker")
+            r = Math.round((Math.random() + 1) * 99)
+            outp.value = "Ok!"
+        } else if (inp.value > r) {
+            outp.value = "Too high, try again!"
+        } else if (inp.value < r) {
+            outp.value = "Too low, try again!"
+        }
+    }
+</script>
+
+</html>
