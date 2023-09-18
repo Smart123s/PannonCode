@@ -3,45 +3,74 @@
 <head>
   <title>Feladat 3</title>
   <style>
-    td, th {
+    td,
+    th {
       border: 1px solid black;
     }
   </style>
   <script>
+    var asc = false;
     function och() {
-      document.getElementById("users").style["display"] = "block"
-      fetch("get_users").then(((r) => {
-        r.text().then((r) => {
-          let table = document.getElementById("users")
-          for (e of JSON.parse(r)) {
-            let row = document.createElement("tr");
+      const a = (async () => {
+        let table = document.getElementById("users")
+        table.style["display"] = "block"
+        let r1 = await fetch("get_users")
+        let r = await r1.text()
+        d = JSON.parse(r)
+        return d
 
-            let name = document.createElement("td")
-            name.innerText = e.name
-            row.appendChild(name);
+      })().then(() => {
+        showData()
+      })
 
-            let age = document.createElement("td")
-            age.innerText = e.age
-            row.appendChild(age);
+    }
 
-            let student = document.createElement("td")
-            student.innerText = e.student
-            row.appendChild(student);
+    function showData() {
+      let table = document.getElementById("users")
+      table.innerHTML = `      <tr id="trh">
+        <th onclick="srt()">Name</th>
+        <th>Age</th>
+        <th>Student</th>
+        <th>Working</th>
+        <th>Gender</th>
+      </tr>`
+      for (e of d) {
+        let row = document.createElement("tr");
 
-            let working = document.createElement("td")
-            working.innerText = e.working
-            row.appendChild(working);
+        let name = document.createElement("td")
+        name.innerText = e.name
+        row.appendChild(name);
 
-            let gender = document.createElement("td")
-            gender.innerText = e.gender
-            row.appendChild(gender);
+        let age = document.createElement("td")
+        age.innerText = e.age
+        row.appendChild(age);
 
-            row.style.backgroundColor = e.color
+        let student = document.createElement("td")
+        student.innerText = e.student
+        row.appendChild(student);
 
-            table.appendChild(row);
-          }
-        })
-      }))
+        let working = document.createElement("td")
+        working.innerText = e.working
+        row.appendChild(working);
+
+        let gender = document.createElement("td")
+        gender.innerText = e.gender
+        row.appendChild(gender);
+
+        row.style.backgroundColor = e.color
+
+        table.appendChild(row);
+      }
+    }
+
+    function srt() {
+      asc = !asc;
+      if (asc) {
+        d.sort((a, b) => a.name.localeCompare(b.name))
+      } else {
+        d.sort((a, b) => b.name.localeCompare(a.name))
+      }
+      showData();
     }
   </script>
 </head>
@@ -83,7 +112,7 @@
   <table>
     <tbody id="users" style="display: none;">
       <tr id="trh">
-        <th>Name</th>
+        <th onclick="srt()">Name</th>
         <th>Age</th>
         <th>Student</th>
         <th>Working</th>
