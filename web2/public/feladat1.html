@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Feladat1</title>
+</head>
+
+<body>
+    <form>
+        <select name="music" id="music" onchange="och()">
+        </select>
+    </form>
+    <div>
+        <p>id: <span id="ids"></span></p>
+        <p>artist: <span id="ars"></span></p>
+        <p>title: <span id="tis"></span></p>
+    </div>
+    <iframe id="ytm" width="560" height="315" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</body>
+<script>
+    text = `
+<root><music>
+  <id>WUS1D2UeFg8</id>
+  <artist>Keanu Silva, Jhn McFly, Marissa</artist>
+  <title>Stranger</title>
+</music>
+<music>
+  <id>edP0L6LQzZE</id>
+  <artist>Kesha</artist>
+  <title>Take It Off</title>
+</music></root>`;
+
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(text, "text/xml");
+    let m = xmlDoc.getElementsByTagName("music")
+
+    let l = document.getElementById("music");
+
+    var v = []
+
+    for (e of m) {
+        o = document.createElement("option")
+        a = o.innerText = e.getElementsByTagName("artist")[0].innerHTML
+        t = o.innerText = e.getElementsByTagName("title")[0].innerHTML
+        o.innerText = a + " - " + t
+        o.value = e.getElementsByTagName("id")[0].innerHTML
+        l.appendChild(o)
+        v[e.getElementsByTagName("id")[0].innerHTML] = {
+            title: e.getElementsByTagName("title")[0].innerHTML,
+            artist: e.getElementsByTagName("artist")[0].innerHTML,
+        }
+    }
+
+    function och() {
+        let id = document.getElementById("music").value
+        document.getElementById("ytm").src = "https://youtube.com/embed/" + id
+        document.getElementById("ids").innerText = id;
+        document.getElementById("ars").innerText = v[id].artist
+        document.getElementById("tis").innerText = v[id].title
+    }
+
+    och()
+</script>
+
+</html>
