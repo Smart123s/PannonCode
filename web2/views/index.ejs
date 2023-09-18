@@ -1,0 +1,96 @@
+<html>
+
+<head>
+  <title>Feladat 3</title>
+  <style>
+    td, th {
+      border: 1px solid black;
+    }
+  </style>
+  <script>
+    function och() {
+      document.getElementById("users").style["display"] = "block"
+      fetch("get_users").then(((r) => {
+        r.text().then((r) => {
+          let table = document.getElementById("users")
+          for (e of JSON.parse(r)) {
+            let row = document.createElement("tr");
+
+            let name = document.createElement("td")
+            name.innerText = e.name
+            row.appendChild(name);
+
+            let age = document.createElement("td")
+            age.innerText = e.age
+            row.appendChild(age);
+
+            let student = document.createElement("td")
+            student.innerText = e.student
+            row.appendChild(student);
+
+            let working = document.createElement("td")
+            working.innerText = e.working
+            row.appendChild(working);
+
+            let gender = document.createElement("td")
+            gender.innerText = e.gender
+            row.appendChild(gender);
+
+            row.style.backgroundColor = e.color
+
+            table.appendChild(row);
+          }
+        })
+      }))
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Bevitel</h1>
+  <h2>Color</h2>
+  <form action="/add_color">
+    <label for="color">Color: </label><br>
+    <input type="text" id="color" name="color" value="green"><br>
+    <input type="submit" value="Submit">
+  </form>
+  <h2>User</h2>
+  <form action="/add_user">
+    <label for="name">Name: </label><br>
+    <input type="text" id="name" name="name"><br>
+    <label for="age">Age: </label><br>
+    <input type="number" id="age" name="age"><br>
+    <input type="checkbox" id="student" name="student">
+    <label for="student">Student</label><br>
+    <input type="checkbox" id="working" name="working">
+    <label for="teacher">Working</label><br>
+    <input type="radio" id="male" name="gender" value="male">
+    <label for="male">Male</label><br>
+    <input type="radio" id="female" name="gender" value="female">
+    <label for="female">Female</label><br>
+    <label for="color">Color:</label>
+    <select name="color" id="color">
+      <% for (let c of colors) { %>
+        <option value="<%= c.color %>">
+          <%= c.color %>
+        </option>
+        <% } %>
+    </select><br>
+    <input type="submit" value="Submit">
+  </form>
+  <h1>Show</h1>
+  <button onclick="och()">megmutat</button>
+  <table>
+    <tbody id="users" style="display: none;">
+      <tr id="trh">
+        <th>Name</th>
+        <th>Age</th>
+        <th>Student</th>
+        <th>Working</th>
+        <th>Gender</th>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>
