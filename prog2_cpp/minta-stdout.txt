@@ -1,0 +1,172 @@
+main() eleje!
+
+
+----START OF PART1a----
+
+OsObjektum virtual destruktor: IGEN
+
+----END OF PART1a----
+
+
+----START OF PART1b----
+
+OsObjektum absztrakt: IGEN
+Teszt1 6 6
+Teszt2 80 140
+
+----END OF PART1b----
+
+
+----START OF PART1c----
+
+Nev: Teszt1, csucsok: 6, haromszogek: 6
+Nev: Teszt2, csucsok: 80, haromszogek: 140
+
+----END OF PART1c----
+
+
+----START OF PART2----
+
+Kocka az OsObjektum gyerekosztalya: IGEN
+Kocka 8 12
+
+----END OF PART2----
+
+
+----START OF PART3----
+
+Gula az OsObjektum gyerekosztalya: IGEN
+Gula 6 8
+Gula 21 38
+Gula 101 198
+
+----END OF PART3----
+
+
+----START OF PART4----
+
+TetraEder a Gula gyerekosztalya: IGEN
+Gula 4 4
+
+----END OF PART4----
+
+
+----START OF PART5a----
+
+t1<t2 : 0
+t1<t2 : 1
+t2<t1 : 1
+t2<t3 : 1
+t3<t1 : 0
+t3<t2 : 0
+
+----END OF PART5a----
+
+
+----START OF PART5b----
+
+Nev: Teszt1, csucsok: 6, haromszogek: 6
+Nev: Teszt2, csucsok: 5, haromszogek: 9
+Nev: Teszt1, csucsok: 12, haromszogek: 12
+fajlban:
+Nev: Teszt1, csucsok: 12, haromszogek: 12
+Nev: Teszt2, csucsok: 5, haromszogek: 9
+Nev: Teszt1, csucsok: 6, haromszogek: 6
+
+----END OF PART5b----
+
+
+----START OF PART5c----
+
+~t1 : 6
+~t2 : 9
+~t3 : 12
+
+----END OF PART5c----
+
+
+----START OF PART6a----
+
+500
+165
+1000
+
+----END OF PART6a----
+
+
+----START OF PART6b----
+
+Nev: Teszt1, csucsok: 234, haromszogek: 234
+Nev: Teszt2, csucsok: 121, haromszogek: TUL SOK
+Nev: Teszt1, csucsok: TUL SOK, haromszogek: TUL SOK
+Nev: Teszt2, csucsok: 121, haromszogek: TUL SOK
+Nev: Teszt1, csucsok: 234, haromszogek: 234
+Nev: Teszt2, csucsok: 121, haromszogek: TUL SOK
+
+----END OF PART6b----
+
+
+----START OF PART7a----
+
+Latszolag rendben
+
+----END OF PART7a----
+
+
+----START OF PART7b----
+
+Latszolag rendben
+
+----END OF PART7b----
+
+
+----START OF PART7c----
+
+0
+1
+2
+3
+4
+5
+
+----END OF PART7c----
+
+
+----START OF PART7d----
+
+Teszt1 6 6
+Teszt2 7 134
+Teszt2 1 25
+Teszt1 64 64
+Teszt2 87 243
+
+----END OF PART7d----
+
+
+----START OF PART7e----
+
+Teszt2 6 32
+Teszt2 63 544
+nullptr
+nullptr
+Teszt2 1 2
+nullptr
+nullptr
+Teszt1 231 231
+Teszt1 123 123
+nullptr
+
+----END OF PART7e----
+
+
+----START OF PART7f----
+
+Teszt2 43 32
+Teszt1 23 23
+Teszt1 23 23
+Teszt2 12 24
+Teszt2 12 24
+
+----END OF PART7f----
+
+main() vege!
