@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 const schemes = JSON.parse(fs.readFileSync('public/schemes.json', 'utf8'));
 
-app.post('/insert/:table', (req, res) => {
+app.put('/insert/:table', (req, res) => {
     db.serialize(() => {
         let table = req.params.table;
         // fura sql injection ellenőrzés :)
@@ -41,7 +41,10 @@ app.get('/select/:table', (req, res) => {
             return res.status(400).send("Table not found");
         }
 
-        db.all(`SELECT * FROM ${table}`, function (err, rows) {
+        // oké, ez viszont elég rendesen sebezhető
+        filter_text = req.query["filter"] ? " WHERE " + req.query["filter"] : "";
+
+        db.all(`SELECT * FROM ${table}${filter_text}`, function (err, rows) {
             if (err) {
                 return res.status(400).send(err.message);
             }
@@ -57,9 +60,9 @@ app.delete('/del/:table/', (req, res) => {
         if (schemes[table] === undefined) {
             return res.status(400).send("Table not found");
         }
-        let keys = schemes[table]["keys"];
-        let placeholders = keys.map((k) => `${k}=(?)`).join(' AND ');
-        db.run(`DELETE FROM ${table} WHERE ${placeholders}`, req.body["keys"], function (err) {
+        let columns = schemes[table]["columns"];
+        let placeholders = columns.map((k) => `${k}=(?)`).join(' AND ');
+        db.run(`DELETE FROM ${table} WHERE ${placeholders}`, req.body["original"], function (err) {
             if (err) {
                 return res.status(400).send(err.message);
             }

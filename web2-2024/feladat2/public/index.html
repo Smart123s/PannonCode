@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feladat 2</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <main>
+      <div style="margin-bottom: 12px;">
+        <span>Tábla:</span>
+        <select id="tableSelect" onchange="loadTable()"></select>
+        <span>Szűrő (SQL WHERE syntax):</span>
+        <input id="filterInp" value="" placeholder="AlbumId = 20">
+        <button onclick="filterBtn()">Szűrés</button>
+        <p>SQL Injection használata illetlen dolog. Senki ne bántsa szegény WHERE szűrőt &#128546;</p>
+        <p>Az innerHTML és az XSS nagyon szeretik egymást, ne válaszuk szét őket egymástól &#129392;</p>
+      </div>
+      <table></table>
+      <div id="big-warn">
+          <p>Az oldal alapból csak az első 100 elemet jeleníti meg, mivel néhány tábla túl nagy a minta adatbázisban,
+            ami miatt a böngésző lefagyott. Erre egy lehetséges megoldás a paginálás lenne, de az nem volt elvárás.
+          </p>
+          <button onclick="removeLimit()">Limit feloldása</button>
+      </div>
+    </main>
+  </body>
+</html>

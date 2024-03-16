@@ -1,3 +1,79 @@
 {
-  "albums": { "columns": ["AlbumId", "Title", "ArtistID"], "keys": ["AlbumId"] }
+  "albums": { "columns": ["AlbumId", "Title", "ArtistID"] },
+  "artists": { "columns": ["ArtistId", "Name"] },
+  "customers": {
+    "columns": [
+      "CustomerId",
+      "FirstName",
+      "LastName",
+      "Company",
+      "Address",
+      "City",
+      "State",
+      "Country",
+      "PostalCode",
+      "Phone",
+      "Fax",
+      "Email",
+      "SupportRepId"
+    ]
+  },
+  "employees": {
+    "columns": [
+      "EmployeeId",
+      "LastName",
+      "FirstName",
+      "Title",
+      "ReportsTo",
+      "BirthDate",
+      "HireDate",
+      "Address",
+      "City",
+      "State",
+      "Country",
+      "PostalCode",
+      "Phone",
+      "Fax",
+      "Email"
+    ]
+  },
+  "genres": { "columns": ["GenreId", "Name"] },
+  "invoices": {
+    "columns": [
+      "InvoiceId",
+      "CustomerId",
+      "InvoiceDate",
+      "BillingAddress",
+      "BillingCity",
+      "BillingState",
+      "BillingCountry",
+      "BillingPostalCode",
+      "Total"
+    ]
+  },
+  "invoice_items": {
+    "columns": [
+      "InvoiceLineId",
+      "InvoiceId",
+      "TrackId",
+      "UnitPrice",
+      "Quantity"
+    ]
+  },
+  "media_types": { "columns": ["MediaTypeId", "Name"] },
+  "playlists": { "columns": ["PlaylistId", "Name"] },
+  "playlist_track": { "columns": ["PlaylistId", "TrackId"] },
+  "tracks": {
+    "columns": [
+      "TrackId",
+      "Name",
+      "AlbumId",
+      "MediaTypeId",
+      "GenreId",
+      "Composer",
+      "Milliseconds",
+      "Bytes",
+      "UnitPrice"
+    ]
+  }
 }
