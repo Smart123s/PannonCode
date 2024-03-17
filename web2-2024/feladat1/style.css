@@ -5,4 +5,8 @@
 img {
     width: 50px;
     height: 150px;
+    max-width: 50px;
+    max-height: 150px;
+    min-width: 50px;
+    min-height: 150px;
 }
