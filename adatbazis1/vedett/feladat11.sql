@@ -1,0 +1,1 @@
+SELECT MAX(forint) FROM ertek;

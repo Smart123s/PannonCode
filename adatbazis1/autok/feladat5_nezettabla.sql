@@ -1,0 +1,1 @@
+CREATE VIEW v_toyotak AS SELECT * FROM szgk WHERE gyarto = 'Toyota';

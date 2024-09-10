@@ -1,0 +1,1 @@
+CREATE VIEW v_tolyotak_ujra AS SELECT id FROM szgk WHERE gyarto = 'Toyota';

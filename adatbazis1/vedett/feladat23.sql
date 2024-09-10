@@ -1,0 +1,1 @@
+DELETE FROM ertek WHERE forint > 1000000

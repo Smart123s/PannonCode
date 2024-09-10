@@ -1,0 +1,1 @@
+SELECT gyarto, MIN(evjarat) AS evjarat_min, 2024 - MIN(evjarat) AS kor FROM dbo.szgk GROUP BY gyarto;

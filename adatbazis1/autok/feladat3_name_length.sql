@@ -1,0 +1,1 @@
+SELECT LEN(gyarto + ' ' + tipus) as hossz, COUNT(LEN(gyarto + ' ' + tipus)) as darab FROM szgk GROUP BY (LEN(gyarto + ' ' + tipus));

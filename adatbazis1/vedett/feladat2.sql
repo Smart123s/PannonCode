@@ -1,0 +1,1 @@
+SELECT nev FROM allat WHERE ev IS NULL;
