@@ -1,0 +1,70 @@
+PE/0001/2020,2020-04-15,2020-07-20,MIK,PurchaseContract,87201000
+PE/0002/2020,2020-02-23,2020-09-10,MK,CooperationAgreement,Acme Corporation
+PE/0003/2020,2020-11-05,2021-01-20,GTK,PurchaseContract,32634000
+PE/0004/2020,2020-08-12,None,PEN,CooperationAgreement,Frost Industries
+PE/0005/2020,2020-06-18,2020-10-30,HTK,PurchaseContract,98676000
+PE/0006/2020,2020-03-25,2020-06-30,MIK,PurchaseContract,82128000
+PE/0007/2020,2020-12-10,2021-03-15,ZEK,CooperationAgreement,Spectrum Inc.
+PE/0008/2020,2020-07-29,2021-01-10,PEN,PurchaseContract,41404000
+PE/0009/2020,2020-10-08,2021-01-15,GTK,PurchaseContract,56120000
+PE/0010/2020,2020-09-02,None,MK,CooperationAgreement,Acme Corporation
+PE/0001/2021,2021-02-17,2021-05-25,HTK,CooperationAgreement,Frost Industries
+PE/0002/2021,2021-03-12,2021-08-15,MIK,CooperationAgreement,Spectrum Inc.
+PE/0003/2021,2021-07-08,2021-09-30,ZEK,PurchaseContract,68157000
+PE/0004/2021,2021-11-20,2022-02-25,HTK,CooperationAgreement,Acme Corporation
+PE/0005/2021,2021-01-05,2021-03-20,GTK,CooperationAgreement,Frost Industries
+PE/0006/2021,2021-04-30,2021-10-05,MIK,CooperationAgreement,Spectrum Inc.
+PE/0007/2021,2021-08-22,None,MK,PurchaseContract,31686000
+PE/0008/2021,2021-06-14,2021-11-10,ZEK,PurchaseContract,66903000
+PE/0009/2021,2021-10-19,2022-03-01,MIK,PurchaseContract,34320000
+PE/0010/2021,2021-12-07,2022-04-15,MK,CooperationAgreement,Acme Corporation
+PE/0001/2022,2022-03-09,2022-07-20,HTK,CooperationAgreement,Frost Industries
+PE/0002/2022,2022-01-15,2022-06-28,GTK,PurchaseContract,65748000
+PE/0003/2022,2022-04-05,None,PEN,CooperationAgreement,Spectrum Inc.
+PE/0004/2022,2022-09-18,2023-01-05,GTK,PurchaseContract,77170000
+PE/0005/2022,2022-08-03,2023-01-15,HTK,PurchaseContract,74870000
+PE/0006/2022,2022-05-20,2022-08-30,MK,PurchaseContract,94149000
+PE/0007/2022,2022-11-10,2023-02-28,MIK,CooperationAgreement,Acme Corporation
+PE/0008/2022,2022-10-01,2023-03-10,HTK,PurchaseContract,51834000
+PE/0009/2022,2022-07-15,2022-10-30,MIK,CooperationAgreement,Frost Industries
+PE/0010/2022,2022-12-03,2023-05-15,MIK,CooperationAgreement,Spectrum Inc.
+PE/0001/2023,2023-03-28,2023-08-05,GTK,PurchaseContract,80938000
+PE/0002/2023,2023-02-14,None,MK,PurchaseContract,70033000
+PE/0003/2023,2023-04-10,2023-09-20,PEN,PurchaseContract,71933000
+PE/0004/2023,2023-10-22,2024-02-15,ZEK,PurchaseContract,69292000
+PE/0005/2023,2023-09-05,2024-02-10,GTK,CooperationAgreement,Acme Corporation
+PE/0006/2023,2023-06-30,None,MIK,PurchaseContract,99904000
+PE/0007/2023,2023-12-19,2024-05-20,MIK,CooperationAgreement,Frost Industries
+PE/0008/2023,2023-08-08,2024-01-15,HTK,CooperationAgreement,Spectrum Inc.
+PE/0009/2023,2023-11-11,2024-04-05,MIK,CooperationAgreement,Acme Corporation
+PE/0010/2023,2023-07-01,2023-10-15,MIK,CooperationAgreement,Frost Industries
+PE/0001/2024,2024-04-15,2024-09-30,ZEK,CooperationAgreement,Spectrum Inc.
+PE/0002/2024,2024-02-23,None,MK,PurchaseContract,60249000
+PE/0003/2024,2024-06-05,2024-10-10,PEN,PurchaseContract,84894000
+PE/0004/2024,2024-08-12,2025-01-20,GTK,PurchaseContract,93431000
+PE/0005/2024,2024-06-18,2024-10-30,HTK,CooperationAgreement,Acme Corporation
+PE/0006/2024,2024-03-25,2024-06-30,MIK,PurchaseContract,72534000
+PE/0007/2024,2024-12-10,None,ZEK,CooperationAgreement,Frost Industries
+PE/0008/2024,2024-07-29,2025-01-10,PEN,PurchaseContract,58775000
+PE/0009/2024,2024-10-08,2025-01-15,GTK,PurchaseContract,76584000
+PE/0010/2024,2024-09-02,None,MK,PurchaseContract,90318000
+PE/0001/2025,2025-02-17,2025-05-25,HTK,CooperationAgreement,Spectrum Inc.
+PE/0002/2025,2025-03-12,2025-08-15,MIK,CooperationAgreement,Acme Corporation
+PE/0003/2025,2025-07-08,2025-09-30,ZEK,CooperationAgreement,Frost Industries
+PE/0004/2025,2025-11-20,2026-02-25,HTK,CooperationAgreement,Spectrum Inc.
+PE/0005/2025,2025-01-05,2025-03-20,GTK,CooperationAgreement,Acme Corporation
+PE/0006/2025,2025-04-30,2025-10-05,MIK,CooperationAgreement,Frost Industries
+PE/0007/2025,2025-08-22,None,MK,PurchaseContract,58681000
+PE/0008/2025,2025-06-14,2025-11-10,ZEK,PurchaseContract,67416000
+PE/0009/2025,2025-10-19,2026-03-01,MIK,CooperationAgreement,Acme Corporation
+PE/0010/2025,2025-12-07,2026-04-15,MK,CooperationAgreement,Frost Industries
+PE/0001/2026,2026-03-09,2026-07-20,HTK,CooperationAgreement,Spectrum Inc.
+PE/0002/2026,2026-01-15,2026-06-28,GTK,PurchaseContract,90339000
+PE/0003/2026,2026-04-05,None,PEN,CooperationAgreement,Acme Corporation
+PE/0004/2026,2026-09-18,2027-01-05,GTK,PurchaseContract,81250000
+PE/0005/2026,2026-08-03,2027-01-15,HTK,PurchaseContract,61690000
+PE/0006/2026,2026-05-20,2026-08-30,MK,PurchaseContract,99659000
+PE/0007/2026,2026-11-10,2027-02-28,MIK,CooperationAgreement,Spectrum Inc.
+PE/0008/2026,2026-10-01,2027-03-10,HTK,PurchaseContract,74956000
+PE/0009/2026,2026-07-15,2026-10-30,MIK,CooperationAgreement,Acme Corporation
+PE/0010/2026,2026-12-03,2027-05-15,MIK,CooperationAgreement,Frost Industries

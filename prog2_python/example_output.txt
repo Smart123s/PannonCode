@@ -1,0 +1,211 @@
+Executing test_1_a
+PE/0012/2024 from 2024-10-01 to 2024-12-31 (MIK)
+ValueError: End date (2024-12-31) before start date (2025-01-10)!
+
+Executing test_1_b
+PE/0123/2023 from 2023-03-15 (GTK) - partner: Google Inc. [CooperationAgreement]
+Partner: Google Inc.
+PE/0123/2023 from 2023-03-15 to 2024-11-30 (GTK) - partner: Google Inc. [CooperationAgreement]
+
+Executing test_1_c
+PE/0007/2024 from 2024-06-10 (MK) - amount: 35000000 [PurchaseContract]
+Amount: 35000000
+PE/0007/2024 from 2024-06-10 to 2025-06-30 (MK) - amount: 35000000 [PurchaseContract]
+
+Executing test_2_a
+PE/0001/2020 from 2020-04-15 to 2020-07-20 (MIK) - amount: 87201000 [PurchaseContract]
+PE/0002/2020 from 2020-02-23 to 2020-09-10 (MK) - partner: Acme Corporation [CooperationAgreement]
+PE/0003/2020 from 2020-11-05 to 2021-01-20 (GTK) - amount: 32634000 [PurchaseContract]
+PE/0004/2020 from 2020-08-12 (PEN) - partner: Frost Industries [CooperationAgreement]
+PE/0005/2020 from 2020-06-18 to 2020-10-30 (HTK) - amount: 98676000 [PurchaseContract]
+PE/0006/2020 from 2020-03-25 to 2020-06-30 (MIK) - amount: 82128000 [PurchaseContract]
+PE/0007/2020 from 2020-12-10 to 2021-03-15 (ZEK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0008/2020 from 2020-07-29 to 2021-01-10 (PEN) - amount: 41404000 [PurchaseContract]
+PE/0009/2020 from 2020-10-08 to 2021-01-15 (GTK) - amount: 56120000 [PurchaseContract]
+PE/0010/2020 from 2020-09-02 (MK) - partner: Acme Corporation [CooperationAgreement]
+PE/0001/2021 from 2021-02-17 to 2021-05-25 (HTK) - partner: Frost Industries [CooperationAgreement]
+PE/0002/2021 from 2021-03-12 to 2021-08-15 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0003/2021 from 2021-07-08 to 2021-09-30 (ZEK) - amount: 68157000 [PurchaseContract]
+PE/0004/2021 from 2021-11-20 to 2022-02-25 (HTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0005/2021 from 2021-01-05 to 2021-03-20 (GTK) - partner: Frost Industries [CooperationAgreement]
+PE/0006/2021 from 2021-04-30 to 2021-10-05 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0007/2021 from 2021-08-22 (MK) - amount: 31686000 [PurchaseContract]
+PE/0008/2021 from 2021-06-14 to 2021-11-10 (ZEK) - amount: 66903000 [PurchaseContract]
+PE/0009/2021 from 2021-10-19 to 2022-03-01 (MIK) - amount: 34320000 [PurchaseContract]
+PE/0010/2021 from 2021-12-07 to 2022-04-15 (MK) - partner: Acme Corporation [CooperationAgreement]
+PE/0001/2022 from 2022-03-09 to 2022-07-20 (HTK) - partner: Frost Industries [CooperationAgreement]
+PE/0002/2022 from 2022-01-15 to 2022-06-28 (GTK) - amount: 65748000 [PurchaseContract]
+PE/0003/2022 from 2022-04-05 (PEN) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0004/2022 from 2022-09-18 to 2023-01-05 (GTK) - amount: 77170000 [PurchaseContract]
+PE/0005/2022 from 2022-08-03 to 2023-01-15 (HTK) - amount: 74870000 [PurchaseContract]
+PE/0006/2022 from 2022-05-20 to 2022-08-30 (MK) - amount: 94149000 [PurchaseContract]
+PE/0007/2022 from 2022-11-10 to 2023-02-28 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0008/2022 from 2022-10-01 to 2023-03-10 (HTK) - amount: 51834000 [PurchaseContract]
+PE/0009/2022 from 2022-07-15 to 2022-10-30 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0010/2022 from 2022-12-03 to 2023-05-15 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0001/2023 from 2023-03-28 to 2023-08-05 (GTK) - amount: 80938000 [PurchaseContract]
+PE/0002/2023 from 2023-02-14 (MK) - amount: 70033000 [PurchaseContract]
+PE/0003/2023 from 2023-04-10 to 2023-09-20 (PEN) - amount: 71933000 [PurchaseContract]
+PE/0004/2023 from 2023-10-22 to 2024-02-15 (ZEK) - amount: 69292000 [PurchaseContract]
+PE/0005/2023 from 2023-09-05 to 2024-02-10 (GTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0006/2023 from 2023-06-30 (MIK) - amount: 99904000 [PurchaseContract]
+PE/0007/2023 from 2023-12-19 to 2024-05-20 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0008/2023 from 2023-08-08 to 2024-01-15 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0009/2023 from 2023-11-11 to 2024-04-05 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0010/2023 from 2023-07-01 to 2023-10-15 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0001/2024 from 2024-04-15 to 2024-09-30 (ZEK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0002/2024 from 2024-02-23 (MK) - amount: 60249000 [PurchaseContract]
+PE/0003/2024 from 2024-06-05 to 2024-10-10 (PEN) - amount: 84894000 [PurchaseContract]
+PE/0004/2024 from 2024-08-12 to 2025-01-20 (GTK) - amount: 93431000 [PurchaseContract]
+PE/0005/2024 from 2024-06-18 to 2024-10-30 (HTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0006/2024 from 2024-03-25 to 2024-06-30 (MIK) - amount: 72534000 [PurchaseContract]
+PE/0007/2024 from 2024-12-10 (ZEK) - partner: Frost Industries [CooperationAgreement]
+PE/0008/2024 from 2024-07-29 to 2025-01-10 (PEN) - amount: 58775000 [PurchaseContract]
+PE/0009/2024 from 2024-10-08 to 2025-01-15 (GTK) - amount: 76584000 [PurchaseContract]
+PE/0010/2024 from 2024-09-02 (MK) - amount: 90318000 [PurchaseContract]
+PE/0001/2025 from 2025-02-17 to 2025-05-25 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0002/2025 from 2025-03-12 to 2025-08-15 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0003/2025 from 2025-07-08 to 2025-09-30 (ZEK) - partner: Frost Industries [CooperationAgreement]
+PE/0004/2025 from 2025-11-20 to 2026-02-25 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0005/2025 from 2025-01-05 to 2025-03-20 (GTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0006/2025 from 2025-04-30 to 2025-10-05 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0007/2025 from 2025-08-22 (MK) - amount: 58681000 [PurchaseContract]
+PE/0008/2025 from 2025-06-14 to 2025-11-10 (ZEK) - amount: 67416000 [PurchaseContract]
+PE/0009/2025 from 2025-10-19 to 2026-03-01 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0010/2025 from 2025-12-07 to 2026-04-15 (MK) - partner: Frost Industries [CooperationAgreement]
+PE/0001/2026 from 2026-03-09 to 2026-07-20 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0002/2026 from 2026-01-15 to 2026-06-28 (GTK) - amount: 90339000 [PurchaseContract]
+PE/0003/2026 from 2026-04-05 (PEN) - partner: Acme Corporation [CooperationAgreement]
+PE/0004/2026 from 2026-09-18 to 2027-01-05 (GTK) - amount: 81250000 [PurchaseContract]
+PE/0005/2026 from 2026-08-03 to 2027-01-15 (HTK) - amount: 61690000 [PurchaseContract]
+PE/0006/2026 from 2026-05-20 to 2026-08-30 (MK) - amount: 99659000 [PurchaseContract]
+PE/0007/2026 from 2026-11-10 to 2027-02-28 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0008/2026 from 2026-10-01 to 2027-03-10 (HTK) - amount: 74956000 [PurchaseContract]
+PE/0009/2026 from 2026-07-15 to 2026-10-30 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0010/2026 from 2026-12-03 to 2027-05-15 (MIK) - partner: Frost Industries [CooperationAgreement]
+
+Executing test_2_b
+Contract found: PE/0001/2023 from 2023-03-28 to 2023-08-05 (GTK) - amount: 80938000 [PurchaseContract]
+
+Contract not found with contract number PE/1234/2024
+
+Executing test_3_a
+PE/0002/2020 from 2020-02-23 to 2020-09-10 (MK) - partner: Acme Corporation [CooperationAgreement]
+PE/0006/2020 from 2020-03-25 to 2020-06-30 (MIK) - amount: 82128000 [PurchaseContract]
+PE/0001/2020 from 2020-04-15 to 2020-07-20 (MIK) - amount: 87201000 [PurchaseContract]
+PE/0005/2020 from 2020-06-18 to 2020-10-30 (HTK) - amount: 98676000 [PurchaseContract]
+PE/0008/2020 from 2020-07-29 to 2021-01-10 (PEN) - amount: 41404000 [PurchaseContract]
+PE/0004/2020 from 2020-08-12 (PEN) - partner: Frost Industries [CooperationAgreement]
+PE/0010/2020 from 2020-09-02 (MK) - partner: Acme Corporation [CooperationAgreement]
+PE/0009/2020 from 2020-10-08 to 2021-01-15 (GTK) - amount: 56120000 [PurchaseContract]
+PE/0003/2020 from 2020-11-05 to 2021-01-20 (GTK) - amount: 32634000 [PurchaseContract]
+PE/0007/2020 from 2020-12-10 to 2021-03-15 (ZEK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0005/2021 from 2021-01-05 to 2021-03-20 (GTK) - partner: Frost Industries [CooperationAgreement]
+PE/0001/2021 from 2021-02-17 to 2021-05-25 (HTK) - partner: Frost Industries [CooperationAgreement]
+PE/0002/2021 from 2021-03-12 to 2021-08-15 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0006/2021 from 2021-04-30 to 2021-10-05 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0008/2021 from 2021-06-14 to 2021-11-10 (ZEK) - amount: 66903000 [PurchaseContract]
+PE/0003/2021 from 2021-07-08 to 2021-09-30 (ZEK) - amount: 68157000 [PurchaseContract]
+PE/0007/2021 from 2021-08-22 (MK) - amount: 31686000 [PurchaseContract]
+PE/0009/2021 from 2021-10-19 to 2022-03-01 (MIK) - amount: 34320000 [PurchaseContract]
+PE/0004/2021 from 2021-11-20 to 2022-02-25 (HTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0010/2021 from 2021-12-07 to 2022-04-15 (MK) - partner: Acme Corporation [CooperationAgreement]
+PE/0002/2022 from 2022-01-15 to 2022-06-28 (GTK) - amount: 65748000 [PurchaseContract]
+PE/0001/2022 from 2022-03-09 to 2022-07-20 (HTK) - partner: Frost Industries [CooperationAgreement]
+PE/0003/2022 from 2022-04-05 (PEN) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0006/2022 from 2022-05-20 to 2022-08-30 (MK) - amount: 94149000 [PurchaseContract]
+PE/0009/2022 from 2022-07-15 to 2022-10-30 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0005/2022 from 2022-08-03 to 2023-01-15 (HTK) - amount: 74870000 [PurchaseContract]
+PE/0004/2022 from 2022-09-18 to 2023-01-05 (GTK) - amount: 77170000 [PurchaseContract]
+PE/0008/2022 from 2022-10-01 to 2023-03-10 (HTK) - amount: 51834000 [PurchaseContract]
+PE/0007/2022 from 2022-11-10 to 2023-02-28 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0010/2022 from 2022-12-03 to 2023-05-15 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0002/2023 from 2023-02-14 (MK) - amount: 70033000 [PurchaseContract]
+PE/0001/2023 from 2023-03-28 to 2023-08-05 (GTK) - amount: 80938000 [PurchaseContract]
+PE/0003/2023 from 2023-04-10 to 2023-09-20 (PEN) - amount: 71933000 [PurchaseContract]
+PE/0006/2023 from 2023-06-30 (MIK) - amount: 99904000 [PurchaseContract]
+PE/0010/2023 from 2023-07-01 to 2023-10-15 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0008/2023 from 2023-08-08 to 2024-01-15 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0005/2023 from 2023-09-05 to 2024-02-10 (GTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0004/2023 from 2023-10-22 to 2024-02-15 (ZEK) - amount: 69292000 [PurchaseContract]
+PE/0009/2023 from 2023-11-11 to 2024-04-05 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0007/2023 from 2023-12-19 to 2024-05-20 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0002/2024 from 2024-02-23 (MK) - amount: 60249000 [PurchaseContract]
+PE/0006/2024 from 2024-03-25 to 2024-06-30 (MIK) - amount: 72534000 [PurchaseContract]
+PE/0001/2024 from 2024-04-15 to 2024-09-30 (ZEK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0003/2024 from 2024-06-05 to 2024-10-10 (PEN) - amount: 84894000 [PurchaseContract]
+PE/0005/2024 from 2024-06-18 to 2024-10-30 (HTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0008/2024 from 2024-07-29 to 2025-01-10 (PEN) - amount: 58775000 [PurchaseContract]
+PE/0004/2024 from 2024-08-12 to 2025-01-20 (GTK) - amount: 93431000 [PurchaseContract]
+PE/0010/2024 from 2024-09-02 (MK) - amount: 90318000 [PurchaseContract]
+PE/0009/2024 from 2024-10-08 to 2025-01-15 (GTK) - amount: 76584000 [PurchaseContract]
+PE/0007/2024 from 2024-12-10 (ZEK) - partner: Frost Industries [CooperationAgreement]
+PE/0005/2025 from 2025-01-05 to 2025-03-20 (GTK) - partner: Acme Corporation [CooperationAgreement]
+PE/0001/2025 from 2025-02-17 to 2025-05-25 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0002/2025 from 2025-03-12 to 2025-08-15 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0006/2025 from 2025-04-30 to 2025-10-05 (MIK) - partner: Frost Industries [CooperationAgreement]
+PE/0008/2025 from 2025-06-14 to 2025-11-10 (ZEK) - amount: 67416000 [PurchaseContract]
+PE/0003/2025 from 2025-07-08 to 2025-09-30 (ZEK) - partner: Frost Industries [CooperationAgreement]
+PE/0007/2025 from 2025-08-22 (MK) - amount: 58681000 [PurchaseContract]
+PE/0009/2025 from 2025-10-19 to 2026-03-01 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0004/2025 from 2025-11-20 to 2026-02-25 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0010/2025 from 2025-12-07 to 2026-04-15 (MK) - partner: Frost Industries [CooperationAgreement]
+PE/0002/2026 from 2026-01-15 to 2026-06-28 (GTK) - amount: 90339000 [PurchaseContract]
+PE/0001/2026 from 2026-03-09 to 2026-07-20 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0003/2026 from 2026-04-05 (PEN) - partner: Acme Corporation [CooperationAgreement]
+PE/0006/2026 from 2026-05-20 to 2026-08-30 (MK) - amount: 99659000 [PurchaseContract]
+PE/0009/2026 from 2026-07-15 to 2026-10-30 (MIK) - partner: Acme Corporation [CooperationAgreement]
+PE/0005/2026 from 2026-08-03 to 2027-01-15 (HTK) - amount: 61690000 [PurchaseContract]
+PE/0004/2026 from 2026-09-18 to 2027-01-05 (GTK) - amount: 81250000 [PurchaseContract]
+PE/0008/2026 from 2026-10-01 to 2027-03-10 (HTK) - amount: 74956000 [PurchaseContract]
+PE/0007/2026 from 2026-11-10 to 2027-02-28 (MIK) - partner: Spectrum Inc. [CooperationAgreement]
+PE/0010/2026 from 2026-12-03 to 2027-05-15 (MIK) - partner: Frost Industries [CooperationAgreement]
+
+Executing test_3_b
+Contracts in year 2023:
+  PE/0001/2023 from 2023-03-28 to 2023-08-05 (GTK) - amount: 80938000 [PurchaseContract]
+  PE/0002/2023 from 2023-02-14 (MK) - amount: 70033000 [PurchaseContract]
+  PE/0003/2023 from 2023-04-10 to 2023-09-20 (PEN) - amount: 71933000 [PurchaseContract]
+  PE/0004/2023 from 2023-10-22 to 2024-02-15 (ZEK) - amount: 69292000 [PurchaseContract]
+  PE/0005/2023 from 2023-09-05 to 2024-02-10 (GTK) - partner: Acme Corporation [CooperationAgreement]
+  PE/0006/2023 from 2023-06-30 (MIK) - amount: 99904000 [PurchaseContract]
+  PE/0007/2023 from 2023-12-19 to 2024-05-20 (MIK) - partner: Frost Industries [CooperationAgreement]
+  PE/0008/2023 from 2023-08-08 to 2024-01-15 (HTK) - partner: Spectrum Inc. [CooperationAgreement]
+  PE/0009/2023 from 2023-11-11 to 2024-04-05 (MIK) - partner: Acme Corporation [CooperationAgreement]
+  PE/0010/2023 from 2023-07-01 to 2023-10-15 (MIK) - partner: Frost Industries [CooperationAgreement]
+
+Contracts in year 2030:
+There are no contracts in 2030
+
+Executing test_3_c
+{'Frost Industries', 'Spectrum Inc.', 'Acme Corporation'}
+
+Executing test_4
+Added new contract: PE/0011/2023 from 2023-03-12 (MIK) - amount: 120000000 [PurchaseContract]
+New contract in contract manager: PE/0011/2023 from 2023-03-12 (MIK) - amount: 120000000 [PurchaseContract]
+
+Added new contract: PE/0011/2024 from 2024-05-19 to 2025-08-31 (HTK) - partner: META Inc. [CooperationAgreement]
+New contract in contract manager: PE/0011/2024 from 2024-05-19 to 2025-08-31 (HTK) - partner: META Inc. [CooperationAgreement]
+
+Executing test_5_a
+New contract created -> filing contract number: PE/0012/2024
+New contract created -> filing contract number: PE/0003/2025
+
+Executing test_5_b
+New contract created on: MIK -> notifying organizational unit
+
+New contract created on: GTK -> notifying organizational unit
+
+
+Executing test_5_c
+New contract created -> filing contract number: PE/0011/2023
+New contract created -> filing contract number: PE/0011/2024
+
+New contract created -> filing contract number: PE/0012/2023
+New contract created on: MIK -> notifying organizational unit
+New contract created -> filing contract number: PE/0012/2024
+
+New contract created -> filing contract number: PE/0013/2023
+New contract created on: MIK -> notifying organizational unit
+New contract created -> filing contract number: PE/0013/2024
+New contract created on: HTK -> notifying organizational unit
