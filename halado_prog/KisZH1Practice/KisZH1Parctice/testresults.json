@@ -1,0 +1,502 @@
+﻿[
+  {
+    "Group": "Csütörtök 16",
+    "Score": 77,
+    "WorkTime": 28
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 95,
+    "WorkTime": 33
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 51,
+    "WorkTime": 25
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 80,
+    "WorkTime": 89
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 93,
+    "WorkTime": 18
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 22,
+    "WorkTime": 12
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 81,
+    "WorkTime": 72
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 70,
+    "WorkTime": 82
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 97,
+    "WorkTime": 63
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 83,
+    "WorkTime": 18
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 88,
+    "WorkTime": 23
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 94,
+    "WorkTime": 76
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 60,
+    "WorkTime": 34
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 81,
+    "WorkTime": 65
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 85,
+    "WorkTime": 19
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 94,
+    "WorkTime": 30
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 60,
+    "WorkTime": 89
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 5,
+    "WorkTime": 90
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 79,
+    "WorkTime": 14
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 83,
+    "WorkTime": 82
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 64,
+    "WorkTime": 73
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 44,
+    "WorkTime": 26
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 40,
+    "WorkTime": 82
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 60,
+    "WorkTime": 32
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 89,
+    "WorkTime": 30
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 69,
+    "WorkTime": 40
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 57,
+    "WorkTime": 52
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 81,
+    "WorkTime": 71
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 34,
+    "WorkTime": 24
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 97,
+    "WorkTime": 65
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 85,
+    "WorkTime": 13
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 74,
+    "WorkTime": 22
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 96,
+    "WorkTime": 32
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 86,
+    "WorkTime": 59
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 82,
+    "WorkTime": 24
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 35,
+    "WorkTime": 80
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 62,
+    "WorkTime": 65
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 3,
+    "WorkTime": 85
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 74,
+    "WorkTime": 85
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 92,
+    "WorkTime": 74
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 37,
+    "WorkTime": 57
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 7,
+    "WorkTime": 68
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 63,
+    "WorkTime": 58
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 61,
+    "WorkTime": 38
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 37,
+    "WorkTime": 73
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 73,
+    "WorkTime": 80
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 90,
+    "WorkTime": 41
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 44,
+    "WorkTime": 83
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 94,
+    "WorkTime": 85
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 81,
+    "WorkTime": 51
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 29,
+    "WorkTime": 31
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 66,
+    "WorkTime": 33
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 71,
+    "WorkTime": 50
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 66,
+    "WorkTime": 23
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 80,
+    "WorkTime": 46
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 84,
+    "WorkTime": 50
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 58,
+    "WorkTime": 13
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 88,
+    "WorkTime": 20
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 60,
+    "WorkTime": 87
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 80,
+    "WorkTime": 76
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 80,
+    "WorkTime": 21
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 66,
+    "WorkTime": 34
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 80,
+    "WorkTime": 59
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 72,
+    "WorkTime": 81
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 41,
+    "WorkTime": 42
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 70,
+    "WorkTime": 59
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 43,
+    "WorkTime": 39
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 23,
+    "WorkTime": 72
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 24,
+    "WorkTime": 55
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 60,
+    "WorkTime": 12
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 62,
+    "WorkTime": 74
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 84,
+    "WorkTime": 68
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 15,
+    "WorkTime": 16
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 93,
+    "WorkTime": 28
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 79,
+    "WorkTime": 10
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 56,
+    "WorkTime": 23
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 1,
+    "WorkTime": 22
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 89,
+    "WorkTime": 62
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 58,
+    "WorkTime": 36
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 88,
+    "WorkTime": 86
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 13,
+    "WorkTime": 84
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 81,
+    "WorkTime": 41
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 83,
+    "WorkTime": 69
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 95,
+    "WorkTime": 59
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 47,
+    "WorkTime": 67
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 66,
+    "WorkTime": 10
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 96,
+    "WorkTime": 39
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 9,
+    "WorkTime": 58
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 66,
+    "WorkTime": 60
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 68,
+    "WorkTime": 34
+  },
+  {
+    "Group": "Csütörtök 16",
+    "Score": 88,
+    "WorkTime": 85
+  },
+  {
+    "Group": "Kedd 12",
+    "Score": 76,
+    "WorkTime": 65
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 75,
+    "WorkTime": 76
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 80,
+    "WorkTime": 17
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 100,
+    "WorkTime": 40
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 70,
+    "WorkTime": 23
+  },
+  {
+    "Group": "Szerda 12",
+    "Score": 53,
+    "WorkTime": 27
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 98,
+    "WorkTime": 44
+  },
+  {
+    "Group": "Kedd 14",
+    "Score": 68,
+    "WorkTime": 62
+  },
+  {
+    "Group": "Szerda 08",
+    "Score": 90,
+    "WorkTime": 21
+  }
+]

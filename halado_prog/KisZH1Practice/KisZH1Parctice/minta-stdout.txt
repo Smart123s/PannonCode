@@ -1,0 +1,22 @@
+﻿
+Scores loaded
+
+Finding scores:
+Score with at least 80 points under 25 minutes:
+    Group: Szerda 08, Score: 93, Time: 18
+Score with at least 90 points under 15 minutes:
+    Error: could not find score: There is no score with required values
+
+Average scores:
+Average of group Csütörtök 16 : 58.72727272727273
+Average of group Kedd 12 : 73.95652173913044
+Average of group Szerda 12 : 63.85
+Average of group Szerda 08 : 69.3529411764706
+Average of group Kedd 14 : 68.22222222222223
+
+Most common grades:
+Most common grades in group Csütörtök 16 with 8 tests: 1
+Most common grades in group Kedd 12 with 6 tests: 4
+Most common grades in group Szerda 12 with 6 tests: 1 3
+Most common grades in group Szerda 08 with 5 tests: 1 4
+Most common grades in group Kedd 14 with 5 tests: 2 4
