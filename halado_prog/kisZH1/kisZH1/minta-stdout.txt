@@ -1,0 +1,23 @@
+﻿Sikeres adatbetöltés
+Adatbetöltés vége
+
+1. Feladat: Legdrágább könyv keresése
+Legdrágább könyv: Harry Potter and the Deathly Hallows, Ár: 25,00
+----------
+
+2. Feladat: Szerzők összesített eladásai
+Szerző neve: José Rodrigues dos Santos, összes eladott példány: 460
+Szerző neve: J.K. Rowling, összes eladott példány: 2610
+Szerző neve: Ernest Hemingway, összes eladott példány: 490
+Szerző neve: J.R.R. Tolkien, összes eladott példány: 1270
+Szerző neve: Mark Twain, összes eladott példány: 410
+Szerző neve: Dan Brown, összes eladott példány: 1060
+----------
+
+3. Feladat: Legnagyobb árbevételű szerzők
+Szerző neve: J.K. Rowling, összes árbevétel: 56 257,50 Ft
+Szerző neve: J.R.R. Tolkien, összes árbevétel: 23 439,20 Ft
+Szerző neve: Dan Brown, összes árbevétel: 21 102,00 Ft
+Szerző neve: José Rodrigues dos Santos, összes árbevétel: 8 353,50 Ft
+Szerző neve: Ernest Hemingway, összes árbevétel: 7 266,65 Ft
+Szerző neve: Mark Twain, összes árbevétel: 5 658,10 Ft

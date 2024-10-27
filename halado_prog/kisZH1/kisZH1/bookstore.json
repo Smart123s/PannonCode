@@ -1,0 +1,152 @@
+﻿[
+  {
+    "Title": "The God Formula",
+    "Author": "José Rodrigues dos Santos",
+    "Price": 19.50,
+    "CopiesSold": 180
+  },
+  {
+    "Title": "Harry Potter and the Chamber of Secrets",
+    "Author": "J.K. Rowling",
+    "Price": 19.99,
+    "CopiesSold": 450
+  },
+  {
+    "Title": "The Old Man and the Sea",
+    "Author": "Ernest Hemingway",
+    "Price": 13.50,
+    "CopiesSold": 160
+  },
+  {
+    "Title": "The Silmarillion",
+    "Author": "J.R.R. Tolkien",
+    "Price": 21.50,
+    "CopiesSold": 200
+  },
+  {
+    "Title": "The Fellowship of the Ring",
+    "Author": "J.R.R. Tolkien",
+    "Price": 15.99,
+    "CopiesSold": 270
+  },
+  {
+    "Title": "Codex 632",
+    "Author": "José Rodrigues dos Santos",
+    "Price": 16.50,
+    "CopiesSold": 130
+  },
+  {
+    "Title": "The Return of the King",
+    "Author": "J.R.R. Tolkien",
+    "Price": 19.00,
+    "CopiesSold": 240
+  },
+  {
+    "Title": "For Whom the Bell Tolls",
+    "Author": "Ernest Hemingway",
+    "Price": 15.00,
+    "CopiesSold": 140
+  },
+  {
+    "Title": "The Adventures of Tom Sawyer",
+    "Author": "Mark Twain",
+    "Price": 12.99,
+    "CopiesSold": 190
+  },
+  {
+    "Title": "The Einstein Enigma",
+    "Author": "José Rodrigues dos Santos",
+    "Price": 17.99,
+    "CopiesSold": 150
+  },
+  {
+    "Title": "The Two Towers",
+    "Author": "J.R.R. Tolkien",
+    "Price": 17.50,
+    "CopiesSold": 250
+  },
+  {
+    "Title": "Adventures of Huckleberry Finn",
+    "Author": "Mark Twain",
+    "Price": 14.50,
+    "CopiesSold": 220
+  },
+  {
+    "Title": "Harry Potter and the Goblet of Fire",
+    "Author": "J.K. Rowling",
+    "Price": 22.00,
+    "CopiesSold": 460
+  },
+  {
+    "Title": "Harry Potter and the Deathly Hallows",
+    "Author": "J.K. Rowling",
+    "Price": 25.00,
+    "CopiesSold": 370
+  },
+  {
+    "Title": "The Da Vinci Code",
+    "Author": "Dan Brown",
+    "Price": 19.99,
+    "CopiesSold": 300
+  },
+  {
+    "Title": "Angels and Demons",
+    "Author": "Dan Brown",
+    "Price": 18.50,
+    "CopiesSold": 250
+  },
+  {
+    "Title": "Harry Potter and the Order of the Phoenix",
+    "Author": "J.K. Rowling",
+    "Price": 23.00,
+    "CopiesSold": 400
+  },
+  {
+    "Title": "The Hobbit",
+    "Author": "J.R.R. Tolkien",
+    "Price": 18.99,
+    "CopiesSold": 310
+  },
+  {
+    "Title": "Harry Potter and the Half-Blood Prince",
+    "Author": "J.K. Rowling",
+    "Price": 24.00,
+    "CopiesSold": 380
+  },
+  {
+    "Title": "Fantastic Beasts and Where to Find Them",
+    "Author": "J.K. Rowling",
+    "Price": 18.99,
+    "CopiesSold": 300
+  },
+  {
+    "Title": "Quidditch Through the Ages",
+    "Author": "J.K. Rowling",
+    "Price": 15.50,
+    "CopiesSold": 250
+  },
+  {
+    "Title": "Inferno",
+    "Author": "Dan Brown",
+    "Price": 21.00,
+    "CopiesSold": 280
+  },
+  {
+    "Title": "The Lost Symbol",
+    "Author": "Dan Brown",
+    "Price": 20.00,
+    "CopiesSold": 230
+  },
+  {
+    "Title": "A Farewell to Arms",
+    "Author": "Ernest Hemingway",
+    "Price": 16.50,
+    "CopiesSold": 105
+  },
+  {
+    "Title": "The Sun Also Rises",
+    "Author": "Ernest Hemingway",
+    "Price": 14.99,
+    "CopiesSold": 85
+  }
+]
