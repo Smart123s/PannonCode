@@ -57,4 +57,20 @@ internal class TestResultManager : ITestResultManager
         averages = averages.OrderBy(a => -a.Value).ToDictionary(a => a.Key, a => a.Value);
         return averages;
     }
+
+    public Dictionary<string, Dictionary<int, int>> GetGrades()
+    {
+        Dictionary<string, Dictionary<int, int>> grades = new Dictionary<string, Dictionary<int, int>>();
+        foreach (var item in _byGroup)
+        {
+            grades[item.Key] = new Dictionary<int, int>();
+            grades[item.Key][1] = item.Value.Count(a => a.Score <= 59);
+            grades[item.Key][2] = item.Value.Count(a => a.Score >= 60 && a.Score <= 69);
+            grades[item.Key][3] = item.Value.Count(a => a.Score >= 70 && a.Score <= 79);
+            grades[item.Key][4] = item.Value.Count(a => a.Score >= 80 && a.Score <= 89);
+            grades[item.Key][5] = item.Value.Count(a => a.Score >= 90 && a.Score <= 100);
+            grades[item.Key] = grades[item.Key].OrderBy(a => -a.Value).ToDictionary(a => a.Key, a => a.Value);
+        }
+        return grades;
+    }
 }
