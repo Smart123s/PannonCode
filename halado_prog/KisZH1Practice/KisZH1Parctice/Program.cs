@@ -37,6 +37,10 @@ namespace KisZH1Parctice;
 
         // Feladat 2
         Console.WriteLine("Average scores:");
-        manager.PrintAverages();
+        Dictionary<string, float> averages = manager.GetAveragesByGroup();
+        foreach (var item in averages)
+        {
+            Console.WriteLine("Average of group " + item.Key + ": " + item.Value);
+        }
     }
 }

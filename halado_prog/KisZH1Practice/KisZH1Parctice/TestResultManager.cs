@@ -48,10 +48,12 @@ internal class TestResultManager : ITestResultManager
 
     }
 
-    public void PrintAverages()
+    public Dictionary<string, float> GetAveragesByGroup()
     {
+        Dictionary<string, float> averages = new Dictionary<string, float>();
         foreach (var item in _byGroup) {
-            Console.WriteLine("Average of group " + item.Key + ": " + item.Value.Average(a => a.Score));
+            averages[item.Key] = (float) item.Value.Average(a => a.Score);
         }
+        return averages;
     }
 }
