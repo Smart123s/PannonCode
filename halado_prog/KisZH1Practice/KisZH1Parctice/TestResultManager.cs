@@ -54,6 +54,7 @@ internal class TestResultManager : ITestResultManager
         foreach (var item in _byGroup) {
             averages[item.Key] = (float) item.Value.Average(a => a.Score);
         }
+        averages = averages.OrderBy(a => -a.Value).ToDictionary(a => a.Key, a => a.Value);
         return averages;
     }
 }
