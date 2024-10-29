@@ -1,0 +1,68 @@
+Feladat 1 - Legnépszerűbb rendezvény:
+Food Truck Festival - 74 résztvevő
+
+Feladat 2 - Résztvevők, akik legalább 8 különböző eseményen vettek részt:
+David - 11 esemény
+Frank - 8 esemény
+Heidi - 8 esemény
+Ivan - 9 esemény
+Judy - 11 esemény
+Laura - 8 esemény
+Mallory - 12 esemény
+Neil - 10 esemény
+Oscar - 10 esemény
+Rita - 9 esemény
+Steve - 11 esemény
+Walter - 9 esemény
+Xander - 9 esemény
+Brian - 11 esemény
+Dylan - 8 esemény
+Jack - 12 esemény
+Kelly - 8 esemény
+Leo - 8 esemény
+Mia - 10 esemény
+Nick - 8 esemény
+Sam - 10 esemény
+Tina - 9 esemény
+Ursula - 9 esemény
+Vince - 8 esemény
+Will - 9 esemény
+Xenia - 9 esemény
+Zach - 10 esemény
+Avery - 10 esemény
+Casey - 9 esemény
+Dana - 11 esemény
+Jenna - 10 esemény
+Kurt - 9 esemény
+Molly - 9 esemény
+Nina - 9 esemény
+Quincy - 9 esemény
+Ralph - 9 esemény
+Sophia - 8 esemény
+Ulysses - 9 esemény
+Wendy - 12 esemény
+Xander - 14 esemény
+Zane - 8 esemény
+Amelia - 11 esemény
+Brooke - 9 esemény
+Caleb - 9 esemény
+Haley - 10 esemény
+Ian - 9 esemény
+Jared - 11 esemény
+Kara - 9 esemény
+Mike - 8 esemény
+Nate - 9 esemény
+Opal - 11 esemény
+Peter - 9 esemény
+Uri - 10 esemény
+Violet - 10 esemény
+Willow - 12 esemény
+Xenia - 10 esemény
+Yasmine - 8 esemény
+
+Feladat 3 - Helyszínek átlagos résztvevőszáma:
+Central Park: 54,00 átlagos résztvevő
+Madison Square Garden: 42,60 átlagos résztvevő
+Wembley Stadium: 39,00 átlagos résztvevő
+Staples Center: 38,67 átlagos résztvevő
+Sydney Opera House: 26,33 átlagos résztvevő
