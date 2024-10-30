@@ -1,0 +1,29 @@
+Adott a lenti export, amely tartalmazza az egyes járművekhez tartozó szervíz költséget és az aktuális kilóméteróra állást. Ez alapján szeretnénk meghatározni, hogy az egyes személyautók átlagosan hány kilómétert tesznek meg két szervízelés között. Ehhez a következő lépéseket kell megvalósítani:
+
+        a) A filter() függvény segítségével szűrd le a személyautókat (category kulcs), majd
+
+        b) egy külön függvény segítségével határozzuk meg, hogy a szervíz intervallum átlagát, amit írjunk vissza "avgkm" kulccsal
+
+             az eredeti listába (Szevizek között megtett km-ek összege / a szervízek száma)
+
+        c) rendezzük a bővített listát az átlagos szervíz intervallum alapján, majd 
+
+        d) írassuk ki annak az autónak a rendszámát, gyártóját, típusát, amelynél a leghosszabb az átlagos szervíz periódus
+
+
+
+export = [ { "license" : "BAC-423", "brand": "Opel", "type" : "Astra", "category" : "car", "services" : [
+                                                                                                                                   {"km" :  25600,  "price" : 89000},
+                                                                                                                                   {"km" :  56100,  "price" : 71500},
+                                                                                                                                   {"km" :  82950,  "price" : 123400},
+                                                                                                                                   {"km" :  101010, "price" : 75100}]},
+                 { "license" : "GHU-732", "brand": "Ford", "type" : "Transit", "category" : "truck", "services" : [
+                                                                                                                                   {"km" :  55600,  "price" : 103400},
+                                                                                                                                   {"km" :  86700,  "price" : 134000},
+                                                                                                                                   {"km" :  11295,  "price" : 89000}]},
+
+                 { "license" : "FGA-111", "brand": "Suzuki", "type" : "Vitara", "category" : "car", "services" : [
+                                                                                                                                   {"km" :  14200,  "price" : 56700},
+                                                                                                                                   {"km" :  23900,  "price" : 71500},
+                                                                                                                                   {"km" :  29050,  "price" : 89100},
+                                                                                                                                   {"km" :  34000,  "price" : 75700}]}

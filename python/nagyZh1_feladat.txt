@@ -1,0 +1,83 @@
+export = {
+"cars":
+[
+{ "plate" : "AG-KF-732", "brand": "Ford",   "model" : "Focus",  "year": 2024, "fuel type": "petrol",  "horsepower" : 160, "consumption" : 4.6},
+{ "plate" : "AB-BB-542", "brand": "Renault","model" : "Zoe",    "year": 2022, "fuel type": "electric","horsepower" : 135, "range": 350 },
+{ "plate" : "AG-WE-333", "brand": "Opel",   "model" : "Astra",  "year": 2020, "fuel type": "petrol",  "horsepower" : 105, "consumption" : 6.4},
+{ "plate" : "AD-QQ-123", "brand": "Tesla",  "model" : "Model 3","year": 2022, "fuel type": "electric","horsepower" : 283, "range": 580 },
+{ "plate" : "AG-LE-554", "brand": "Volkswagen", "model" : "Golf","year": 2021, "fuel type": "petrol", "horsepower" : 150, "consumption" : 5.1}
+],
+"history": [
+        { "id" : 1, "name"  : "2024-08",
+           "companies":[ { "hash": "kjd23bhasdjf", "name" : "TechSphere",
+                                    "bookings": [ { "plate": "AG-KF-732", "day": 4, "hours": "12:00", "km" : 590}, { "AB-BB-542": 5, "hours": "08:00", "km" : 110 },
+   { "plate": "AG-LE-554", "day": 12, "hours": "11:00", "km" : 450}, { "plate": "AD-QQ-123", "day": 16, "hours": "12:00", "km" : 320 }, 
+   { "plate": "AD-QQ-123", "day": 18, "hours": "14:00", "km" : 330}, { "plate": "AD-QQ-123", "day": 24, "hours": "08:00", "km" : 90 }
+]},
+       { "hash": "2je7wqu2j342", "name" : "Quantum Innovations",
+"bookings": [ {"plate": "AG-KF-732", "day": 20, "hours": "12:00", "km" : 220}, { "AB-BB-542": 22, "hours": "08:00", "km" : 110 }
+ ]},
+        { "hash": "ee68quwjqu22", "name" : "Nexus Consulting",
+ "bookings": [ { "plate": "AG-LE-554", "day": 1, "hours": "10:00", "km" : 340}, { "plate": "AG-LE-554", "day": 5, "hours": "13:00", "km" : 410 }, 
+    { "plate": "AD-QQ-123", "day": 11, "hours": "07:00", "km" : 130}
+  ]},
+           ]
+        },
+        { "id" : 2, "name"  : "2024-09",
+          "companies":[{ "hash": "kjd23bhasdjf", "name" : "TechSphere",
+       "bookings": [ { "plate": "AG-KF-732", "day": 3, "hours": "12:00", "km" : 470}, { "AB-BB-542": 8, "hours": "08:00", "km" : 280 },
+    { "plate": "AD-QQ-123", "day": 18, "hours": "14:00", "km" : 320}, { "plate": "AG-LE-554", "day": 24, "hours": "08:00", "km" : 50 }
+  ]},
+     { "hash": "12edawqew323", "name" : "GreenLeaf Solutions",
+       "bookings": [ { "plate": "AG-LE-554", "day": 41, "hours": "09:00", "km" : 280}, { "plate": "AD-QQ-123", "day": 10, "hours": "11:30", "km" : 210 }, 
+ { "plate": "AD-QQ-123", "day": 11, "hours": "09:30", "km" : 170}
+  ]},
+         ]
+        } 
+    ]   
+}
+ 
+Adott egy autó kölcsönző cég adat exportja, amely tartalmazza az elérhető autók adatait és az elmúlt két havi céges foglalásokat. A havi foglalásokat alapján szeretnénk kimutatásokat végezni, amelyhez egy másik rendszerbe kell feltölteni az adatokat. Az export struktúra viszont nem megfelelő, ezért konvertálni kell a jelenlegi formátumot a célrendszer által elvárt formátumba, ezért a következő fejlesztési lépéseket kell megvalósítani:
+ 
+        (a) Foglalható autók tárolása:
+                - Készíts egy Car osztályt, amely tárolni fogja az autók főbb adatait:
+                  rendszám, gyártó, modell, évjárat
+                - A Car osztály biztosítson egy metódust, amely visszaadja a tárolt adatokat a következő formátumban:
+                    { "plate" : "AG-KF-732", "type": "Ford Focus",  "year": 2024
+- Készítsünk egy PetrolCar osztályt, amelyet a Car osztályból származtatunk és pluszban tárolja az átlagos
+  fogyasztási adatokat
+- Készíts egy CarList osztályt, amely konstruktorában megkapja az exportból a "items" kulcsú struktúrát, majd a 'fuel type' alapján elkészíteni a megfelelő objektumokat:
+   petrol esetén PetrolCar objektum, electric esetén Car objektum, majd ezeket egy belső listában tárolja.
+- A CarList osztály biztosítson egy metódust, amely a paraméterben megadott rendszám alapján visszaadja a kapcsolódó objektumot
+ 
+        (b) Cégekhez tartozó foglalások tárolása:
+                - Készíts egy Company osztályt, amely tárolni fogja a foglaló cég azonosítóját (hash) és nevét, valamint egy listába tartalmazza a foglalási adatokat
+                - A Company osztály biztosítson egy metódust, amely paraméterbe megkap egy rendszámot, majd összegzi, hogy a cég hány km-t tett meg az autóval a bérlések során.
+                - Az osztály biztosítsa, hogy a print() függvény paramétereként a következő információk jelenjenk meg: cég neve, összes megtett km, valamint a bérelt autók gyártójának 
+                  és típusának listája: pl.: Quantum Innovations, 330 km, (Ford Focus, Renault Zoe) 
+ 
+        (c) A havi historikus adatok tárolása:
+                - Készíts egy MonthlyData osztályt, amely a konstruktorba megkapja az export "history" listájának egy elemét, amely 
+                alapján tárolja a havi foglalások adatait: azonosítót, a hónap megjelölését, valamint az adott hónaphoz tartozó bejegyzések alapján létrehoz egy-egy Company osztályt
+                - A MonthlyData osztály biztosítson egy metódust, amely visszaadja, hogy hány km-t tettek meg összesen az adott hónapban a bérelt autókkal
+ 
+        (d) Konverter osztály megvalósítása:
+                - Készíts egy Converter osztályt, amely a konstruktorba megkapja az export struktúrát, majd létrehozza a következő objektumokat:
+   - a "cars" kulcshoz tartozó struktúra alapján a  CarList objektumot
+   - a "history" kulcshoz tartozó struktúra alapján a MonthlyData objektumok egy listáját
+                - A Converter osztály biztosítson egy "convert" metódust, amely a tárolt foglalási adatok alapján visszaadja az egyes járművek havi kihasználtságát a következő
+                  formátumba:
+                  [
+                    { "month" = "2024-08"
+                      "cars" = [
+                            { "plate" : "AB-BB-542", "type" : "Renault Zoe", "sumkm"  : 220},
+                            { "plate" : "AD-QQ-123", "type" : "Tesla Model 3", "sumkm" : 740},
+                             ...
+                        ]},
+                    { "month" = "2024-09"
+                      "cars" = [
+                             { "plate" : "AB-BB-542", "type" : "Renault Zoe", "sumkm"  : 280},
+                             { "plate" : "AD-QQ-123", "type" : "Tesla Model 3", "sumkm" : 700},
+                        ]},
+                  ]
+                  ahol a hónapon belül az egyes autókhoz tartozó bejegyzések a rendszám alapján rendezve vannak.
