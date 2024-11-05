@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-class ReaderExample {
+class FileReaderExample {
 	public static void main(String args[]) {
 		Map<String, Integer> shoppingList = new HashMap<String, Integer>();
 		
