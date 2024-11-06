@@ -1,0 +1,6 @@
+enum BetonType {
+	NORMAL,
+	LIGHT,
+	ANTIFREEZE,
+	ANTICORROSION
+}

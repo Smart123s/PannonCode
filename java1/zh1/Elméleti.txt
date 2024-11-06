@@ -1,0 +1,54 @@
+1. Mikor használjuk a Comparator illetve a Comparable interface-eket?
+Amikor két objektumot szeretnénk összehasonlítani. A Comparable az eredeti osztályon van rajta (implementálja azt), és megadja, hogy két instance közül melyik a nagyobb.
+A Comparator egy külön osztály, ami két ugyanolyan típusú objektumot hasonlít össze. A comparator osztályt rendszerint a sort függvény paramétereként adjuk meg. Ezzel a megoldással egy osztály több szempont szerint is sorba lehet rendezni (pl. egy Person() osztály esetén lehet AgeComparator, NameComparator, stb.)
+
+2. Mi a Garbage Collector és milyen hatása van a Java programokra, programfejlesztésre?
+Szemét szedő, kitörli azokat az objektumokat a memóriából, amikre 0db referencia van. RAM felhazsnálást csökkenti. GC-nek köszönhetően nem kell destructort írni, mint C++-ban.
+
+3. Ismertesd röviden a Java I/O stream modellt, a legfontosabb ősosztályokkal!
+Az OS a JVM-nek küldi az adott csatornán beérkező/kimenő adatot. A JVM továbbadja a Java kódunknak az információt. A JVM effektíve egy híd az OS és a Java kód között.
+Fontosabb osztályok:
+java.io illetve java.nio packageekben található osztályok.
+pl. BufferedReader, InputStreamReader, OutputStreamWriter, esetleg ServerSocket
+
+4. Mire szolgál a referencia változó a Java nyelvben? Milyen műveletek értelmezettek rajta?
+Adj példát a használatára!
+Osztályok tetején szoktuk létrehozni (tehát meódusokon kívül), és nincs értékük (pontosabban null);
+Pl. class A {int asd;}
+Itt asd egy referencia változó.
+Lehet neki érétket adni, illetve egyenlőséget vizsgálni. Null-on más műveletet nem nagyon lehet végezni.
+
+5. Hogyan valósítja meg a platform függetlenséget a JVM?
+A JVM-et elkészítették több OS-re/architektúrára (x86,arm). Ugyanazt a Java kódot az éppen futó OS instrukcióira fordítja le a JVM, futás közben.
+
+6. Metódushívás során a Java érték és/vagy cím szerinti paraméterátadást használ?
+Indokold a válaszod példa segítségével!
+A primitív adattípusoknál értéket ad tovább.
+Pl.
+a = 5;
+public alma(int a)
+{a = 3;}
+// az alma metóduson kívül a = 5 maradt, ne változik
+// Tehát itt „a” értéke másolódik.
+
+Az objektumoknál viszont referenciát ad tovább
+Pl.
+Car a = new Car("opel");
+public alma(Car a)
+{a.brand = "BMW";}
+// az alma metóduson kívül (a.brand = BMW) lett
+// Tehát itt objektum referencia került átadásra
+
+7. Indokold meg miért jobb a példányváltozókat „private” láthatósággal ellátni!
+Getter és setter függvényekkel érjük el őket.
+Ha input validációra van szükség, akkor azt a setter-ben el lehet végezni.
+Pl., ha valaki egy gyerek korát -1-re szeretné állítani, akkor exception-t dobhat a setter metódus
+Lehet interfce-ben setter metódus, míg változó nem (lásd: következő kérdés)
+Lehet csak írható változókat készíteni (nincs getter).
+
+8. Mi az interface jelentése és szerepe a Java programnyelvben?
+Ugyanaz, mint a többi programozási nyelvben.
+Egy contract-ot (szerződést) ad meg, miszerint az interface-t implementáló osztályok biztosan rendelkeznek a megadott metódusokkal.
+Továbbá, ha külső könyvtárat használunk, akkor elég a könyvtár interface-it letölteni, nem kell a teljes kód. (gyorsabb lesz tőle a maven :) )
+A könyvtárat könnyebb dinamikusan linkelni.
+Ha az osztályon belül a logika megváltozik, akkor a régebbi interface-ek implementálásával könnyebb visszafelé (backwards) kompatibilitást megvalósítani.
