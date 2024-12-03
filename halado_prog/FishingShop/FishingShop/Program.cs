@@ -74,7 +74,39 @@ namespace FishingShop
             if (context.Orders.Count() < 43)
             {
                 //ide hozd létre az új rendeléseket felvivő részt
-                
+                orderManager.Create(new Order()
+                {
+                    CustomerId = 10,
+                    OrderDate = DateTime.Now,
+                    OrderProducts = new List<OrderProduct>()
+                    {
+                        new OrderProduct() {ProductId = 1, Quantity = 2},
+                        new OrderProduct() {ProductId = 23, Quantity = 10},
+                    }
+                });
+
+                orderManager.Create(new Order()
+                {
+                    CustomerId = 11,
+                    OrderDate = new DateTime(2024, 10, 23),
+                    OrderProducts = new List<OrderProduct>()
+                    {
+                        new OrderProduct() {ProductId = 4, Quantity = 1},
+                        new OrderProduct() {ProductId = 29, Quantity = 6},
+                        new OrderProduct() {ProductId = 11, Quantity = 8},
+                    }
+                });
+
+                orderManager.Create(new Order()
+                {
+                    CustomerId = 12,
+                    OrderDate = new DateTime(2024, 11, 30),
+                    OrderProducts = new List<OrderProduct>()
+                    {
+                        new OrderProduct() {ProductId = 8, Quantity = 3},
+                    }
+                });
+
             }
 
             //list orders
@@ -84,7 +116,12 @@ namespace FishingShop
             Console.WriteLine();
 
             //itt hívd meg azt a függvényt, amely visszaadja, hogy melyik nap hány rendelés történt és az eredményét írasd ki a konzolra
-
+            var ordersByDate = orderManager.GetOrderCountByDate();
+            foreach (var key in ordersByDate.Keys)
+            {
+                Console.WriteLine($"{key:yyyy-MM-dd}: {ordersByDate[key]}");
+            }
+            Console.WriteLine();
 
             try
             {

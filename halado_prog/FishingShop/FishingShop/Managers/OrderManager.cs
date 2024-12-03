@@ -23,7 +23,14 @@ namespace FishingShop.Managers
         public void Create(Order order)
         {
             _context.Orders.Add(order);
-            _context.ToString();
+            _context.SaveChanges();
+        }
+
+        public Dictionary<DateTime, int> GetOrderCountByDate()
+        {
+            return _context.Orders
+                .GroupBy(o => o.OrderDate)
+                .ToDictionary(g => g.Key, g => g.Count());
         }
     }
 }
