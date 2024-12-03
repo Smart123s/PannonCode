@@ -10,3 +10,16 @@ dotnet tool install --global dotnet-ef
 Commands:
 dotnet ef migrations add AddAddressToOwner
 dotnet ef database update
+
+
+NuGet Package Manager Console-ban
+Add-Migration <name>
+Update-Database
+
+Connection String:
+@"Server=localhost;" +
+"Database=<DATABASE_NAME_HERE!!!!!!!!!!!!!!!!!!!!>;" +
+// "Trusted_Connection=True;" +
+"TrustServerCertificate=True;" +
+"User Id=sa;" +
+"Password=yourStrong(&)Password"
