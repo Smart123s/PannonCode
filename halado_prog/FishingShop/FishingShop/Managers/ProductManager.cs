@@ -1,4 +1,6 @@
-﻿namespace FishingShop.Managers
+﻿using FishingShop.Entities;
+
+namespace FishingShop.Managers
 {
     public class ProductManager
     {
@@ -7,6 +9,17 @@
         public ProductManager(FishingShopDbContext context)
         {
             _context = context;
+        }
+
+        public void Create(Product product)
+        {
+            _context.Products.Add(product);
+            _context.ToString();
+        }
+
+        public IList<Product> GetAll()
+        {
+            return _context.Products.ToList();
         }
     }
 }

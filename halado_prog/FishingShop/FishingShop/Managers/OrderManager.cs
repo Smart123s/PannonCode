@@ -19,5 +19,11 @@ namespace FishingShop.Managers
                 .OrderBy(o => o.OrderDate)
                 .ToList();
         }
+
+        public void Create(Order order)
+        {
+            _context.Orders.Add(order);
+            _context.ToString();
+        }
     }
 }

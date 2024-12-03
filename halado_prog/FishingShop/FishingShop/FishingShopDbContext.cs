@@ -12,7 +12,14 @@ namespace FishingShop
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(local);Database=FishingShopDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
+            optionsBuilder
+                // .LogTo(Console.WriteLine)
+                .UseSqlServer(@"Server=localhost;" +
+                "Database=FishingShopDb;" +
+                // "Trusted_Connection=True;" +
+                "TrustServerCertificate=True;" +
+                "User Id=sa;" +
+                "Password=yourStrong(&)Password");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
