@@ -1,0 +1,12 @@
+Feladat:
+https://moodle.uni-pannon.hu/pluginfile.php/236935/mod_resource/content/1/FishingShop.pdf
+https://web.archive.org/web/20241203130857if_/https://moodle.uni-pannon.hu/pluginfile.php/236935/mod_resource/content/1/FishingShop.pdf
+
+
+ZH gyakorlás - InitDbData SQL:
+https://moodle.uni-pannon.hu/mod/resource/view.php?id=147167
+
+ZH gyakorló - FishingShop Addresses SQL Fájl:
+https://moodle.uni-pannon.hu/mod/resource/view.php?id=147170
+
+https://moodle.uni-pannon.hu/mod/resource/view.php?id=147171
