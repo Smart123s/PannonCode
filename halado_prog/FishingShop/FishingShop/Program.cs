@@ -126,7 +126,12 @@ namespace FishingShop
             try
             {
                 //itt demonstráld a blacklist-es feladatot
-                
+                orderManager.Create(new Order()
+                {
+                    CustomerId = 11,
+                    OrderDate = DateTime.Now,
+                    OrderProducts = [new OrderProduct() { ProductId = 1, Quantity = 10 }]
+                });
             }
             catch (Exception ex)
             {

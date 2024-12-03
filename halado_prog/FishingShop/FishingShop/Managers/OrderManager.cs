@@ -1,15 +1,19 @@
 ﻿using FishingShop.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace FishingShop.Managers
 {
     public class OrderManager
     {
         private readonly FishingShopDbContext _context;
+        private readonly IList<string> _blackListedCustomerNames;
 
         public OrderManager(FishingShopDbContext context)
         {
             _context = context;
+            var fileContent = File.ReadAllText("blacklist.json");
+            _blackListedCustomerNames = JsonSerializer.Deserialize<IList<string>>(fileContent);
         }
 
         public List<Order> GetAll()
@@ -22,6 +26,15 @@ namespace FishingShop.Managers
 
         public void Create(Order order)
         {
+            var customerName = _context.Customers
+                .Where(customer => customer.Id == order.CustomerId)
+                .Select(Customer => Customer.Name)
+                .First();
+
+            if (_blackListedCustomerNames.Contains(customerName))
+            {
+                throw new BlackListException(customerName);
+            }
             _context.Orders.Add(order);
             _context.SaveChanges();
         }
