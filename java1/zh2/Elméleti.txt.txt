@@ -1,0 +1,26 @@
+E1. Hogyan tud egy Java program kommunikálni egy másik gépen futó programmal?
+Tud ugyanúgy is, mint bármelyik másik program: egy standard protokollon keresztül: pl. HTTP, TCP, stb. Például a kliens egy HTTP GET request-et küld egy másik gépen futó, nem feltétlenül Java-ban megírt programnak.
+Létezik JVM-JVM közti kommunikáció is, RPC, Java-ban RNI. Itt a .class fileokat mindkét JVM-nek el kell érnie (pl SAMBA megosztás). Ezután a Serializable interface-t implementáló osztályok bytestream-é serializált állapotban áetküldésre kerülnek a távoli JVM-ra, ahol a számíások elvégézse után az eredmény szintén serializálva visszakerül a client JVM-re.
+
+
+E2. Mi a különbség az „overriding” és „overloading” között? Melyiket mire használjuk?
+Overriding: Öröklődésnál (extends) használjuk, hogy az anyaosztály egy metódusát felülírjuk.
+Overloading: Ha kettő (vagy több) függvénynek ugyanaz a neve egy osztályon belül, de mások a paraméterei, akkor a Java (vagy más nyelv is) meg tudja különböztetni a két fügvényt egymástól, a paraméterek típusait felhazsnálva.
+Pl.
+void add(int a, int b)
+void add(float a, float b)
+lehetnek egy osztályon belül, és meghíváskor a paramétereknek megfelelő fog lefutni.
+
+
+E3. Mire szolgál a referenciaváltozó a Java nyelvben? Milyen műveletek értelmezettek rajta?
+Ez volt az előző ZH-ban is............ 😠
+Singeletonoknál gyaakori például a használata. A referenciaváltozó egy instance-t (példányt) tárol az adott osztályról.
+pl.
+class Alma() {
+    private static Alma inst; // Ez a referencia változó
+    public void getAlma() {
+        return inst;
+    }
+}
+Ha egy osztályból nem akarunk több példányt használni, akkor a singleton megoldás hasznos. Pl. egy játékszervernél egyetlen Server objektum van, ami minden adatot tárol. És bárhol a kódban ha a Server objektumot akarjuk használni, akkor mindig ugyanaz az Server objektum kell.
+Például: https://github.com/GeyserMC/Floodgate (igen, fejből tudom a repo URL-jét... nincs netem :/ ) projekben ilyen a FloodgateApi.getInstance(), amibeől az egész szerveren egyetlen példány létezik, és az kezeli az összes objektumot.
