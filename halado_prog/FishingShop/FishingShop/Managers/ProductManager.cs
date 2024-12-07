@@ -1,4 +1,5 @@
 ﻿using FishingShop.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FishingShop.Managers
 {
@@ -20,6 +21,17 @@ namespace FishingShop.Managers
         public IList<Product> GetAll()
         {
             return _context.Products.ToList();
+        }
+
+        public Dictionary<string, List<string>> GetCustomers()
+        {
+            return _context.Products
+                .Include(p => p.OrderProducts)
+                .ThenInclude(op => op.Order)
+                .ThenInclude(o => o.Customer)
+                .GroupBy(product => product.Name)
+                .ToDictionary(Customer => Customer.Key, Customer
+                    => Customer.SelectMany(product => product.OrderProducts.Select(op => op.Order.Customer.Name)).Distinct().ToList());
         }
     }
 }

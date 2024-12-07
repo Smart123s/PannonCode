@@ -139,17 +139,24 @@ namespace FishingShop
             }
 
             //itt demonstráld azt a feladatot, amely visszaadja, hogy adott termékeket eddig milyen megrendelők rendelték
-
+            var productCustomers = productManager.GetCustomers();
+            foreach (var key in productCustomers.Keys)
+            {
+                Console.WriteLine($"{key}: {string.Join(", ", productCustomers[key])}");
+            }
+            Console.WriteLine();
 
             //itt hívd meg A TotalOrderst kiszámoló függvényt
-
+            customerManager.UpdateOrderCounts();
 
             //itt írasd ki újra a megrendelőket, hogy már benne van a megrendelések össz száma is
             Console.WriteLine("Customers:");
-
+            customers = customerManager.GetAll();
+            customers.ForEach(Console.WriteLine);
             Console.WriteLine();
-            
+
             //itt hívd meg a rendelések statisztikáját városonként adatbázisba beszúró függvényt
+            //orderManager.CalculateCityOrderStats();
 
         }
     }
