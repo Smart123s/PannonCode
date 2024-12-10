@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Courses</h3>
+<!-- Write your solution here!-->
+<table >
+    <th>Code</th><th>Course</th><th>Students</th><th>Link</th>
+    {%for course in courses %}
+        <tr>
+            <td>{{course.code}}</td>
+            <td><b>{{course.name}}</b></td>
+            <td>
+                {%for student in course.students %}
+                    <p>{{ student.name }}</p>
+                {% endfor %}
+            </td>
+            <td>
+                <a href="/students/{{course.code}}">Link students</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<!---->
+{% endblock %}
