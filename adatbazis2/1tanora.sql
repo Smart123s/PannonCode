@@ -49,7 +49,12 @@ CREATE TABLE EmployeeRecord (
 /*
 5. Töltse fel az EmployeeRecord táblát az EmployeeField adataival! 
 */
---Megoldás???
+insert EmployeeRecord (EmployeeId, AttribId, AttribValue)
+select employeeid, 1, lastname from employeefield where lastname is not null
+union
+select employeeid, 2, title from employeefield where title is not null
+union
+select employeeid, 3, city from employeefield where city is not null
 
 /*
 6. Ellenőrizze, hogy az adatok feltöltése sikerült-e!
