@@ -1,0 +1,4 @@
+Gyor 711 8.99 1
+Pecs 711 4.77 4
+Nemesvamos 639 8.03 2
+Szombathely 977 5.26 2
