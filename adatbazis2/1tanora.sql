@@ -127,10 +127,25 @@ SELECT * FROM eredm_pivot ORDER BY csapat_nev
 /*
 P1 feladat: csapatteljesítmények gyümölcsönként (csapatnév, napnév + gyümölcsök)
 */
+SELECT csapat_nev, nap_nev, alma, szilva
+from eredm_pivot
+pivot (sum(leadott_lada) for gyumolcs_nev in (alma, szilva) ) as pt
 
 /*P2*/
 
 /*P3*/
+
+/* EREDETI (bonyolultabb) ÓRAI MEGOLDÁS */
+SELECT csapat_nev, alma, szilva
+FROM (SELECT csapat_nev, gyumolcs_nev, sum(leadott_lada) AS leadott_lada
+FROM eredm_pivot GROUP BY csapat_nev, gyumolcs_nev) AS forras
+pivot (sum(leadott_lada) for gyumolcs_nev in (alma, szilva) ) AS pt
+
+/* UGYANAZ, MINT FENT, CSAK ATTI ÓRÁN EGYSZERŰBBEN MEGOLDOTTA*/
+SELECT csapat_nev, alma, szilva
+FROM (SELECT csapat_nev, gyumolcs_nev, leadott_lada
+FROM eredm_pivot) AS forras
+pivot (sum(leadott_lada) for gyumolcs_nev in (alma, szilva) ) AS pt
 
 /*P4*/
 
