@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MintaZH1</string>
+    <string name="points_count">Points count</string>
+    <string name="retries_count">Retries count</string>
+</resources>

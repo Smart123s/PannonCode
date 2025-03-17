@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MintaZH1</string>
+    <string name="points_count">Pontszám</string>
+    <string name="retries_count">Próbálkozások száma</string>
+</resources>
