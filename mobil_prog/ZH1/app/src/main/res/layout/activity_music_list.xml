@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#03D4CE"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="537dp"
+        android:layout_height="58dp"
+        android:fontFamily="@font/concert_one"
+        android:text="@string/music_list"
+        android:textAlignment="center"
+        android:textColor="#9C27B0"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="22dp"
+        android:text="@string/random_play_order"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="23dp"
+        android:layout_toEndOf="@+id/textView4"
+        android:checked="true"
+        android:text="@string/turned_on"
+        android:textColor="@color/black"
+        android:textOff="@string/turned_off"
+        android:textOn="@string/turned_on"
+        android:textSize="18sp"
+        tools:checked="true" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="429dp"
+        android:layout_height="261dp"
+        android:layout_below="@+id/textView4"
+        android:layout_marginTop="25dp"
+        android:background="@color/white" />
+</RelativeLayout>

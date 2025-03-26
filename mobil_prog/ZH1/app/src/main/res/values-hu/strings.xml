@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ZH1</string>
+    <string name="music_list">Dalok listája</string>
+    <string name="notes">Jegyzetek...</string>
+    <string name="play">Lejátszás</string>
+    <string name="pause">Szünet</string>
+    <string name="volume">Hangerő</string>
+    <string name="random_play_order">Véletlen lejátszási sorrend</string>
+    <string name="turned_on">Bekapcsolva</string>
+    <string name="turned_off">Kikapcsolva</string>
+    <string name="save_title">Mentés</string>
+    <string name="save_text">Szeretnél még módosítani a jegyzeteken?</string>
+    <string name="save_success">Jegyzetek sikeresen elmentve</string>
+    <string name="yes">Igen</string>
+    <string name="no">Nem</string>
+</resources>

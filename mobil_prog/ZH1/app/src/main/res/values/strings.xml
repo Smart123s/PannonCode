@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">ZH1</string>
+    <string name="music_list">Music list</string>
+    <string name="notes">Notes...</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="volume">Volume</string>
+    <string name="random_play_order">Random order</string>
+    <string name="turned_on">On</string>
+    <string name="turned_off">Off</string>
+    <string name="save_title">Save</string>
+    <string name="save_text">Would you like to modify the notes?</string>
+    <string name="save_success">Notes saved successfully</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>
