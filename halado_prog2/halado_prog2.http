@@ -1,0 +1,6 @@
+@halado_prog2_HostAddress = http://localhost:5114
+
+GET {{halado_prog2_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
