@@ -1,4 +1,6 @@
 using halado_prog2;
+using halado_prog2.Configuration;
+using halado_prog2.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,10 @@ options.UseSqlServer(@"Server=localhost;" +
                 "TrustServerCertificate=True;" +
                 "User Id=sa;" +
                 "Password=yourStrong(&)Password"));
+
+// Configure the Price Update Settings
+builder.Services.Configure<PriceUpdateSettings>(builder.Configuration.GetSection(PriceUpdateSettings.SectionName));
+builder.Services.AddHostedService<PriceUpdateBackgroundService>();
 
 var app = builder.Build();
 

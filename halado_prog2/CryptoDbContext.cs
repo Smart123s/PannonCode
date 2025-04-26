@@ -127,7 +127,6 @@ namespace halado_prog2
             modelBuilder.Entity<Cryptocurrency>().Property(c => c.Name).HasMaxLength(50);
             modelBuilder.Entity<Transaction>().Property(t => t.TransactionType).HasMaxLength(10);
 
-
             base.OnModelCreating(modelBuilder);
         }
     }
