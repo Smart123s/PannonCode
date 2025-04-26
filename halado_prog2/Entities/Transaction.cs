@@ -1,39 +1,37 @@
-﻿namespace halado_prog2.Entities
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-    // Represents a buy or sell transaction
+namespace halado_prog2.Entities // Namespace remains the same
+{
+    // Represents a buy or sell transaction (remains the same)
     public class Transaction
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public int UserId { get; set; } // Foreign Key
+        public int UserId { get; set; }
 
         [Required]
-        public int CryptoId { get; set; } // Foreign Key
+        public int CryptoId { get; set; }
 
         [Required]
-        [MaxLength(10)] // "Buy" or "Sell"
-        public string TransactionType { get; set; } // e.g., "Buy", "Sell" - could also be an enum
-
-        [Required]
-        [Column(TypeName = "decimal(18, 8)")]
-        public decimal Quantity { get; set; } // Quantity of crypto traded
+        [MaxLength(10)]
+        public string TransactionType { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18, 8)")]
-        public decimal PriceAtTrade { get; set; } // Price of the crypto at the time of the trade
+        public decimal Quantity { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(18, 8)")]
+        public decimal PriceAtTrade { get; set; }
 
         [Required]
         public DateTime Timestamp { get; set; }
 
-        // Navigation properties
-        public User User { get; set; } // Foreign Key relationship to User
-        public Cryptocurrency Cryptocurrency { get; set; } // Foreign Key relationship to Cryptocurrency
+        // Navigation properties (remain the same)
+        public User User { get; set; }
+        public Cryptocurrency Cryptocurrency { get; set; }
     }
 }
-

@@ -1,10 +1,12 @@
-﻿namespace halado_prog2.Entities
-{
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-    // Represents a type of cryptocurrency traded in the simulator
+namespace halado_prog2.Entities // Namespace remains the same
+{
+
+    // Removed Wallet entity previously
+
+    // Represents a type of cryptocurrency traded in the simulator (Remains the same)
     public class Cryptocurrency
     {
         [Key]
@@ -12,23 +14,34 @@
 
         [Required]
         [MaxLength(50)]
-        // Using Fluent API for unique index on Name in DbContext
-        public string Name { get; set; } // e.g., "BTC", "ETH"
+        public string Name { get; set; }
 
-        [Required]
-        [Column(TypeName = "decimal(18, 8)")]
-        public decimal CurrentPrice { get; set; }
-
-        // Starting price/quantity mentioned in the spec could be stored if needed for history or setup,
-        // but CurrentPrice is the crucial dynamic value.
-        // Optional:
-        // [Column(TypeName = "decimal(18, 8)")]
-        // public decimal StartingPrice { get; set; }
+        // --- REMOVED [Required] and [Column(TypeName = "decimal(18, 8)")] ---
+        // --- Added [NotMapped] and implemented getter logic ---
+        [NotMapped] // This property will NOT be mapped to a database column
+        public decimal CurrentPrice
+        {
+            get
+            {
+                // Find the latest price entry in the PriceHistory collection
+                // IMPORTANT: This relies on the PriceHistory navigation property being loaded!
+                // If PriceHistory is not loaded, this will likely return 0 or throw an error.
+                return PriceHistory?
+                       .OrderByDescending(ph => ph.Timestamp) // Order by timestamp descending
+                       .FirstOrDefault()?.Price ?? 0.0M; // Get the price of the latest, or 0 if no history
+            }
+            // You can keep a setter if you want to allow setting it in code, but it won't save to DB
+            // or you can remove the setter if it's purely calculated. Let's remove the setter
+            // to emphasize it's derived.
+            // set { /* Maybe do nothing, or handle it if needed */ }
+        }
+        // ---
 
         // Navigation properties
-        public ICollection<Transaction> Transactions { get; set; } // One-to-many relationship with Transactions (trades involving this crypto)
-        public ICollection<PriceHistory> PriceHistory { get; set; } // One-to-many relationship with PriceHistory
-        public ICollection<WalletCrypto> WalletCryptos { get; set; } // Many-to-many relationship via WalletCrypto (wallets holding this crypto)
+        public ICollection<CryptoWallet> CryptoWallets { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
+
+        // One-to-many relationship with PriceHistory - Remains the source of truth for prices
+        public ICollection<PriceHistory> PriceHistory { get; set; } // This collection MUST be loaded!
     }
 }
-

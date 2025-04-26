@@ -1,17 +1,16 @@
-﻿namespace halado_prog2.Entities
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-    // Logs the price changes for cryptocurrencies
+namespace halado_prog2.Entities // Namespace remains the same
+{
+    // Logs the price changes for cryptocurrencies (remains the same)
     public class PriceHistory
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public int CryptoId { get; set; } // Foreign Key
+        public int CryptoId { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18, 8)")]
@@ -20,8 +19,7 @@
         [Required]
         public DateTime Timestamp { get; set; }
 
-        // Navigation property
-        public Cryptocurrency Cryptocurrency { get; set; } // Foreign Key relationship to Cryptocurrency
+        // Navigation property (remains the same)
+        public Cryptocurrency Cryptocurrency { get; set; }
     }
 }
-

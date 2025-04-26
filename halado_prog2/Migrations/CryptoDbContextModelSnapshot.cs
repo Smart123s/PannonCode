@@ -22,6 +22,24 @@ namespace halado_prog2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("halado_prog2.Entities.CryptoWallet", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CryptoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18, 8)");
+
+                    b.HasKey("UserId", "CryptoId");
+
+                    b.HasIndex("CryptoId");
+
+                    b.ToTable("CryptoWallets");
+                });
+
             modelBuilder.Entity("halado_prog2.Entities.Cryptocurrency", b =>
                 {
                     b.Property<int>("Id")
@@ -29,9 +47,6 @@ namespace halado_prog2.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("CurrentPrice")
-                        .HasColumnType("decimal(18, 8)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -115,6 +130,9 @@ namespace halado_prog2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18, 8)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -137,35 +155,23 @@ namespace halado_prog2.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("halado_prog2.Entities.Wallet", b =>
+            modelBuilder.Entity("halado_prog2.Entities.CryptoWallet", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasOne("halado_prog2.Entities.Cryptocurrency", "Cryptocurrency")
+                        .WithMany("CryptoWallets")
+                        .HasForeignKey("CryptoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18, 8)");
+                    b.HasOne("halado_prog2.Entities.User", "User")
+                        .WithMany("CryptoWallets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("Id");
+                    b.Navigation("Cryptocurrency");
 
-                    b.ToTable("Wallets");
-                });
-
-            modelBuilder.Entity("halado_prog2.Entities.WalletCrypto", b =>
-                {
-                    b.Property<int>("WalletId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CryptoId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18, 8)");
-
-                    b.HasKey("WalletId", "CryptoId");
-
-                    b.HasIndex("CryptoId");
-
-                    b.ToTable("WalletCryptos");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("halado_prog2.Entities.PriceHistory", b =>
@@ -198,56 +204,20 @@ namespace halado_prog2.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("halado_prog2.Entities.Wallet", b =>
-                {
-                    b.HasOne("halado_prog2.Entities.User", "User")
-                        .WithOne("Wallet")
-                        .HasForeignKey("halado_prog2.Entities.Wallet", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("halado_prog2.Entities.WalletCrypto", b =>
-                {
-                    b.HasOne("halado_prog2.Entities.Cryptocurrency", "Cryptocurrency")
-                        .WithMany("WalletCryptos")
-                        .HasForeignKey("CryptoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("halado_prog2.Entities.Wallet", "Wallet")
-                        .WithMany("WalletCryptos")
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cryptocurrency");
-
-                    b.Navigation("Wallet");
-                });
-
             modelBuilder.Entity("halado_prog2.Entities.Cryptocurrency", b =>
                 {
+                    b.Navigation("CryptoWallets");
+
                     b.Navigation("PriceHistory");
 
                     b.Navigation("Transactions");
-
-                    b.Navigation("WalletCryptos");
                 });
 
             modelBuilder.Entity("halado_prog2.Entities.User", b =>
                 {
+                    b.Navigation("CryptoWallets");
+
                     b.Navigation("Transactions");
-
-                    b.Navigation("Wallet")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("halado_prog2.Entities.Wallet", b =>
-                {
-                    b.Navigation("WalletCryptos");
                 });
 #pragma warning restore 612, 618
         }

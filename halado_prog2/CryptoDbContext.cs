@@ -23,69 +23,73 @@ namespace halado_prog2
 
     }
 
-    // DbSets represent your tables in the database
-    public DbSet<User> Users { get; set; }
-        public DbSet<Wallet> Wallets { get; set; }
+
+        // DbSets represent your tables in the database
+        public DbSet<User> Users { get; set; }
         public DbSet<Cryptocurrency> Cryptocurrencies { get; set; }
-        public DbSet<WalletCrypto> WalletCryptos { get; set; }
+        // RENAMED DbSet name
+        public DbSet<CryptoWallet> CryptoWallets { get; set; } // Changed from UserCryptos
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<PriceHistory> PriceHistory { get; set; }
 
         // Configure the model using Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // --- Configure Primary Keys (mostly covered by convention, but can be explicit) ---
+            // --- Configure Primary Keys --- (remain largely the same, except for the join table)
             modelBuilder.Entity<User>().HasKey(u => u.Id);
-            modelBuilder.Entity<Wallet>().HasKey(w => w.Id); // Wallet ID is also the FK to User
             modelBuilder.Entity<Cryptocurrency>().HasKey(c => c.Id);
             modelBuilder.Entity<Transaction>().HasKey(t => t.Id);
             modelBuilder.Entity<PriceHistory>().HasKey(ph => ph.Id);
+            // Configured CryptoWallet Composite Key below
 
             // --- Configure Relationships ---
 
-            // User <--> Wallet (One-to-One)
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Wallet)      // User has one Wallet
-                .WithOne(w => w.User)       // Wallet is associated with one User
-                .HasForeignKey<Wallet>(w => w.Id); // The FK is on the Wallet entity, using Wallet.Id
+            // --- Tell EF Core to IGNORE the CurrentPrice property ---
+            modelBuilder.Entity<Cryptocurrency>()
+                .Ignore(c => c.CurrentPrice); // Mark CurrentPrice as not mapped to the database
+            // ---
 
-            // User --> Transactions (One-to-Many)
+            // User --> Transactions (One-to-Many) - remains the same
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Transactions)
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId);
 
-            // Cryptocurrency --> Transactions (One-to-Many)
+            // Cryptocurrency --> Transactions (One-to-Many) - remains the same
             modelBuilder.Entity<Cryptocurrency>()
                 .HasMany(c => c.Transactions)
                 .WithOne(t => t.Cryptocurrency)
-                .HasForeignKey(t => t.CryptoId);
+                .HasForeignKey(t => t.CryptoId)
+                .OnDelete(DeleteBehavior.Cascade); // <-- Add this
 
-            // Cryptocurrency --> PriceHistory (One-to-Many)
+            // Cryptocurrency --> PriceHistory (One-to-Many) - remains the same
             modelBuilder.Entity<Cryptocurrency>()
                 .HasMany(c => c.PriceHistory)
                 .WithOne(ph => ph.Cryptocurrency)
                 .HasForeignKey(ph => ph.CryptoId);
 
-            // Wallet <--> WalletCrypto (One-to-Many)
-            modelBuilder.Entity<Wallet>()
-                .HasMany(w => w.WalletCryptos)
-                .WithOne(wc => wc.Wallet)
-                .HasForeignKey(wc => wc.WalletId);
+            // --- CryptoWallet (Many-to-Many Join Entity with Composite Key) ---
 
-            // Cryptocurrency <--> WalletCrypto (One-to-Many)
+            // Composite Primary Key (RENAMED Entity reference)
+            modelBuilder.Entity<CryptoWallet>() // Changed from UserCrypto
+                .HasKey(cw => new { cw.UserId, cw.CryptoId }); // Property names remain UserId, CryptoId
+
+            // User <--> CryptoWallet (One-to-Many) (RENAMED Entity and Navigation Property)
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.CryptoWallets) // Changed from UserCryptos
+                .WithOne(cw => cw.User) // Changed from uc
+                .HasForeignKey(cw => cw.UserId) // Property name remains UserId
+                .OnDelete(DeleteBehavior.Cascade); // <-- Add this
+
+            // Cryptocurrency <--> CryptoWallet (One-to-Many) (RENAMED Entity and Navigation Property)
             modelBuilder.Entity<Cryptocurrency>()
-                .HasMany(c => c.WalletCryptos)
-                .WithOne(wc => wc.Cryptocurrency)
-                .HasForeignKey(wc => wc.CryptoId);
+                .HasMany(c => c.CryptoWallets) // Changed from UserCryptos
+                .WithOne(cw => cw.Cryptocurrency) // Changed from uc
+                .HasForeignKey(cw => cw.CryptoId); // Property name remains CryptoId
 
-            // WalletCrypto (Many-to-Many Join Entity with Composite Key)
-            modelBuilder.Entity<WalletCrypto>()
-                .HasKey(wc => new { wc.WalletId, wc.CryptoId }); // Composite Key
+            // --- Configure Constraints and Data Types --- (remain largely the same)
 
-            // --- Configure Constraints and Data Types ---
-
-            // Unique Indexes
+            // Unique Indexes - remain the same
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -94,23 +98,14 @@ namespace halado_prog2
                 .HasIndex(c => c.Name)
                 .IsUnique();
 
-            // Decimal Precision for monetary/quantity values
-            modelBuilder.Entity<Wallet>()
-                .Property(w => w.Balance)
-                .HasColumnType("decimal(18, 8)"); // Example precision, adjust if needed
+            // Decimal Precision for monetary/quantity values - remain the same
+            modelBuilder.Entity<User>()
+                 .Property(u => u.Balance)
+                 .HasColumnType("decimal(18, 8)");
 
-            modelBuilder.Entity<Cryptocurrency>()
-                .Property(c => c.CurrentPrice)
-                .HasColumnType("decimal(18, 8)");
-
-            // If you added StartingPrice
-            // modelBuilder.Entity<Cryptocurrency>()
-            //    .Property(c => c.StartingPrice)
-            //    .HasColumnType("decimal(18, 8)");
-
-
-            modelBuilder.Entity<WalletCrypto>()
-                .Property(wc => wc.Quantity)
+            // CryptoWallet Quantity (RENAMED Entity reference)
+            modelBuilder.Entity<CryptoWallet>() // Changed from UserCrypto
+                .Property(cw => cw.Quantity) // Property name remains Quantity
                 .HasColumnType("decimal(18, 8)");
 
             modelBuilder.Entity<Transaction>()
@@ -126,7 +121,7 @@ namespace halado_prog2
                 .HasColumnType("decimal(18, 8)");
 
 
-            // Configure string lengths explicitly if not using Data Annotations
+            // Configure string lengths explicitly - remain the same
             modelBuilder.Entity<User>().Property(u => u.Username).HasMaxLength(255);
             modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(255);
             modelBuilder.Entity<Cryptocurrency>().Property(c => c.Name).HasMaxLength(50);
@@ -135,6 +130,5 @@ namespace halado_prog2
 
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }
