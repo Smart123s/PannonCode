@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#03D4CE"
+    tools:context=".MainActivity2">
+
+    <TextView
+        android:id="@+id/speed_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Megtett lépések száma\n... tempóban:"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/steps_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 / ..."
+        android:textColor="@color/black"
+        android:textSize="50sp" />
+
+    <Button
+        android:id="@+id/btn_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#9C27B0"
+        android:text="Befejezés"
+        android:textSize="18sp" />
+
+</LinearLayout>
