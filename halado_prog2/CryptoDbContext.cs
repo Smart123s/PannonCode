@@ -44,11 +44,6 @@ namespace halado_prog2
 
             // --- Configure Relationships ---
 
-            // --- Tell EF Core to IGNORE the CurrentPrice property ---
-            modelBuilder.Entity<Cryptocurrency>()
-                .Ignore(c => c.CurrentPrice); // Mark CurrentPrice as not mapped to the database
-            // ---
-
             // User --> Transactions (One-to-Many) - remains the same
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Transactions)
@@ -102,6 +97,10 @@ namespace halado_prog2
             modelBuilder.Entity<User>()
                  .Property(u => u.Balance)
                  .HasColumnType("decimal(18, 8)");
+
+            modelBuilder.Entity<Cryptocurrency>()
+                .Property(c => c.CurrentPrice)
+                .HasColumnType("decimal(18, 8)");
 
             // CryptoWallet Quantity (RENAMED Entity reference)
             modelBuilder.Entity<CryptoWallet>() // Changed from UserCrypto

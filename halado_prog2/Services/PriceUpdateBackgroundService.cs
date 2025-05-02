@@ -42,78 +42,71 @@ namespace halado_prog2.Services
         {
             _logger.LogInformation("Price Update Background Service started.");
 
-            // Loop indefinitely until the application is shutting down
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Price Update Background Service working.");
-
                 try
                 {
-                    // Create a new scope for each cycle to get a fresh DbContext
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var context = scope.ServiceProvider.GetRequiredService<CryptoDbContext>();
 
-                        // Fetch all cryptocurrencies *including* their price history
-                        // We need the latest price from the history to calculate the new price
-                        var cryptos = await context.Cryptocurrencies
-                             .Include(c => c.PriceHistory) // Crucial for getting the current price
-                             .ToListAsync(stoppingToken);
+                        // Fetch all cryptocurrencies. No longer strictly need Include(PriceHistory)
+                        // just to get the current price.
+                        var cryptos = await context.Cryptocurrencies.ToListAsync(stoppingToken);
+
+                        var newHistoryEntries = new List<PriceHistory>();
 
                         foreach (var crypto in cryptos)
                         {
-                            var currentPrice = crypto.CurrentPrice; // Uses the [NotMapped] getter
+                            // --- Read CurrentPrice directly from the entity ---
+                            var currentPrice = crypto.CurrentPrice;
+                            // ---
 
-                            // Only simulate if current price is available (history exists)
+                            // Only simulate if current price is positive
                             if (currentPrice > 0)
                             {
-                                // Simulate price change: random percentage up or down
-                                var percentageChange = (_random.NextDouble() * 2 - 1) * (double)_settings.MaxPercentageChange; // Random double between -Max% and +Max%
+                                var percentageChange = (_random.NextDouble() * 2 - 1) * (double)_settings.MaxPercentageChange;
                                 var priceMultiplier = (decimal)(1 + percentageChange);
                                 var newPrice = currentPrice * priceMultiplier;
+                                newPrice = Math.Max(0.0M, newPrice); // Ensure non-negative
 
-                                // Ensure price doesn't go negative (optional, but good for simulation)
-                                newPrice = Math.Max(0.0M, newPrice);
+                                // --- Update CurrentPrice directly on the entity ---
+                                crypto.CurrentPrice = newPrice;
+                                // ---
 
-                                // Create a new PriceHistory entry
-                                var newPriceHistory = new PriceHistory
+                                // --- Create the PriceHistory entry for logging ---
+                                newHistoryEntries.Add(new PriceHistory
                                 {
                                     CryptoId = crypto.Id,
-                                    Price = newPrice,
-                                    Timestamp = DateTime.UtcNow // Log the time of the update
-                                };
-
-                                context.PriceHistory.Add(newPriceHistory);
+                                    Price = newPrice, // Log the same new price
+                                    Timestamp = DateTime.UtcNow
+                                });
+                                // ---
                                 _logger.LogDebug($"Updating price for {crypto.Name}: {currentPrice:N8} -> {newPrice:N8}");
                             }
                             else
                             {
-                                _logger.LogWarning($"Cryptocurrency {crypto.Name} has no price history. Skipping update.");
+                                _logger.LogWarning($"Cryptocurrency {crypto.Name} has zero or negative price ({currentPrice}). Skipping update.");
                             }
                         }
 
-                        // Save all the new price history entries in a single transaction
+                        // Add all new history entries to the context
+                        context.PriceHistory.AddRange(newHistoryEntries);
+
+                        // Save changes (updates Cryptocurrencies AND adds PriceHistory)
                         await context.SaveChangesAsync(stoppingToken);
                         _logger.LogInformation($"Prices updated successfully for {cryptos.Count} cryptocurrencies.");
-                    } // Scope is disposed here, releasing the DbContext
-
+                    }
                 }
-                catch (TaskCanceledException)
-                {
-                    // Task was cancelled (application is shutting down)
-                    break; // Exit the loop gracefully
-                }
+                catch (TaskCanceledException) { break; }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error occurred in Price Update Background Service.");
-                    // Optionally, wait longer after an error before trying again
-                    // await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
                 }
 
-                // Wait for the specified interval before the next update
                 await Task.Delay(TimeSpan.FromSeconds(_settings.UpdateIntervalSeconds), stoppingToken);
             }
-
             _logger.LogInformation("Price Update Background Service stopped.");
         }
 

@@ -14,10 +14,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// Load Neptun code from neptun.txt
-// I didn't want to commit this to git
-// Yes, I've heard of appsettings.json...
-string neptunCode = NeptunCodeLoader.LoadNeptunCodeFromFile("neptun.txt");
+var neptunCode = builder.Configuration["NeptunCode"];
+if (string.IsNullOrWhiteSpace(neptunCode) || neptunCode.Equals("CHANGEME", StringComparison.OrdinalIgnoreCase))
+{
+    throw new InvalidOperationException("NeptunCode is not configured correctly in appsettings.json. Please set your Neptun code.");
+}
 
 builder.Services.AddDbContext<CryptoDbContext>(options =>
 options.UseSqlServer(@"Server=localhost;" +

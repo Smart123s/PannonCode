@@ -21,22 +21,23 @@ PRINT 'Seeding initial data for Cryptocurrencies...';
 SET IDENTITY_INSERT dbo.Cryptocurrencies ON;
 GO
 
-INSERT INTO dbo.Cryptocurrencies (Id, Name) VALUES
-(1, N'BTC'),
-(2, N'ETH'),
-(3, N'XRP'),
-(4, N'ADA'),
-(5, N'SOL'),
-(6, N'DOGE'),
-(7, N'DOT'),
-(8, N'SHIB'),
-(9, N'LTC'),
-(10, N'BCH'),
-(11, N'LINK'),
-(12, N'TRX'),
-(13, N'VET'),
-(14, N'ETC'),
-(15, N'XLM');
+INSERT INTO dbo.Cryptocurrencies (Id, Name, CurrentPrice) VALUES
+(1, N'BTC', 40000.0),
+(2, N'ETH', 3000.0),
+(3, N'XRP', 0.75),
+(4, N'ADA', 1.20),
+(5, N'SOL', 150.0),
+(6, N'DOGE', 0.15),
+(7, N'DOT', 20.0),
+(8, N'SHIB', 0.000025),
+(9, N'LTC', 150.0),
+(10, N'BCH', 300.0),
+(11, N'LINK', 25.0),
+(12, N'TRX', 0.08),
+(13, N'VET', 0.05),
+(14, N'ETC', 35.0),
+(15, N'XLM', 0.25);
+-- ---
 GO
 
 -- Disable inserting explicit values into IDENTITY columns
@@ -70,6 +71,13 @@ GO
 
 -- Disable inserting explicit values into IDENTITY columns
 SET IDENTITY_INSERT dbo.PriceHistory OFF;
+GO
+
+SET IDENTITY_INSERT dbo.Users ON;
+GO
+
+INSERT INTO dbo.Users (Id, Username, Email, PasswordHash, Balance) VALUES
+(1, N'testuser', N'test@example.com', '$2a$11$CPIfGDU06cxWMkUYCow9OeUTo.AtJTZbGP5AwFF7KvumXNnoVsC9y', 10000.0); -- User ID 1 with initial balance
 GO
 
 -- Note: Users are not seeded here. They would be created via the API's registration endpoint.

@@ -178,8 +178,7 @@ namespace halado_prog2.Controllers
         // --- Endpoints for Price Update and History (Routes adjusted) ---
 
         // PUT /api/cryptos/price
-        // Manuális árfolyam frissítés.
-        [HttpPut("price")] // Sub-route /price combined with base /api/cryptos -> /api/cryptos/price
+        [HttpPut("price")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -190,35 +189,40 @@ namespace halado_prog2.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Validate that the cryptocurrency exists
-            var cryptoExists = await _context.Cryptocurrencies.AnyAsync(c => c.Id == request.CryptoId);
-            if (!cryptoExists)
+            // --- Fetch the Cryptocurrency entity itself ---
+            var cryptoToUpdate = await _context.Cryptocurrencies
+                                       .FirstOrDefaultAsync(c => c.Id == request.CryptoId);
+
+            if (cryptoToUpdate == null)
             {
                 return NotFound($"Cryptocurrency with ID {request.CryptoId} not found.");
             }
 
-            // Create a new PriceHistory entry
+            // --- Update the CurrentPrice directly on the entity ---
+            cryptoToUpdate.CurrentPrice = request.NewPrice;
+            // ---
+
+            // --- Still create the PriceHistory entry for logging ---
             var newPriceHistory = new PriceHistory
             {
                 CryptoId = request.CryptoId,
-                Price = request.NewPrice,
+                Price = request.NewPrice, // Log the same new price
                 Timestamp = DateTime.UtcNow
             };
-
             _context.PriceHistory.Add(newPriceHistory);
+            // ---
 
             try
             {
+                // --- Save changes (updates Cryptocurrency AND adds PriceHistory) ---
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException dbEx)
+            catch (DbUpdateException dbEx) // Catch specific EF Core update exceptions
             {
-                Console.Error.WriteLine($"Database error adding price history: {dbEx}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while saving the price history.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while saving the price update.");
             }
-            catch (Exception ex)
+            catch (Exception ex) // Catch any other unexpected errors
             {
-                Console.Error.WriteLine($"Unexpected error updating price: {ex}");
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
 
