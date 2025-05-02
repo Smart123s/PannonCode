@@ -32,6 +32,14 @@ options.UseSqlServer(@"Server=localhost;" +
 builder.Services.Configure<PriceUpdateSettings>(builder.Configuration.GetSection(PriceUpdateSettings.SectionName));
 builder.Services.AddHostedService<PriceUpdateBackgroundService>();
 
+// Register controller extracted services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICryptoService, CryptoService>();
+builder.Services.AddScoped<ITradeService, TradeService>();
+builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IProfitService, ProfitService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

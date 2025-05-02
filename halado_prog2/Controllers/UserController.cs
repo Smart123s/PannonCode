@@ -1,199 +1,89 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities;
+﻿// File: Controllers/UsersController.cs
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using halado_prog2.DTOs;
+using halado_prog2.Services; // Use the service interface
 
 namespace halado_prog2.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] // Base route /api/users
+    [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly CryptoDbContext _context;
+        // Inject the service interface, NOT the DbContext
+        private readonly IUserService _userService;
 
-        public UsersController(CryptoDbContext context)
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
-        // POST /api/users/register
         [HttpPost("register")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
+            // 1. Input Validation (remains in controller)
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Validation: Check if email already exists
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-            if (existingUser != null)
+            // 2. Call the service
+            var (userDto, errorMessage, statusCode) = await _userService.RegisterAsync(request);
+
+            // 3. Map service result to IActionResult
+            if (userDto != null)
             {
-                return Conflict(new ProblemDetails
-                {
-                    Title = "Email already exists",
-                    Detail = $"A user with the email address '{request.Email}' already exists.",
-                    Status = StatusCodes.Status409Conflict,
-                    Instance = HttpContext.Request.Path
-                });
+                // Success (201 Created)
+                return CreatedAtAction(nameof(GetUser), new { userId = userDto.Id }, userDto);
             }
-
-            // Create a new User entity
-            var user = new User
+            else if (statusCode == StatusCodes.Status409Conflict)
             {
-                Username = request.Username,
-                Email = request.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                // --- Set initial Balance directly on the User ---
-                Balance = 10000.0M // Initial balance as per spec requirement example
-            };
-
-            // Add the new user to the context
-            _context.Users.Add(user);
-
-            // Save changes to the database. This will assign an ID to the user.
-            await _context.SaveChangesAsync();
-
-            // Prepare the response DTO
-            var userDto = new UserDto
+                // Specific, known error (Conflict)
+                return Conflict(new ProblemDetails { Title = "Registration Error", Detail = errorMessage, Status = statusCode });
+            }
+            else
             {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                Balance = user.Balance
-            };
-
-            return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, userDto);
+                // Generic internal server error
+                return StatusCode(statusCode, new ProblemDetails { Title = "Registration Error", Detail = errorMessage, Status = statusCode });
+            }
         }
 
-        // GET /api/users/{userId}
         [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUser(int userId)
         {
-            // Find the user by ID
-            var user = await _context.Users.FindAsync(userId);
+            var userDto = await _userService.GetUserAsync(userId);
 
-            if (user == null)
-            {
-                return NotFound(); // Return 404 if user is not found
-            }
-
-            // Map the User entity to a DTO for the response
-            var userDto = new UserDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                Balance = user.Balance
-                // Do NOT include PasswordHash
-            };
-
-            return Ok(userDto);
-        }
-
-        // PUT /api/users/{userId}
-        [HttpPut("{userId}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserRequestDto request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Find the user to update
-            var user = await _context.Users.FindAsync(userId);
-
-            if (user == null)
-            {
-                return NotFound(); // Return 404 if user is not found
-            }
-
-            // Apply updates from the request DTO if fields are provided
-            if (!string.IsNullOrEmpty(request.Username))
-            {
-                user.Username = request.Username;
-            }
-
-            if (!string.IsNullOrEmpty(request.Email) && request.Email != user.Email)
-            {
-                // Check for email uniqueness if the email is being changed
-                var existingUserWithEmail = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email && u.Id != userId);
-                if (existingUserWithEmail != null)
-                {
-                    return Conflict(new ProblemDetails
-                    {
-                        Title = "Email already exists",
-                        Detail = $"A user with the email address '{request.Email}' already exists.",
-                        Status = StatusCodes.Status409Conflict,
-                        Instance = HttpContext.Request.Path
-                    });
-                }
-                user.Email = request.Email;
-            }
-
-            if (!string.IsNullOrEmpty(request.NewPassword))
-            {
-                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Users.Any(e => e.Id == userId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE /api/users/{userId}
-        [HttpDelete("{userId}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteUser(int userId)
-        {
-            // Find the user to delete
-            var user = await _context.Users
-                .Include(u => u.CryptoWallets) // Include related CryptoWallet entities
-                .Include(u => u.Transactions) // Include related Transaction entities
-                .FirstOrDefaultAsync(u => u.Id == userId); // Use FirstOrDefaultAsync with Include
-
-            if (user == null)
+            if (userDto == null)
             {
                 return NotFound();
             }
+            return Ok(userDto);
+        }
 
-            // --- Rely on cascading delete ---
-            // If cascading delete is NOT configured in DbContext, you'd need to remove them manually first:
-            // _context.CryptoWallets.RemoveRange(user.CryptoWallets);
-            // _context.Transactions.RemoveRange(user.Transactions);
-            // --- Assuming cascading delete is configured (recommended) ---
+        // --- Refactor other actions (UpdateUser, DeleteUser) similarly ---
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserRequestDto request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var (success, error, statusCode) = await _userService.UpdateUserAsync(userId, request);
+            if (success) return NoContent();
+            if (statusCode == StatusCodes.Status404NotFound) return NotFound(error);
+            if (statusCode == StatusCodes.Status409Conflict) return Conflict(error);
+            return StatusCode(statusCode, error); // Or generic error
+        }
 
-            // Remove the user from the context
-            _context.Users.Remove(user);
-
-            // Save changes. Cascading delete will handle CryptoWallet and Transaction entries
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            var (success, error) = await _userService.DeleteUserAsync(userId);
+            if (success) return NoContent();
+            return NotFound(error); // Assuming only 404 is possible failure here
         }
     }
 }

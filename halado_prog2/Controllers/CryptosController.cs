@@ -1,77 +1,50 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities;
+﻿// File: Controllers/CryptosController.cs
+using Microsoft.AspNetCore.Mvc;
 using halado_prog2.DTOs;
+using halado_prog2.Services;
 
 namespace halado_prog2.Controllers
 {
     [ApiController]
-    [Route("api/cryptos")] // Base route /api/cryptos
+    [Route("api/cryptos")] // Base route
     public class CryptosController : ControllerBase
     {
-        private readonly CryptoDbContext _context;
+        // Inject the service interface
+        private readonly ICryptoService _cryptoService;
+        // Inject logger if needed for controller-specific logging (optional)
+        // private readonly ILogger<CryptosController> _logger;
 
-        public CryptosController(CryptoDbContext context)
+        public CryptosController(ICryptoService cryptoService)
         {
-            _context = context;
+            _cryptoService = cryptoService;
         }
 
-        // GET /api/cryptos
-        // Listázza az összes elérhető kriptovalutát és azok aktuális árfolyamát.
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<CryptoDto>>> GetCryptos()
+        [ProducesResponseType(typeof(IEnumerable<CryptoDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetCryptos()
         {
-            // Fetch all cryptocurrencies, INCLUDING PriceHistory
-            var cryptos = await _context.Cryptocurrencies
-                .Include(c => c.PriceHistory)
-                .ToListAsync();
-
-            // Map to DTOs
-            var cryptoDtos = cryptos.Select(c => new CryptoDto
-            {
-                Id = c.Id,
-                Name = c.Name,
-                CurrentPrice = c.CurrentPrice
-            }).ToList();
-
-            return Ok(cryptoDtos);
+            var result = await _cryptoService.GetAllAsync();
+            return Ok(result);
         }
 
-        // GET /api/cryptos/{cryptoId}
-        // Egy adott kriptovaluta lekérdezése.
         [HttpGet("{cryptoId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CryptoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CryptoDto>> GetCrypto(int cryptoId)
+        public async Task<IActionResult> GetCrypto(int cryptoId)
         {
-            // Find the cryptocurrency, INCLUDING PriceHistory
-            var crypto = await _context.Cryptocurrencies
-                .Include(c => c.PriceHistory)
-                .FirstOrDefaultAsync(c => c.Id == cryptoId);
-
-            if (crypto == null)
+            var result = await _cryptoService.GetByIdAsync(cryptoId);
+            if (result == null)
             {
                 return NotFound($"Cryptocurrency with ID {cryptoId} not found.");
             }
-
-            // Map to DTO
-            var cryptoDto = new CryptoDto
-            {
-                Id = crypto.Id,
-                Name = crypto.Name,
-                CurrentPrice = crypto.CurrentPrice
-            };
-
-            return Ok(cryptoDto);
+            return Ok(result);
         }
 
-        // POST /api/cryptos
-        // Új kriptovaluta hozzáadása.
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CryptoDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateCrypto([FromBody] CreateCryptoRequestDto request)
         {
             if (!ModelState.IsValid)
@@ -79,103 +52,41 @@ namespace halado_prog2.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Check for name uniqueness
-            var existingCrypto = await _context.Cryptocurrencies.FirstOrDefaultAsync(c => c.Name == request.Name);
-            if (existingCrypto != null)
+            var (createdDto, errorMessage, statusCode) = await _cryptoService.CreateAsync(request);
+
+            if (createdDto != null)
             {
-                return Conflict(new ProblemDetails
-                {
-                    Title = "Cryptocurrency already exists",
-                    Detail = $"A cryptocurrency with the name '{request.Name}' already exists.",
-                    Status = StatusCodes.Status409Conflict,
-                    Instance = HttpContext.Request.Path
-                });
+                return CreatedAtAction(nameof(GetCrypto), new { cryptoId = createdDto.Id }, createdDto);
             }
 
-            var newCrypto = new Cryptocurrency
-            {
-                Name = request.Name,
-            };
-
-            // Add the new crypto and its initial price history
-            _context.Cryptocurrencies.Add(newCrypto);
-
-            var initialPriceHistory = new PriceHistory
-            {
-                Price = request.InitialPrice,
-                Timestamp = DateTime.UtcNow
-            };
-            newCrypto.PriceHistory = new List<PriceHistory> { initialPriceHistory };
-
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException dbEx)
-            {
-                Console.Error.WriteLine($"Database error adding crypto: {dbEx}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while saving the new cryptocurrency.");
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Unexpected error adding crypto: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
-            }
-
-
-            // Prepare the response DTO (CurrentPrice works because PriceHistory was added and is loaded)
-            var cryptoDto = new CryptoDto
-            {
-                Id = newCrypto.Id,
-                Name = newCrypto.Name,
-                CurrentPrice = newCrypto.CurrentPrice
-            };
-
-            // Return 201 Created, pointing to the GET endpoint
-            return CreatedAtAction(nameof(GetCrypto), new { cryptoId = newCrypto.Id }, cryptoDto);
+            // Handle errors based on status code from service
+            var problemDetails = new ProblemDetails { Title = "Creation Error", Detail = errorMessage, Status = statusCode };
+            return StatusCode(statusCode, problemDetails);
         }
 
-        // DELETE /api/cryptos/{cryptoId}
-        // Kriptovaluta törlése.
         [HttpDelete("{cryptoId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteCrypto(int cryptoId)
         {
-            var cryptoToDelete = await _context.Cryptocurrencies.FindAsync(cryptoId);
+            var (success, errorMessage, statusCode) = await _cryptoService.DeleteAsync(cryptoId);
 
-            if (cryptoToDelete == null)
+            if (success)
             {
-                return NotFound($"Cryptocurrency with ID {cryptoId} not found.");
+                return NoContent();
             }
 
-            _context.Cryptocurrencies.Remove(cryptoToDelete);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException dbEx)
-            {
-                Console.Error.WriteLine($"Database error deleting crypto (check for related records): {dbEx}");
-                return StatusCode(StatusCodes.Status409Conflict, "Cannot delete cryptocurrency because it is referenced by other records (e.g., transactions, user holdings).");
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Unexpected error deleting crypto: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred during deletion.");
-            }
-
-            return NoContent(); // 204 No Content
+            var problemDetails = new ProblemDetails { Title = "Deletion Error", Detail = errorMessage, Status = statusCode };
+            return StatusCode(statusCode, problemDetails);
         }
 
-
-        // PUT /api/cryptos/price
         [HttpPut("price")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdatePrice([FromBody] UpdatePriceRequestDto request)
         {
             if (!ModelState.IsValid)
@@ -183,67 +94,32 @@ namespace halado_prog2.Controllers
                 return BadRequest(ModelState);
             }
 
-            var cryptoToUpdate = await _context.Cryptocurrencies
-                                       .FirstOrDefaultAsync(c => c.Id == request.CryptoId);
+            var (success, errorMessage, statusCode) = await _cryptoService.UpdatePriceAsync(request);
 
-            if (cryptoToUpdate == null)
+            if (success)
             {
-                return NotFound($"Cryptocurrency with ID {request.CryptoId} not found.");
+                return NoContent();
             }
 
-            cryptoToUpdate.CurrentPrice = request.NewPrice;
-
-            var newPriceHistory = new PriceHistory
-            {
-                CryptoId = request.CryptoId,
-                Price = request.NewPrice,
-                Timestamp = DateTime.UtcNow
-            };
-            _context.PriceHistory.Add(newPriceHistory);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException dbEx)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while saving the price update.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
-            }
-
-            return NoContent(); // 204 No Content
+            var problemDetails = new ProblemDetails { Title = "Price Update Error", Detail = errorMessage, Status = statusCode };
+            return StatusCode(statusCode, problemDetails);
         }
 
-        // GET /api/cryptos/price/history/{cryptoId}
-        // Árfolyamváltozási naplózás lekérdezése.
         [HttpGet("price/history/{cryptoId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<PriceHistoryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<PriceHistoryDto>>> GetPriceHistory(int cryptoId)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPriceHistory(int cryptoId)
         {
-            // Validate that the cryptocurrency exists
-            var cryptoExists = await _context.Cryptocurrencies.AnyAsync(c => c.Id == cryptoId);
-            if (!cryptoExists)
+            var (history, errorMessage, statusCode) = await _cryptoService.GetPriceHistoryAsync(cryptoId);
+
+            if (history != null)
             {
-                return NotFound($"Cryptocurrency with ID {cryptoId} not found.");
+                return Ok(history);
             }
 
-            // Fetch the price history for the specific crypto
-            var history = await _context.PriceHistory
-                .Where(ph => ph.CryptoId == cryptoId)
-                .OrderBy(ph => ph.Timestamp)
-                .Select(ph => new PriceHistoryDto
-                {
-                    Id = ph.Id,
-                    Price = ph.Price,
-                    Timestamp = ph.Timestamp
-                })
-                .ToListAsync();
-
-            return Ok(history);
+            var problemDetails = new ProblemDetails { Title = "Get History Error", Detail = errorMessage, Status = statusCode };
+            return StatusCode(statusCode, problemDetails);
         }
     }
 }

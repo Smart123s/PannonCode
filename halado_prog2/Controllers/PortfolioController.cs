@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using halado_prog2.DTOs;
+﻿// File: Controllers/PortfolioController.cs
+using Microsoft.AspNetCore.Mvc;
+using halado_prog2.DTOs; // Needed for WalletDto
+using halado_prog2.Services; // Use the service interface
 
 namespace halado_prog2.Controllers
 {
@@ -8,48 +9,27 @@ namespace halado_prog2.Controllers
     [Route("api/[controller]")] // Base route /api/portfolio
     public class PortfolioController : ControllerBase
     {
-        private readonly CryptoDbContext _context;
+        // Inject the service interface
+        private readonly IPortfolioService _portfolioService;
 
-        public PortfolioController(CryptoDbContext context)
+        public PortfolioController(IPortfolioService portfolioService)
         {
-            _context = context;
+            _portfolioService = portfolioService;
         }
 
-        // GET /api/portfolio/{userId}
-        // Felhasználó portfóliójának lekérdezése.
-        // This endpoint is very similar to GET /api/wallet/{userId},
-        // returning the user's fiat balance and crypto holdings.
         [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(WalletDto), StatusCodes.Status200OK)] // Use WalletDto as response type
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<WalletDto>> GetPortfolio(int userId)
+        public async Task<IActionResult> GetPortfolio(int userId)
         {
-            var user = await _context.Users
-                .Include(u => u.CryptoWallets)
-                    .ThenInclude(cw => cw.Cryptocurrency)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var portfolioDto = await _portfolioService.GetPortfolioAsync(userId);
 
-            if (user == null)
+            if (portfolioDto == null)
             {
                 return NotFound($"User with ID {userId} not found.");
             }
 
-            // Map the data to the WalletDto (or a dedicated PortfolioDto if needed later)
-            // Reusing WalletDto as it contains the required info: balance and crypto holdings with current prices
-            var portfolioDto = new WalletDto
-            {
-                UserId = user.Id,
-                FiatBalance = user.Balance,
-                CryptoHoldings = user.CryptoWallets.Select(cw => new CryptoHoldingDto
-                {
-                    CryptoId = cw.CryptoId,
-                    CryptoName = cw.Cryptocurrency.Name,
-                    Quantity = cw.Quantity,
-                    CurrentPrice = cw.Cryptocurrency.CurrentPrice
-                }).ToList()
-            };
-
-            return Ok(portfolioDto);
+            return Ok(portfolioDto); // Return 200 OK with the portfolio data
         }
     }
 }
