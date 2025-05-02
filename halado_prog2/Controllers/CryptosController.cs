@@ -1,20 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities; // Your Entity models namespace
-using halado_prog2.DTOs; // Your DTOs namespace
-using System.Linq; // Required for LINQ methods
-using System; // Required for DateTime
+using halado_prog2.Entities;
+using halado_prog2.DTOs;
 
 namespace halado_prog2.Controllers
 {
     [ApiController]
-    // --- Changed base route back to /api/cryptos ---
     [Route("api/cryptos")] // Base route /api/cryptos
-    public class CryptosController : ControllerBase // Renamed class back to CryptosController
+    public class CryptosController : ControllerBase
     {
         private readonly CryptoDbContext _context;
 
-        // Updated constructor name to match class name
         public CryptosController(CryptoDbContext context)
         {
             _context = context;
@@ -22,7 +18,7 @@ namespace halado_prog2.Controllers
 
         // GET /api/cryptos
         // Listázza az összes elérhető kriptovalutát és azok aktuális árfolyamát.
-        [HttpGet] // Route is just /api/cryptos
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<CryptoDto>>> GetCryptos()
         {
@@ -36,7 +32,7 @@ namespace halado_prog2.Controllers
             {
                 Id = c.Id,
                 Name = c.Name,
-                CurrentPrice = c.CurrentPrice // Uses the [NotMapped] getter
+                CurrentPrice = c.CurrentPrice
             }).ToList();
 
             return Ok(cryptoDtos);
@@ -44,7 +40,7 @@ namespace halado_prog2.Controllers
 
         // GET /api/cryptos/{cryptoId}
         // Egy adott kriptovaluta lekérdezése.
-        [HttpGet("{cryptoId}")] // Route is /api/cryptos/{cryptoId}
+        [HttpGet("{cryptoId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CryptoDto>> GetCrypto(int cryptoId)
@@ -64,7 +60,7 @@ namespace halado_prog2.Controllers
             {
                 Id = crypto.Id,
                 Name = crypto.Name,
-                CurrentPrice = crypto.CurrentPrice // Uses the [NotMapped] getter
+                CurrentPrice = crypto.CurrentPrice
             };
 
             return Ok(cryptoDto);
@@ -72,7 +68,7 @@ namespace halado_prog2.Controllers
 
         // POST /api/cryptos
         // Új kriptovaluta hozzáadása.
-        [HttpPost] // Route is /api/cryptos
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -142,7 +138,7 @@ namespace halado_prog2.Controllers
 
         // DELETE /api/cryptos/{cryptoId}
         // Kriptovaluta törlése.
-        [HttpDelete("{cryptoId}")] // Route is /api/cryptos/{cryptoId}
+        [HttpDelete("{cryptoId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteCrypto(int cryptoId)
@@ -175,8 +171,6 @@ namespace halado_prog2.Controllers
         }
 
 
-        // --- Endpoints for Price Update and History (Routes adjusted) ---
-
         // PUT /api/cryptos/price
         [HttpPut("price")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -189,7 +183,6 @@ namespace halado_prog2.Controllers
                 return BadRequest(ModelState);
             }
 
-            // --- Fetch the Cryptocurrency entity itself ---
             var cryptoToUpdate = await _context.Cryptocurrencies
                                        .FirstOrDefaultAsync(c => c.Id == request.CryptoId);
 
@@ -198,30 +191,25 @@ namespace halado_prog2.Controllers
                 return NotFound($"Cryptocurrency with ID {request.CryptoId} not found.");
             }
 
-            // --- Update the CurrentPrice directly on the entity ---
             cryptoToUpdate.CurrentPrice = request.NewPrice;
-            // ---
 
-            // --- Still create the PriceHistory entry for logging ---
             var newPriceHistory = new PriceHistory
             {
                 CryptoId = request.CryptoId,
-                Price = request.NewPrice, // Log the same new price
+                Price = request.NewPrice,
                 Timestamp = DateTime.UtcNow
             };
             _context.PriceHistory.Add(newPriceHistory);
-            // ---
 
             try
             {
-                // --- Save changes (updates Cryptocurrency AND adds PriceHistory) ---
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException dbEx) // Catch specific EF Core update exceptions
+            catch (DbUpdateException dbEx)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while saving the price update.");
             }
-            catch (Exception ex) // Catch any other unexpected errors
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
@@ -231,7 +219,7 @@ namespace halado_prog2.Controllers
 
         // GET /api/cryptos/price/history/{cryptoId}
         // Árfolyamváltozási naplózás lekérdezése.
-        [HttpGet("price/history/{cryptoId}")] // Sub-route price/history/{cryptoId} combined with base /api/cryptos
+        [HttpGet("price/history/{cryptoId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<PriceHistoryDto>>> GetPriceHistory(int cryptoId)

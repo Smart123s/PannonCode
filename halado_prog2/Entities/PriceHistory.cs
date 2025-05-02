@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace halado_prog2.Entities // Namespace remains the same
+namespace halado_prog2.Entities
 {
-    // Logs the price changes for cryptocurrencies (remains the same)
     public class PriceHistory
     {
         [Key]
@@ -18,8 +17,6 @@ namespace halado_prog2.Entities // Namespace remains the same
 
         [Required]
         public DateTime Timestamp { get; set; }
-
-        // Navigation property (remains the same)
         public Cryptocurrency Cryptocurrency { get; set; }
     }
 }

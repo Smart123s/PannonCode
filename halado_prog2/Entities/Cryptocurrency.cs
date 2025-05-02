@@ -1,12 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace halado_prog2.Entities // Namespace remains the same
+namespace halado_prog2.Entities
 {
-
-    // Removed Wallet entity previously
-
-    // Represents a type of cryptocurrency traded in the simulator (Remains the same)
     public class Cryptocurrency
     {
         [Key]
@@ -15,14 +11,9 @@ namespace halado_prog2.Entities // Namespace remains the same
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-
-        // --- Re-added as a mapped database column ---
-        [Required] // Price is required
-        [Column(TypeName = "decimal(18, 8)")] // Define SQL Server data type
-        public decimal CurrentPrice { get; set; } // Now stored directly
-        // --- Removed [NotMapped] and custom getter ---
-
-        // Navigation properties (remain the same)
+        [Required]
+        [Column(TypeName = "decimal(18, 8)")]
+        public decimal CurrentPrice { get; set; }
         public ICollection<CryptoWallet> CryptoWallets { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
         public ICollection<PriceHistory> PriceHistory { get; set; }

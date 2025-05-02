@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities; // Your Entity models namespace
-using halado_prog2.DTOs; // Your DTOs namespace
-using System.Linq; // Required for LINQ methods
+using halado_prog2.DTOs;
 
-namespace halado_prog2.Controllers // Namespace
+namespace halado_prog2.Controllers
 {
     [ApiController]
     [Route("api/[controller]")] // Base route /api/wallet
@@ -27,7 +25,6 @@ namespace halado_prog2.Controllers // Namespace
             var user = await _context.Users
                 .Include(u => u.CryptoWallets)
                     .ThenInclude(cw => cw.Cryptocurrency)
-                        .ThenInclude(c => c.PriceHistory) // MUST INCLUDE THIS for CurrentPrice Getter!
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
@@ -44,7 +41,7 @@ namespace halado_prog2.Controllers // Namespace
                     CryptoId = cw.CryptoId,
                     CryptoName = cw.Cryptocurrency.Name,
                     Quantity = cw.Quantity,
-                    CurrentPrice = cw.Cryptocurrency.CurrentPrice // Use the [NotMapped] getter
+                    CurrentPrice = cw.Cryptocurrency.CurrentPrice
                 }).ToList()
             };
 

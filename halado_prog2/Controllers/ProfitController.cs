@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities;
 using halado_prog2.DTOs;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic; // For List
 
 namespace halado_prog2.Controllers
 {
@@ -12,7 +8,6 @@ namespace halado_prog2.Controllers
     [Route("api/[controller]")] // Base route /api/profit
     public class ProfitController : ControllerBase
     {
-        // !!! Required for DbContext !!!
         private readonly CryptoDbContext _context;
         private readonly ILogger<ProfitController> _logger; // Optional: for logging
 
@@ -67,12 +62,10 @@ namespace halado_prog2.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<DetailedProfitLossDto>> GetDetailedProfitLoss(int userId)
         {
-            // Use the shared calculation logic
             return await CalculateProfitLossDetails(userId);
         }
 
 
-        // --- Private Helper Method for Calculation Logic ---
         private async Task<ActionResult<DetailedProfitLossDto>> CalculateProfitLossDetails(int userId)
         {
             // 1. Check if user exists
@@ -87,7 +80,6 @@ namespace halado_prog2.Controllers
             //    Include Cryptocurrency and its PriceHistory for current price
             var userHoldings = await _context.CryptoWallets
                 .Include(cw => cw.Cryptocurrency)
-                    .ThenInclude(c => c.PriceHistory) // Needed for CurrentPrice
                 .Where(cw => cw.UserId == userId && cw.Quantity > 0) // Only include cryptos currently held
                 .ToListAsync();
 
@@ -102,7 +94,7 @@ namespace halado_prog2.Controllers
             foreach (var holding in userHoldings)
             {
                 decimal currentQuantityHeld = holding.Quantity;
-                decimal currentPrice = holding.Cryptocurrency.CurrentPrice; // Uses [NotMapped] getter
+                decimal currentPrice = holding.Cryptocurrency.CurrentPrice;
 
                 // Filter transactions for this specific crypto
                 var cryptoBuyTransactions = userBuyTransactions
@@ -148,7 +140,6 @@ namespace halado_prog2.Controllers
                 HoldingsProfitLoss = profitLossDetailsList
             };
 
-            // Return OK with the detailed results
             return Ok(resultDto);
         }
 

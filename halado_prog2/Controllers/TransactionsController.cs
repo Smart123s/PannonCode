@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities; // Your Entity models namespace
-using halado_prog2.DTOs; // Your DTOs namespace
-using System.Linq; // Required for LINQ methods
-using System; // Required for DateTime
-using System.Collections.Generic; // Required for IEnumerable
+using halado_prog2.DTOs;
 
 namespace halado_prog2.Controllers
 {
@@ -12,10 +8,6 @@ namespace halado_prog2.Controllers
     [Route("api/[controller]")] // Base route /api/transactions
     public class TransactionsController : ControllerBase
     {
-        // !!! NOTE: Accessing the database requires an instance of CryptoDbContext.
-        // This instance is provided via Dependency Injection, and the CryptoDbContext class
-        // is defined in the halado_prog2.DataAccess namespace.
-        // Therefore, the 'using halado_prog2.DataAccess;' directive is necessary. !!!
         private readonly CryptoDbContext _context;
 
         public TransactionsController(CryptoDbContext context)
@@ -27,8 +19,8 @@ namespace halado_prog2.Controllers
         // Tranzakciók listázása egy adott felhasználóhoz.
         // Az adatok időrendi sorrendben tárolódnak.
         [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)] // Corrected casing
-        [ProducesResponseType(StatusCodes.Status404NotFound)] // Corrected casing
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<TransactionDto>>> GetUserTransactions(int userId)
         {
             // Optional: Check if the user exists first (good practice)
@@ -42,15 +34,14 @@ namespace halado_prog2.Controllers
             // Include the Cryptocurrency to get its name
             // Order by Timestamp (ascending for historical order)
             var transactions = await _context.Transactions
-                .Include(t => t.Cryptocurrency) // Include related Cryptocurrency entity
+                .Include(t => t.Cryptocurrency)
                 .Where(t => t.UserId == userId)
-                .OrderBy(t => t.Timestamp) // Order by timestamp
+                .OrderBy(t => t.Timestamp)
                 .Select(t => new TransactionDto // Project into DTO
                 {
                     Id = t.Id,
-                    // UserId = t.UserId, // Include if needed in DTO
                     CryptoId = t.CryptoId,
-                    CryptoName = t.Cryptocurrency.Name, // Get name from included entity
+                    CryptoName = t.Cryptocurrency.Name,
                     TransactionType = t.TransactionType,
                     Quantity = t.Quantity,
                     PriceAtTrade = t.PriceAtTrade,
@@ -61,44 +52,40 @@ namespace halado_prog2.Controllers
             // If the user exists but has no transactions, return an empty list (200 OK)
             // Returning 404 only if the userId itself is invalid.
 
-            return Ok(transactions); // Return 200 OK with the list of transactions
+            return Ok(transactions);
         }
 
         // GET /api/transactions/details/{transactionId}
         // Egy adott tranzakció részletes megjelenítése.
         [HttpGet("details/{transactionId}")] // Sub-route details/{transactionId}
-        [ProducesResponseType(StatusCodes.Status200OK)] // Corrected casing
-        [ProducesResponseType(StatusCodes.Status404NotFound)] // Corrected casing
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransactionDto>> GetTransactionDetails(int transactionId)
         {
             // Find the transaction by ID
             // Include the Cryptocurrency to get its name
             var transaction = await _context.Transactions
-                .Include(t => t.Cryptocurrency) // Include related Cryptocurrency entity
-                .FirstOrDefaultAsync(t => t.Id == transactionId); // Find specific transaction
+                .Include(t => t.Cryptocurrency)
+                .FirstOrDefaultAsync(t => t.Id == transactionId);
 
             if (transaction == null)
             {
-                return NotFound($"Transaction with ID {transactionId} not found."); // Return 404 if not found
+                return NotFound($"Transaction with ID {transactionId} not found.");
             }
 
             // Map the entity to DTO
             var transactionDto = new TransactionDto
             {
                 Id = transaction.Id,
-                // UserId = transaction.UserId, // Include if needed in DTO
                 CryptoId = transaction.CryptoId,
-                CryptoName = transaction.Cryptocurrency.Name, // Get name from included entity
+                CryptoName = transaction.Cryptocurrency.Name,
                 TransactionType = transaction.TransactionType,
                 Quantity = transaction.Quantity,
                 PriceAtTrade = transaction.PriceAtTrade,
                 Timestamp = transaction.Timestamp
             };
 
-            return Ok(transactionDto); // Return 200 OK with transaction details
+            return Ok(transactionDto);
         }
-
-        // No POST/PUT/DELETE endpoints for transactions specified here,
-        // as they are created by the Buy/Sell operations in the TradeController.
     }
 }

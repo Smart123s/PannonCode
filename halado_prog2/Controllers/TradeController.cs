@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities; // Your Entity models namespace
-using halado_prog2.DTOs; // Your DTOs namespace
-using System.Linq; // Required for LINQ methods
-using System; // Required for DateTime
-
+using halado_prog2.Entities;
+using halado_prog2.DTOs;
 namespace halado_prog2.Controllers
 {
     [ApiController]
@@ -43,7 +40,6 @@ namespace halado_prog2.Controllers
 
             // Load Cryptocurrency and its PriceHistory (needs CurrentPrice)
             var crypto = await _context.Cryptocurrencies
-                .Include(c => c.PriceHistory) // MUST INCLUDE PRICE HISTORY for CurrentPrice
                 .FirstOrDefaultAsync(c => c.Id == request.CryptoId);
             if (crypto == null)
             {
@@ -53,7 +49,6 @@ namespace halado_prog2.Controllers
             // Check if crypto has any price history (edge case, should be seeded/added)
             if (crypto.CurrentPrice <= 0)
             {
-                // Or handle this differently based on requirements, maybe return 400
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Cryptocurrency {crypto.Name} has no valid current price.");
             }
 
@@ -85,7 +80,7 @@ namespace halado_prog2.Controllers
                 {
                     UserId = user.Id,
                     CryptoId = crypto.Id,
-                    Quantity = request.Quantity // Add the purchased quantity
+                    Quantity = request.Quantity
                 };
                 _context.CryptoWallets.Add(cryptoWallet);
             }
@@ -100,10 +95,10 @@ namespace halado_prog2.Controllers
             {
                 UserId = user.Id,
                 CryptoId = crypto.Id,
-                TransactionType = "Buy", // Hardcoded type as per spec
+                TransactionType = "Buy",
                 Quantity = request.Quantity,
-                PriceAtTrade = crypto.CurrentPrice, // Record the price at the moment of trade
-                Timestamp = DateTime.UtcNow // Record the timestamp
+                PriceAtTrade = crypto.CurrentPrice,
+                Timestamp = DateTime.UtcNow
             };
             _context.Transactions.Add(transaction);
 
@@ -155,19 +150,11 @@ namespace halado_prog2.Controllers
                 return NotFound($"User with ID {request.UserId} not found.");
             }
 
-            // Load Cryptocurrency and its PriceHistory (needs CurrentPrice)
             var crypto = await _context.Cryptocurrencies
-                 .Include(c => c.PriceHistory) // MUST INCLUDE PRICE HISTORY for CurrentPrice
                 .FirstOrDefaultAsync(c => c.Id == request.CryptoId);
             if (crypto == null)
             {
                 return NotFound($"Cryptocurrency with ID {request.CryptoId} not found.");
-            }
-
-            // Check if crypto has any price history
-            if (crypto.CurrentPrice <= 0)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Cryptocurrency {crypto.Name} has no valid current price.");
             }
 
 
@@ -209,10 +196,10 @@ namespace halado_prog2.Controllers
             {
                 UserId = user.Id,
                 CryptoId = crypto.Id,
-                TransactionType = "Sell", // Hardcoded type as per spec
+                TransactionType = "Sell",
                 Quantity = request.Quantity,
-                PriceAtTrade = crypto.CurrentPrice, // Record the price at the moment of trade
-                Timestamp = DateTime.UtcNow // Record the timestamp
+                PriceAtTrade = crypto.CurrentPrice,
+                Timestamp = DateTime.UtcNow
             };
             _context.Transactions.Add(transaction);
 

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace halado_prog2.Entities // Namespace remains the same
+namespace halado_prog2.Entities
 {
     // Represents a user in the system
-    public class User // Remains the same
+    public class User
     {
         [Key]
         public int Id { get; set; }
@@ -25,10 +25,8 @@ namespace halado_prog2.Entities // Namespace remains the same
         [Column(TypeName = "decimal(18, 8)")]
         public decimal Balance { get; set; } // Fiat currency balance
 
-        // Navigation properties
         // Link to the cryptocurrencies this user holds (Many-to-Many represented by CryptoWallet)
-        // RENAMED navigation property
-        public ICollection<CryptoWallet> CryptoWallets { get; set; } // Changed from UserCryptos
+        public ICollection<CryptoWallet> CryptoWallets { get; set; }
 
         // One-to-many relationship with Transactions (trades involving this user) - remains the same
         public ICollection<Transaction> Transactions { get; set; }

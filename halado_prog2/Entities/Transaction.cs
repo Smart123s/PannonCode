@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace halado_prog2.Entities // Namespace remains the same
+namespace halado_prog2.Entities
 {
-    // Represents a buy or sell transaction (remains the same)
     public class Transaction
     {
         [Key]
@@ -29,8 +28,6 @@ namespace halado_prog2.Entities // Namespace remains the same
 
         [Required]
         public DateTime Timestamp { get; set; }
-
-        // Navigation properties (remain the same)
         public User User { get; set; }
         public Cryptocurrency Cryptocurrency { get; set; }
     }

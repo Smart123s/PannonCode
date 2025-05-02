@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities; // Your Entity models namespace
-using halado_prog2.DTOs; // Your DTOs namespace
-using System.Linq; // Required for LINQ methods
+using halado_prog2.DTOs;
 
 namespace halado_prog2.Controllers
 {
@@ -26,12 +24,9 @@ namespace halado_prog2.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<WalletDto>> GetPortfolio(int userId)
         {
-            // Find the user, INCLUDING their CryptoWallets and the related Cryptocurrency and its PriceHistory
-            // Including PriceHistory is crucial for the [NotMapped] CurrentPrice property on Cryptocurrency to work.
             var user = await _context.Users
-                .Include(u => u.CryptoWallets) // Include the join table entries
-                    .ThenInclude(cw => cw.Cryptocurrency) // Include the related Cryptocurrency for each holding
-                        .ThenInclude(c => c.PriceHistory) // *** MUST INCLUDE THIS for CurrentPrice Getter! ***
+                .Include(u => u.CryptoWallets)
+                    .ThenInclude(cw => cw.Cryptocurrency)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
@@ -44,18 +39,17 @@ namespace halado_prog2.Controllers
             var portfolioDto = new WalletDto
             {
                 UserId = user.Id,
-                FiatBalance = user.Balance, // Get balance directly from User entity
+                FiatBalance = user.Balance,
                 CryptoHoldings = user.CryptoWallets.Select(cw => new CryptoHoldingDto
                 {
                     CryptoId = cw.CryptoId,
-                    CryptoName = cw.Cryptocurrency.Name, // Get name from the included Cryptocurrency
-                    Quantity = cw.Quantity, // Get quantity from the CryptoWallet entry
-                    CurrentPrice = cw.Cryptocurrency.CurrentPrice // Use the [NotMapped] getter (which works because PriceHistory was included)
-                    // ValueInFiat can be calculated in the DTO or client-side
+                    CryptoName = cw.Cryptocurrency.Name,
+                    Quantity = cw.Quantity,
+                    CurrentPrice = cw.Cryptocurrency.CurrentPrice
                 }).ToList()
             };
 
-            return Ok(portfolioDto); // Return 200 OK with the portfolio data
+            return Ok(portfolioDto);
         }
     }
 }

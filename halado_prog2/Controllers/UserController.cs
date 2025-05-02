@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using halado_prog2.Entities; // Your Entity models namespace
-using halado_prog2.DTOs; // Your DTOs namespace
+using halado_prog2.Entities;
+using halado_prog2.DTOs;
 
-namespace halado_prog2.Controllers // Changed namespace
+namespace halado_prog2.Controllers
 {
     [ApiController]
     [Route("api/[controller]")] // Base route /api/users
@@ -49,7 +49,6 @@ namespace halado_prog2.Controllers // Changed namespace
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 // --- Set initial Balance directly on the User ---
                 Balance = 10000.0M // Initial balance as per spec requirement example
-                // --- Removed Wallet creation ---
             };
 
             // Add the new user to the context
@@ -64,12 +63,9 @@ namespace halado_prog2.Controllers // Changed namespace
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                // --- Include the Balance in the DTO ---
                 Balance = user.Balance
-                // ---
             };
 
-            // Return 201 Created status and the newly created user's data
             return CreatedAtAction(nameof(GetUser), new { userId = user.Id }, userDto);
         }
 
@@ -93,13 +89,11 @@ namespace halado_prog2.Controllers // Changed namespace
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                // --- Include the Balance in the DTO ---
                 Balance = user.Balance
-                // ---
                 // Do NOT include PasswordHash
             };
 
-            return Ok(userDto); // Return 200 OK with the user data
+            return Ok(userDto);
         }
 
         // PUT /api/users/{userId}
@@ -151,9 +145,6 @@ namespace halado_prog2.Controllers // Changed namespace
                 user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
             }
 
-            // No changes needed here related to balance or crypto holdings updates
-            // as the UpdateUserRequestDto doesn't include them.
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -170,7 +161,7 @@ namespace halado_prog2.Controllers // Changed namespace
                 }
             }
 
-            return NoContent(); // Return 204 No Content for successful update
+            return NoContent();
         }
 
         // DELETE /api/users/{userId}
@@ -187,7 +178,7 @@ namespace halado_prog2.Controllers // Changed namespace
 
             if (user == null)
             {
-                return NotFound(); // Return 404 if user is not found
+                return NotFound();
             }
 
             // --- Rely on cascading delete ---
@@ -202,7 +193,7 @@ namespace halado_prog2.Controllers // Changed namespace
             // Save changes. Cascading delete will handle CryptoWallet and Transaction entries
             await _context.SaveChangesAsync();
 
-            return NoContent(); // Return 204 No Content for successful deletion
+            return NoContent();
         }
     }
 }

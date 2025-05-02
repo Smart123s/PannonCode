@@ -1,6 +1,5 @@
 ﻿using halado_prog2.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Linq; // Required for .Any() in seeding example
 
 namespace halado_prog2
 {
