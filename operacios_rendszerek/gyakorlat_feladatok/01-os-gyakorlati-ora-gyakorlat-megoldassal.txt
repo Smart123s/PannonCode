@@ -1,0 +1,43 @@
+Old meg bash parancsokkal:
+
+01. 
+Hozz létre egy projekt könyvtárat a home könyvtárádban. Ebben a könyvtárban hozz létre egy dokumentumok alkönyvtárat és egy kepek alkönyvtárat.
+mkdir ~/projekt ~/projekt/dokumentumok ~/projekt/kepek
+
+02. 
+Hozz létre egy fontos.txt nevű fájlt a projekt/dokumentumok könyvtárban és egy kep1.jpg és kep2.jpg fájlt a projekt/kepek könyvtárban.
+touch ~/projekt/dokumentumok/fontos.txt
+touch ~/projekt/kepek/kep1.jpg ~/projekt/kepek/kep2.jpg
+
+03. 
+Másold le a fontos.txt fájlt a backup könyvtárba.
+cp ~/projekt/dokumentumok/fontos.txt ~/backup/
+
+04.
+Másold le a kep1.jpg fájlt a projekt/kepek könyvtárból a projekt/dokumentumok könyvtárba és nevezd át dokumentum.jpg-re.
+cp ~/projekt/kepek/kep1.jpg ~/projekt/dokumentumok/dokumentum.jpg
+
+05.
+Listázd ki a projekt könyvtár tartalmát.
+ls ~/projekt
+
+06.
+Listázd ki a projekt könyvtár tartalmát, beleértve a rejtett fájlokat is.
+ls -a ~/projekt
+
+07.
+Töröld a kep2.jpg fájlt a projekt/kepek könyvtárból.
+rm ~/projekt/kepek/kep2.jpg
+
+08.
+Töröld az egész projekt könyvtárat.
+rm -r ~/projekt
+
+09.
+Hozz létre egy osztalyok/matematika könyvtárat a home könyvtáradba.
+mkdir -p ~/osztalyok/matematika
+
+10.
+Hozz létre egy jegyzetek/2022 könyvtárat, majd a 2022 könyvtárban hozz létre egy jegyzet.txt nevű fájlt.
+mkdir -p ~/jegyzetek/2022
+touch ~/jegyzetek/2022/jegyzet.txt

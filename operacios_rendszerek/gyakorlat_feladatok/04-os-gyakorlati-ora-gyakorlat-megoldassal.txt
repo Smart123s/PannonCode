@@ -1,0 +1,128 @@
+Old meg bash szkriptekkel:
+
+1. Készíts egy bash scriptet, amely beolvassa a felhasználó nevét és üdvözli azt egy személyre szabott üzenettel!
+
+#!/bin/bash
+
+echo "Kerem, adja meg a nevet:"
+read name
+echo "Udvozoljuk, $name!"
+
+2. Írj egy bash scriptet, amely a parancssori argumentumok között megadott két számot összeadja, majd az eredményt kiírja a képernyőre!
+
+#!/bin/bash
+
+sum=$(( $1 + $2 ))
+echo "A ket szam osszege: $sum"
+
+3. Hozz létre egy bash scriptet, amely a felhasználótól bekér egy fájlnevet, majd ellenőrzi, hogy a megadott fájl létezik-e a dokumentumok mappában! Ha igen, írja ki "A fájl létezik.", ha nem, akkor írja ki "A fájl nem létezik."!
+
+#!/bin/bash
+
+echo "Kerem, adjon meg egy fájlnevet:"
+read filename
+
+if [ -e ~/dokumentumok/$filename ]
+then
+    echo "A fájl létezik."
+else
+    echo "A fájl nem létezik."
+fi
+
+4. Írj egy bash scriptet, amely két számot olvas be a felhasználótól, és meghatározza, hogy melyik a nagyobb, vagy ha egyenlőek, akkor erről tájékoztatja a felhasználót!
+
+#!/bin/bash
+
+echo "Kérem, adjon meg két számot:"
+read num1
+read num2
+
+if [ "$num1" -gt "$num2" ]
+then
+    echo "$num1 nagyobb, mint $num2."
+elif [ "$num1" -eq "$num2" ]
+then
+    echo "A két szám egyenlő."
+else
+    echo "$num2 nagyobb, mint $num1."
+fi
+
+5. Írj egy bash scriptet, amely egy megadott fájlt másol egy másik megadott mappába!
+
+#!/bin/bash
+
+echo "Kérem, adja meg a forrásfájl nevét:"
+read source_file
+
+echo "Kérem, adja meg a célkönyvtár nevét:"
+read destination_dir
+
+cp "$source_file" "$destination_dir"
+echo "A fájl másolása sikeres volt."
+
+6. Írj egy bash scriptet, amely ellenőrzi, hogy egy adott fájl létezik-e, és ha igen, akkor megvizsgálja, hogy az üres-e vagy sem! Ha az adott fájl nem létezik, írja ki a "A fájl nem található." üzenetet!
+
+#!/bin/bash
+
+echo "Kérem, adjon meg egy fájl nevét:"
+read filename
+
+if [ -e "$filename" ]; then
+    if [ -s "$filename" ]; then
+        echo "A fájl létezik és nem üres."
+    else
+        echo "A fájl létezik, de üres."
+    fi
+else
+    echo "A fájl nem található."
+fi
+
+7. Készíts egy bash scriptet, amely bekéri a felhasználótól egy könyvtár nevét, majd kiírja a könyvtárban található összes fájl és alkönyvtár nevét!
+
+#!/bin/bash
+
+echo "Kérem, adjon meg egy könyvtár nevét:"
+read directory
+
+echo "A könyvtár tartalma:"
+ls -a $directory
+
+8. Készíts egy bash scriptet, amely bekéri a felhasználótól két számot, majd összeadja azokat és az eredményt kiírja egy fájlba!
+
+#!/bin/bash
+
+echo "Kérem, adjon meg két számot:"
+read num1
+read num2
+
+sum=$(($num1 + $num2))
+echo "Az összeg: $sum" > sum.txt
+echo "Az összeg ki lett írva a sum.txt fájlba."
+
+9. Írj egy bash scriptet, amely eldönti, hogy a megadott szám páros vagy páratlan!
+
+#!/bin/bash
+
+echo "Kérem, adjon meg egy számot:"
+read num
+
+if [ $(($num % 2)) -eq 0 ]; then
+    echo "$num páros szám."
+else
+    echo "$num páratlan szám."
+fi
+
+10. Írj egy bash scriptet, amely a felhasználótól bekér egy számot, majd megállapítja, hogy az adott szám pozitív, negatív vagy nulla!
+
+#!/bin/bash
+
+echo "Kérem, adjon meg egy számot:"
+read num
+
+if [ $num -gt 0 ]; then
+    echo "A szám pozitív."
+elif [ $num -lt 0 ]; then
+    echo "A szám negatív."
+else
+    echo "A szám nulla."
+fi

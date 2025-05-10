@@ -1,0 +1,941 @@
+Operációs rendszerek
+
+1. Bevezetés
+Felhasznált irodalom:
+• Kóczy-Kondorosi (szerk.): Operációs rendszerek mérnöki megközelítésben
+• Tanenbaum: Modern Operating Systems 2nd. Ed.
+• Silberschatz, Galvin, Gagne: Operating System Concepts
+
+v4.0
+
+Irodalom
+•
+•
+•
+•
+•
+
+Kóczi-Kondorosi (szerk): Operációs rendszerek mérnöki
+megközelítésben. Panem Könyvkiadó, 2000. ISBN:9635452500
+Tanenbaum, Woodhul: Operációs rendszerek. Műszaki
+Könyvkiadó, 1999.
+Tanenbaum, Woodhull: Operációs rendszerek - tervezés és
+implementáció. Panem Kft., 2007. ISBN: 9789635454761
+Silberschatz, Galvin, Gagne: Operating System Concepts.
+Wiley, 2013. ISBN:9781118063330
+Tanenbaum, Bos: Modern Operating Systems. Pearson, 2015.
+ISBN: 9780133591620
+
+2
+
+Amit mindig szerettél volna tudni …
+… de sosem merted megkérdezni.
+
+C:\>
+• Mi ez?
+• Mi a „C:” belőle?
+• Honnan származik?
+
+3
+
+Miért kell operációs rendszereket tanulni?
+• Fogok én valaha operációs rendszert készíteni?
+– nem (valószínű)
+
+• Szeretnék én valaha hatékony programot készíteni?
+– (remélhetőleg) igen
+
+• Történelem
+– mi az az MS-DOS
+
+Ebben segíthet ez a tárgy!
+4
+
+Miért kell operációs rendszereket tanulni?
+• Ahol számítógép – ott operációs rendszer
+• Hogyan működik a számítógép
+– Számítógép és operációs rendszer együtt
+
+• Nagy rendszerek
+– Alrendszerek, modulok, rétegek
+
+• Komplexitás kezelés absztrakcióval
+– CPU, memória, fájlok, szemaforok, erőforrások, interfészek
+
+• Rendszertervezés
+– Teljesítmény vs. egyszerűség
+– HW vs. SW
+
+5
+
+Miért kell operációs rendszereket tanulni?
+• Több program
+– Konkurens feldolgozás
+– Együttműködés
+– Versenyhelyzet
+
+• Erőforrás kezelés
+• Memória kezelés
+• Háttértár kezelés
+• Fájlrendszer használat
+• Teljesítmény analízis
+
+6
+
+1. Az operációs rendszerekről általában
+• Az operációs rendszerek célja
+• Az operációs rendszerek fogalma
+• Az operációs rendszerek feladatai
+
+7
+
+1.1 Az operációs rendszerek célja
+• felhasználók kényelme
+– egyszerű, kényelmes, biztonságos
+használat (elsősorban kis gépeknél
+elsődleges, fontossága növekszik)
+• hatékony gépkihasználás
+– adott idő alatt minél több program
+végrehajtása (nagy gépeknél elsődleges,
+fontossága csökken)
+8
+
+1.2 Az operációs rendszer fogalma
+Definíció:
+A számítógépen állandóan futó program
+•
+•
+
+Az a program, amely közvetlenül vezérli a gép működését
+(operációs rendszer magja, kernel).
+Minden egyéb alkalmazói program.
+
+Definíció:
+Az összes program, ami a szállítótól "operációs rendszer”ként érkezik.
+•
+•
+•
+
+A gyakorlati feladatokat ellátó programok.
+Minden ami a gép "általános" felhasználásához szükséges.
+Pl. grafikus felület, editor, számológép,...
+
+9
+
+1.3 Az operációs rendszerek feladatai
+1. Végrehajtási környezet
+2. Erőforrás kiosztás
+3. Vezérlő program
+
+10
+
+Operációs rendszer feladatai 1
+Végrehajtási környezet definíció:
+Olyan környezet, ahol a felhasználók és
+programjaik hasznos munkát végezhetnek.
+– A számítógép hardver szolgáltatásainak
+bővítése
+– Elrejti a „piszkos” részleteket, könnyű
+felhasználhatóságot biztosít
+
+11
+
+Operációs rendszer feladatai 2
+Erőforrás kiosztás
+– Kezeli a rendszer erőforrásait
+• CPU,
+• központi tár,
+• merevlemez, stb.
+
+– Tulajdonságai:
+• hatékony
+• biztonságos
+• igazságos felhasználás.
+12
+
+Operációs rendszer feladatai 3
+Vezérlő program
+– vezérli a felhasználói programok
+működését,
+– a felhasználói programok helyett vezérli a
+perifériák működését.
+
+13
+
+Számítógépes rendszerek
+OS ma már alap!
+Web böngésző
+Banki rendszerek
+stb...
+Szövegszerkesztők
+Fordítók
+Command Interpreter
+Operációs rendszer
+Gépi kód
+Mikrokód
+Fizikai eszközök
+
+Felhasználó 1.
+
+Felhasználó 2.
+
+Felhasználó N.
+
+Rendszer- és alkalmazói programok
+Operációs rendszer
+
+HW
+14
+
+Neumann architektúra
+
+15
+
+Statisztika
+2023:
+• Asztali operációs rendszerek (statista.com)
+
+84,1%
+
+20,42%
+
+3,24%
+
+3,12%
+
+• Mobil operációs rendszerek (statcounter.com)
+69,94%
+
+29,32%
+
+0,74%
+
+16
+
+Statisztika
+
+17
+
+Statisztika
+
+18
+
+2. Az operációs rendszerek története
+• Első generáció (1945-1955)
+• Második generáció (1955-1965)
+• Harmadik generáció (1965-1980)
+• Negyedik generáció (1980- )
+
+19
+
+2.1 Első generáció
+Nincs operációs rendszer (1945-1955)
+– Hardver: nagy, drága, megbízhatatlan,
+plugboard vezérelt CPU, egyszerű
+perifériák
+– Használat: programozó = operátor, kézi
+vezérlés, gépidő foglalás
+– Mindent mindenki maga csinál, sok hiba,
+hibakeresés, ebből adódóan rossz
+kihasználtság.
+20
+
+ENIAC
+
+(Electronic Numerical Integrator And Computer)
+
+21
+
+Plugboard
+
+22
+
+Programok
+Egyszerű matematikai és számtani
+problémák
+– Szinusz, koszinusz, logaritmus táblázatok
+– Trajektóriák
+– (Adószámítások)
+
+23
+
+Lyukkártya
+Plugboard leváltása
+
+24
+
+2.2 Második generáció
+Nincs operációs rendszer (1955-1965)
+– Hardver: kisebb, olcsóbb, megbízhatóbb,
+egyszerű perifériák, mágnesszalag
+– Használat: programozó és operátor
+szétválik
+– Képzett operátor: gyorsabb gépkezelés,
+de hibakeresés még nincs
+– Programozó: papír, lyukkártya, job, papír
+25
+
+Job
+Program vagy programok halmaza
+– Program
+– Azonosítók
+– Végrehajtási utasítások
+– Fordító
+
+26
+
+Példa
+
+27
+
+Job Control Language
+$JOB - munka kezdete
+$END - munka vége
+$FORTRAN - FORTRAN fordító
+$ASM - az assembler hívása
+$LOAD - program betöltése
+$RUN - program futtatása
+
+28
+
+Kötegelt (batch) feldolgozás
+• Probléma
+– Sok idő megy el a job összeállításával
+– Közben áll a drága CPU
+• Ötlet
+– Off-line I/O műveletek
+– Az operátor kötegekbe (batch)
+csoportosítja a munkákat (jobs)
+– Egyszerre több job-ot visz be a gépbe
+– Gép sorosan feldolgozza a job-okat
+29
+
+Mágnesszalag megjelenése
+• Bemenet szalagról (lényegesen gyorsabb
+
+mint a kártya). Egy másik gép végzi a
+másolást kártyáról a szalagra. Kimenet
+hasonló. (+2 gép)
+• Az I/O műveletek felgyorsulnak, a
+processzor kihasználtsága nő.
+• A három számítógép párhuzamosan
+működik.
+• Periféria-független programok, szabványos
+felületek.
+30
+
+Off-line I/O műveletek
+
+a)
+b)
+c)
+d)
+e)
+f)
+
+Kártya a 1401-be
+Kártya másolása szalagra
+Szalag a 7094-hez
+7094 elvégzi a számítást
+Szalag a 1401-be
+1401 kinyomtatja az eredményt
+31
+
+Programok
+Tudományos és mérnöki számítások
+– Parciális differenciál egyenletek
+– (Könyvelés)
+
+32
+
+Merevlemez megjelenése
+Egyszerű monitor: ős operációs rendszer
+– A gép vezérlését egy állandóan a memóriában
+lévő program (a monitor) végzi, az operátor a
+perifériákat kezeli.
+– A munkához rendelt vezérlő információkat a
+monitor értelmezi, végrehajtja, akár sorrendet is
+módosíthat a véletlen elérésnek köszönhetően
+– Egy tevékenység befejezése után újra a monitor
+kapja meg a vezérlést, amely beolvassa a
+következő munkát.
+33
+
+CP/M
+Control
+Program /
+Monitor
+Disk
+Operating
+System
+34
+
+Kötegelt rendszer memória-kiosztása
+Memória partíciók
+Felhasználói memória
+
+Monitor
+
+35
+
+2.3. Harmadik generáció
+• Operációs rendszer megjelenik (1965-1980)
+– operátorok szerepe csökken
+• Hardver
+– még kisebb, még olcsóbb
+• A CPU sebessége jelentősen megnőtt
+– érdemes kihasználni az időt, amíg egy munka a
+lemezről olvasás eredményére vár
+– ezalatt az idő alatt egy másik program működhet
+Definíció:
+Multiprogramozás  az OS egyszerre több
+programot hajt végre
+36
+
+Programok
+• Tudományos és mérnöki számítások
+• Kereskedelmi alkalmazások
+
+37
+
+Multiprogramozott rendszer memória-kiosztása
+Memória partíciók
+Job #3
+Job #2
+Job #1
+Operációs rendszer
+
+38
+
+A multiprogramozás lépései
+• A rendszer nyilvántartja és tárolja a
+
+futtatandó munkákat.
+• A kiválasztott munka addig fut, amíg
+várakozni nem kényszerül.
+• Az OS feljegyzi a várakozás okát, majd
+kiválaszt egy másik futni képes munkát és
+azt elindítja.
+• Ha a félbehagyott munka várakozási
+feltételei teljesülnek, akkor azt alkalmasint
+elindítja.
+39
+
+A multiprogramozás problémái
+• Az átkapcsoláshoz több program van a
+
+tárban: tárgazdálkodás.
+• Egy időben több futásra kész program: CPU
+
+ütemezés.
+• A gépi erőforrások felhasználásának
+
+koordinációja: allokáció, holtpont kezelés.
+• A programok ne zavarják egymást és az OSt:védelmi mechanizmusok.
+
+40
+
+Perifériás műveletek gyorsítása
+• A munkák között automatikus az átkapcsolás
+
+GYORS
+• A perifériák sebessége a CPU-hoz képest
+LASSÚ
+• Megoldások:
+– Off-line I/O műveletek (lásd korábban)
+– Pufferelés
+– Spooling (Simultaneous Peripheral Operations
+On-line)
+
+41
+
+Pufferelés
+• CPU és a periféria vezérlő egyidejűleg
+
+működnek. A beolvasás pufferbe (központi
+memória) megy. Egy adott job adatfeldolgozási és I/O művelete átlapoltan történik.
+• Pufferek mérete növekszik (blokkos átvitel).
+• Csak akkor jelent hosszú távú sebesség
+növekedést, ha az I/O és a CPU műveletek
+kb. azonos időt vesznek igénybe (ami
+általában nem igaz).
+42
+
+Spooling
+Spooling (Simultaneous Peripheral Operations
+On-line):
+• A lassú perifériák adatait a feldolgozásig a
+kisméretű puffer helyett mágneslemezen
+tárolják.
+• A partícióba a mágneslemezről kerül be.
+• Különböző munkák perifériás és feldolgozási
+műveletei átlapolódhatnak.
+• A lemez véletlen hozzáférése lehetővé teszi
+a munkák sorrendjének megválasztását.
+43
+
+Timesharing
+• A harmadik generációs rendszerek is
+
+alapvetően még batch rendszerek voltak
+• Egy job átfutása sokáig tartott
+• Gyorsabb reakcióidőt szerettek volna a
+programozók
+• Azt az érzetet, hogy csak ők használják a gépet
+
+• Terminál „minden” programozónak
+• MULTICS (MULTiplexed Information and
+
+Computing Service) OS
+44
+
+Unix
+• Ken Thompshon
+
+Dennis Ritchie
+
+• Uniplexed Information and Computing
+
+Service 
+• Multics hibáit és bonyolultságát kiküszöböli
+• C-ben írták  portolható
+45
+
+Unix
+
+46
+
+2.4 Negyedik generáció
+• 1980- (főleg személyi számítógépek)
+• Hardver: kicsi, olcsó, nem csak
+
+cégeknek megfizethető
+• Korszerű kötegelt rendszerek
+• Időosztásos rendszerek
+• Valós idejű rendszerek
+• Elosztott operációs rendszerek
+• Beágyazott operációs rendszerek
+47
+
+Korszerű kötegelt rendszerek
+Csak nagy számítógépeken !!
+• A gyors véletlen-hozzáférésű mágneslemezek miatt
+
+megszűnt a kötegelt rendszerek szükségessége.
+• A jelenlegi rendszerekben a programok futásába
+nem lehet interaktívan beavatkozni, csak előre
+összeállított munkák futnak.
+• Hátrányok:
+– Átfutási idő hosszú. (Egy munkának a rendszerbe adása és
+az eredmény közti idő.)
+– A programok csak statikusan, az eredmények alapján
+fejleszthetők, használhatók. Az átfutási idő megnehezíti a
+programokkal történő kísérletezést.
+48
+
+Időosztásos rendszerek
+• A időosztásos rendszer (timesharing, multitask
+
+•
+•
+•
+
+•
+
+systems) közvetlen interaktív kommunikációt biztosít
+a felhasználó és a programja, ill. az OS között.
+Adatok tárolása közvetlenül (on-line) az
+állományrendszerben.
+A felhasználó interakciója nagyon lassú, közben az
+OS más tevékenységet tud végrehajtani.
+Gyors reakció a parancsokra, válaszidő (response
+time) kicsi. Sűrűn kell a programok között
+kapcsolgatni.
+Felhasználók függetlenül használják a gépet, mintha
+mindenki egy saját gépen dolgozna.
+49
+
+Elosztott operációs rendszerek
+• A számításokat több központi egység között osztják
+
+meg egyenletesen (multiprocessing)
+• A felhasználó ezt nem veszi észre (transzparens)
+• Szervezési elvek:
+– Azonosak-e a processzorok
+• homogén ↔ inhomogén
+
+– Van-e kitüntetett processzor:
+• szimmetrikus ↔ aszimmetrikus
+
+– Csatolás
+• szorosan csatolt (tár egy részét közösen használják)
+• nem szorosan csatolt (a CPU-kat kommunikációs csatorna köti
+össze) [elosztott rendszerek általában ilyenek]
+
+50
+
+Elosztott operációs rendszerek
+kommunikációja
+• Hálózati infrastruktúra kell (LAN vagy WAN)
+• Architektúra: kliens-szerver, vagy peer-to-peer
+
+Példa: egy kliens-szerver architektúra:
+
+Üzenet egy klienstől egy szerver számára
+51
+
+Elosztott operációs rendszerek előnyei
+• Erőforrások megosztása
+– A felhasználó a másik gép erőforrásait (spec. hardver,
+perifériák, állományok adatbázisok) használhatja
+
+• Terhelés megosztás
+– párhuzamosan végrehajtható részeket szét lehet osztani
+– megnövelt teljesítmény
+
+• Megbízhatóság
+– Egy elem kiesése esetén a többi elem átveheti a szerepét.
+• Homogén esetén könnyebb, inhomogén esetében nehezebb
+• „graceful degradation”
+
+• Kommunikáció
+– Programok, felhasználók közötti információ csere.
+
+52
+
+Valósidejű rendszerek
+• Kemény valós idejű rendszerek (hard real-time)
+– Szigorúan definiált és betartott válaszidők
+– Kritikus rendszerek (pl. atomreaktor, járművek)
+– Adattárolás: RAM, ROM, másodlagos tárolást (diszk) nem
+támogatják
+– Általános célú operációs rendszerek nem támogatják
+
+• Puha valós idejű rendszerek (soft real-time)
+– A válaszidők betartására törekednek, csúszás megengedett
+– Nem kritikus folyamatirányítási feladatok
+– Multimédia rendszerek, virtuális valóság
+
+53
+
+Beágyazott operációs rendszerek
+• Háztartási berendezések,
+
+mobiltelefonok, járművek, játékok
+• Nem általános célú, nem független az
+alkalmazástól (összefordul)
+• Korlátos erőforrások, korlátos
+szolgáltatások. OS-nek csak a
+szükséges része fordul be.
+54
+
+3. Az operációs rendszerek szerkezete
+•
+
+OS:
+– nagyméretű
+– komplex program,
+– belső szerkezetük részekből áll.
+
+•
+
+A felosztásnál rétegeket különböztetünk meg:
+– egymásra épülnek
+– az alattuk elhelyezkedő réteggel jól definiált felülettel érintkeznek
+– egyre bővülő funkcionalitás.
+Felhasználó 1.
+
+•
+
+Felhasználó 2.
+
+Felhasználó N.
+
+Legalább 3 réteg:
+– hardver
+– operációs rendszer
+– felhasználói programok
+
+Rendszer- és alkalmazói programok
+Operációs rendszer
+HW
+55
+
+How large is large?
+
+56
+
+Unix alapvető rétegszerkezete
+
+57
+
+Rétegszerkezet rétegei
+1. felhasználói programok
+2. periféria meghajtók
+3. virtuális tár kezelése
+4. I/O csatornák
+5. CPU ütemezése
+6. hardver
+Tendencia a kevés réteg.
+
+58
+
+Rétegszerkezet
+• Tiszta rétegszerkezetű rendszerek: csak az
+
+alatta és felette levő réteggel kommunikál, a
+rétegek feladatainak egymásra épülését
+megnehezíti.
+• Modulok, a rétegen belüli strukturálás: egyegy jól meghatározott feladatcsoportra egy
+modul.
+• A modulok egymás között kommunikálnak,
+egységes mechanizmus.
+
+59
+
+CP/M rétegszerkezet
+• Basic Input/Output System (BIOS),
+• Basic Disk Operating System (BDOS),
+• Console Command Processor (CCP)
+
+(BIOS, DOS, COMMAND.COM)
+
+60
+
+Linux rétegszerkezet
+
+61
+
+4. Az operációs rendszerek feladatai
+• Rendszerhívások
+• Fontosabb rendszermodulok
+• Szolgáltatások
+• Rendszerprogramok
+
+62
+
+4.1 Rendszerhívások
+• Program és OS közötti felület szigorúan
+
+rögzített.
+• A programok csak ezt látják.
+• A rendszer szolgáltatásainak igénybevétele:
+rendszerhívások.
+• Rendszerhívás speciális gépi utasítás
+segítségével történik (trap). A vezérlést az
+OS programjának adja.
+– assembly-ből közvetlenül kiadhatók (pl. DOS
+int010 megszakítás)
+– magasszintű nyelveknél könyvtári eljárások
+63
+
+A rendszerhívás lépései
+• Paraméter átadás (1,2,3)
+– Az OS által megadott helyre kell elhelyezni.
+
+• Hívás, hardver működési mód váltás (4,5,6)
+– felhasználói mód (korlátozott, bizonyos utasítások nem) 
+rendszer mód (módváltás).
+– A rendszerhívó gépi utasítás végzi el.
+
+• Paraméterek kiolvasása, elágazás a hívott
+
+szolgáltatáshoz (a rendszerhívás célját megvalósító
+kód végrehajtása) (7)
+• Visszaadott paraméterek másolása (8)
+• Visszatérés a hívóhoz (módváltás) (9)
+• Hívó tovább fut, eredmények felhasználása (10,11)
+64
+
+A rendszerhívás lépései
+
+read (fd, buffer, nbytes)
+
+65
+
+Példák rendszerhívásokra
+
+66
+
+4.2 Fontosabb rendszermodulok
+• Folyamatok kezelése
+• Központi tár kezelése
+• Perifériák kezelése
+• Állományok kezelése
+• Védelmi mechanizmusok
+• Hálózatok kezelése
+• Kezelői felület
+67
+
+Folyamatok kezelése 1.
+Problémák
+• Folyamatokhoz erőforrások biztosítása
+– Folyamat indulásakor allokálódnak, vagy
+amikor szükség van rá.
+
+• Holtpont a folyamatok között (kölcsönös
+
+várakozás).
+• CPU mint erőforrás a folyamatok közötti
+megosztása (CPU ütemezés).
+68
+
+Folyamatok kezelése 2.
+Folyamatokat kezelő rendszerhívások:
+
+69
+
+Központi tár kezelése
+• Folyamathoz annak indulásánál (esetleg
+
+később is) memóriát kell rendelni.
+• Virtuális tárkezelés
+– virtuális cím - közvetlen cím hozzárendelés
+
+• Központi tárban több folyamat utasításai,
+
+adatai vannak. Ezért biztosítani kell, hogy
+– a futáshoz szükséges részek az operatív tárban,
+– a nem szükségesek pedig a háttértáron legyenek.
+
+70
+
+Perifériák kezelése
+• Perifériák elrejtése a programok elől.
+• Átvitel pufferelése
+– CPU jobb kihasználása érdekében.
+• Periféria (HD) jobb kihasználása
+
+érdekében több egyidejű igény
+ütemezése.
+
+71
+
+Állományok kezelése
+Fájl (file):
+– egymáshoz tartozó információk gyűjteménye
+– elrejti a tárolás részleteit.
+
+• Tárolja a felhasználói programokat és adatokat.
+• állományok csoportosítása könyvtárakban
+
+(hierarchia)
+• állományok létrehozása, megszüntetése, olvasása,
+írása, stb., valamint a szabad hely nyilvántartása.
+• Megbízható mentés (backup).
+
+72
+
+Állományok felépítése
+
+73
+
+Állománykezelő rendszerhívások
+
+74
+
+Védelmi mechanizmusok
+• OS-t és erőforrásait védeni kell a hibás
+
+vagy illetéktelen felhasználásoktól.
+• Lehet
+– hardver, vagy
+– OS-ben megvalósított
+védelmi mechanizmus
+
+75
+
+Hálózatok kezelése
+• Távoli felhasználókkal, gépekkel való
+
+kommunikáció,
+• távoli erőforrások elérése.
+
+76
+
+Kezelői felület
+Definíció:
+A kezelői felület célja az OS és a felhasználó
+közötti kommunikáció biztosítása.
+• Karakteres kommunikáció (parancsértelmező,
+parancsnyelv) – CLI
+• Grafikus, speciális beviteli eszközökkel
+megvalósított kommunikáció – GUI
+
+77
+
+4.3 Az operációs rendszerek szolgáltatásai
+• Folyamatok vezérlése
+• Állományok kezelése
+• Perifériás eszközök kezelése
+• Rendszerinformációk kezelése
+• Kommunikáció
+
+78
+
+Folyamatok vezérlése
+• program betöltése, végrehajtása
+• folyamatok létrehozása, megszüntetése;
+
+attribútumainak beállítása;
+• központi tár igénylése, felszabadítása;
+• folyamatok közötti kommunikáció,
+folyamatok szinkronizálása (egymáshoz,
+órához, külső eseményhez);
+• nyomkövetés hibakereséshez
+79
+
+Állományok kezelése
+• állomány létrehozása, törlése,
+
+attribútumok beállítása;
+• könyvtárak létrehozása, módosítása;
+• állományok megnyitása, lezárása,
+szekvenciális és véletlen átvitel .
+
+80
+
+Perifériás eszközök kezelése
+• Perifériák
+– igénylése;
+– lefoglalása;
+– felszabadítása;
+• Adatátvitel a program és a periféria
+
+között
+
+81
+
+Rendszerinformációk kezelése
+• A rendszerkomponensek
+– folyamatok
+– állományok
+– perifériák
+állapotának lekérdezése, módosítása;
+• rendszer statisztikák, naplózás
+
+82
+
+Kommunikáció
+• kommunikációs csatornák
+– létrehozása
+– megszüntetése;
+• üzenetek
+– küldése
+– fogadása;
+• műveletek távoli erőforrásokon.
+83
+
+4.4 Rendszerprogramok
+Definíció:
+Az OS-hez adott, annak általános célú
+felhasználását támogató programok.
+• parancsértelmező
+• állományrendszer kezelő
+• szövegszerkesztő
+• fordító program, linker, loader, könyvtár
+kezelő
+• kommunikációs programok (pl. levelezés)
+84
+
+

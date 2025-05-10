@@ -1,0 +1,375 @@
+Operációs rendszerek
+
+10. Elosztott rendszerek
+
+v3.0
+
+10. Elosztott rendszerek
+• Mik az elosztott rendszerek? Miért van rájuk
+
+szükség?
+• Kommunikációs hálózatok típusai, tulajdonságai
+• Elosztott operációs rendszerek típusai
+• Elosztott rendszerek tervezési szempontjai
+
+2
+
+10.1 Bevezetés
+Angolul: Distributed systems
+Definíció:
+Egymással együttműködő, kommunikációs
+hálózaton összekapcsolt, több számítógépből
+álló rendszer
+
+3
+
+Elosztott rendszerek
+
+4
+
+Motivációk
+• Erőforrások megosztása
+– speciális eszköz, nem kell mindenhova
+• Szolgáltatás megosztása
+– szerver - kliens
+• dedikált - csak szolgáltat
+• nem dedikált
+
+• Megbízhatóság növelése:
+– ha egy csomópont kiesik, nem gond  a feladatokat
+átveszik mások.
+
+5
+
+Motivációk (folyt.)
+• Terhelés megosztás: a feladatok egyenletes
+
+elosztása (nem eléggé terhelt csomópontokat
+terhelhetjük, teljesítmény nő)
+• Sebesség növekedés
+– párhuzamos feldolgozás
+
+• Kommunikáció
+– a meglévő alacsony szintű kommunikációra egyéb is
+épülhet: email, messenger, stb.
+
+6
+
+10.2 Kommunikációs hálózatok
+• Topológia
+• Hálózatok típusai
+• Forgalomirányítás
+
+• Állomások kapcsolódásának módjai
+• Osztott csatornahasználat, versengés
+• Hálózati rendszerek szerkezete
+
+7
+
+Topológia
+• Teljesen összekapcsolt
+– drága (négyzetes növekedés),
+– gyors,
+– megbízható.
+• Részlegesen összekapcsolt:
+– olcsóbb,
+– lassabb,
+– kevésbé megbízható.
+
+8
+
+Részlegesen összekapcsolt hálózatok: csillag
+• Olcsó
+• Gyors (de túlterhelődhet),
+• Megbízható
+
+• A „C” csomópont kiesése
+
+során a részek magukra
+maradnak.
+
+9
+
+Részlegesen összekapcsolt hálózatok:
+kapcsolt
+• Kapcsolt (switched)
+– Csillag topológia
+– A switch tetszőleges pont-pont kapcsolatot tud
+létrehozni a forgalom függvényében.
+
+10
+
+Részlegesen összekapcsolt hálózatok: gyűrű
+• Változatok
+– gyűrű
+– kétirányú gyűrű
+– kettős gyűrű
+• Tulajdonságok
+– olcsó
+– lassú
+– megbízhatatlan
+
+11
+
+Részlegesen összekapcsolt hálózatok:
+faszerkezet
+• Olcsó
+• Gyors
+• Egyes állomások kiesése a hálózat
+
+széttöredezését okozza.
+
+12
+
+Részlegesen összekapcsolt hálózatok: busz
+• Busz (közösen használt csatorna)
+– Olcsó
+– Gyors
+– Egyes állomások kiesése a többit nem érinti
+– Ha a busz kiesik, az katasztrofális.
+
+A
+
+B
+
+C
+
+D
+
+E
+
+F
+
+13
+
+Hálózatok típusai kiterjedésük alapján
+• Lokális: LAN – local area network
+
+14
+
+Hálózatok típusai kiterjedésük alapján
+• Nagy területű: WAN – wide area network
+
+15
+
+Forgalomirányítás
+•
+•
+•
+
+Routing
+Ott van rá szükség, ahol nincs teljes összekötés.
+Táblázat alapján határozza meg az útvonalat. Táblázat:
+– lehetséges útvonalak
+– egyéb információk
+
+• csatorna sebessége,
+• költsége,
+• terhelése
+
+– aktualizálni kell!
+
+•
+
+fix útvonal
+
+– Az üzenetváltás rögzített (legrövidebb, legkisebb költségű) útvonalon
+történik.
+
+•
+
+virtuális áramkör
+
+– Felépül - forgalom - leépül.
+
+•
+
+dinamikus
+
+– minden üzenethez keresnek útvonalat, az állomások üzenetenként
+döntik el, hogy azt merre küldjék tovább.
+16
+
+Állomások kapcsolódásának módjai
+• Áramkörkapcsolt:
+– kizárólagos használat
+– (mint régen a vezetékes telefon)
+
+• Üzenetkapcsolt:
+– minden üzenet továbbításához ideiglenesen egy fizikai csatornát
+rendelnek
+– a közbülső csomópontoknak az egész üzenetet (ami gyakran
+nagy!) venni és tárolni kell
+– (mint a postai levéltovábbítás)
+
+• Csomagkapcsolt:
+– csomagokra bontás (küldő feladata)
+– a csomagokat a vevő állítja össze
+– nem kell nagy puffer
+– overhead  lassabb
+17
+
+Osztott csatornahasználat, versengés
+• Több állomás által közösen használt csatorna
+
+(pl. busz, vagy gyűrű szerkezet).
+• Egyszerre csak egy állomás használhatja.
+• Ha többen egyszerre használják  hiba.
+• Kezelés:
+– CSMA/CD (Ethernet)
+– Token passing
+– Message slots
+
+18
+
+Hálózati rendszerek szerkezete
+• Hálózati kommunikáció megvalósítása komplex rendszert
+
+igényel.
+
+• Rétegszerkezet: ISO-OSI modell
+
+• Fizikai (physical) (Pl. Cat5e)
+– mechanika, elektronika
+
+• Adatkapcsolati (link) (Pl. CSMA/CD)
+– Adatcsomagok (keretek) két szomszédos pont közötti átvitele, fizikai
+szintű hibák kezelése
+
+• Hálózati (network) (Pl. IP)
+– Két tetszőleges végpont közötti kommunikációs kapcsolat
+biztosítása, forgalomirányítás (csomagok útjának kijelölése), egyedi
+fizikai címek generálása
+19
+
+Hálózati rendszerek szerkezete
+•
+
+Szállítási (transport) (Pl. TCP)
+– üzenetek átvitele, csomagokra bontása és összeállítása, adó-vevő
+információforgalom vezérlése, forgalom szabályozás (adó túl sok adatot küld
+túl gyorsan)
+
+•
+
+Viszony (session)
+– Kapcsolatfelvétel (logikai kapcsolat felépítése, bontása), szinkronizáció /
+párbeszéd szervezés (pl. távoli bejelentkezés kommunikációs protokollja)
+
+•
+
+Megjelenítési (presentation) (Pl. HTTP részben)
+– Információ formázása, különböző konverziók (pl. karakter kód ASCII EBCDIC)
+
+•
+
+Alkalmazási (application) (Pl. FTP, email, HTTP, telnet)
+– felhasználói szintű szolgáltatások, belépés, kilépés, titkosítás, jogok)
+
+•
+
+Két végpont minden rétege között lesz kapcsolat, a szabályok a
+protokollok.
+20
+
+10.3 Elosztott operációs rendszerek típusai
+• Hálózati számítási modell
+– A felhasználó tudja, hogy melyik erőforrás melyik
+állomáson van. Meg kell nevezni a szolgáltatót és az
+erőforrást is.
+– Pl.:
+• távoli terminál (remote login)
+• állományok átvitele (file transfer)
+
+• Elosztott számítási modell
+– Az OS már több gépen fut, a felhasználó nem tudja,
+hogy helyi vagy távoli erőforrást lát-e.
+– Távoli erőforráshoz szerver-kliens információcsere kell
+(middleware).
+21
+
+Információcsere elosztott számítási
+modellben
+• Adatvándorlás (data migration)
+– Egy távoli állományt (vagy egy részét) a helyi gépre
+másolja, a munka végeztével visszaírja.
+• Feldolgozás vándorlás (computation migration)
+– Ha sok az adat, akkor inkább a feldolgozó programot
+és az eredményt másolja.
+• Üzenetküldés (message passing)
+– Megadja a műveletet, majd tovább megy.
+• Távoli eljáráshívás (remote procedure call)
+– Meghívja a távoli gépen lévő eljárást és bevárja az
+eredményt.
+22
+
+Információcsere elosztott számítási
+modellben (folyt.)
+• Folyamatvándorlás (process migration)
+– A folyamat, vagy annak egyes párhuzamos
+részei nem ott futnak, ahol elindították.
+1. csomópontok terhelése egyenletes,
+2. végrehajtás a párhuzamos feldolgozás miatt
+felgyorsul,
+3. az elindított folyamat számára kedvező
+környezetben fut (HW, SW),
+4. adatok gyorsabb elérése adott csomóponton.
+
+– A felhasználó ezen részleteket nem látja.
+23
+
+10.4 Az elosztott rendszerek tervezésének
+szempontjai (1)
+• Átlátszó elosztott rendszer (transparent
+
+distributed system)
+
+– a felhasználó ne érezzen különbséget a helyi és a
+távoli erőforrás között
+– felhasználó mozgásának támogatása (mindegy melyik
+gépre lép be: a megszokott környezetét látja)
+
+• Hibatűrés
+– az egyes csomópontok meghibásodása esetén a
+többiek a feladatot átveszik (teljesítmény csökkenhet,
+de tovább működik)
+– javítás után a csomópont automatikusan kerüljön
+vissza a rendszerbe.
+
+24
+
+Az elosztott rendszerek tervezésének
+szempontjai (2)
+• Skálázhatóság (scalability)
+
+– A rendszer növekedésével ne kelljen az rendszer
+architektúráját vagy a szoftver alkalmazásokat
+megváltoztatni.
+– Növekvő terheléshez alkalmazkodjon, ne törjön le hirtelen.
+– További csomópontok beállításakor a teljesítmény ne
+romoljon, ne legyen túlterhelődés. Hibatűréssel azonos
+tervezési elvek:
+• redundancia kell a rendszerbe: a kiesett elemek helyére
+léphetnek, illetve kiszolgálják a növekvő terhelést
+
+– központosított szolgáltatások kerülése: kiesés végzetes
+lenne, növekedés túlterheléshez vezetne.
+– Teljesen elosztott nehéz: ezért fürtözés (cluster) (a
+csomópontokat csoportokba, fürtökbe szervezik, amik
+lazán csatoltak.)
+25
+
+Az elosztott rendszerek tervezésének
+szempontjai (3)
+• Szerver implementáció
+– Szervereknek több ezer aktív kérés egyidejű
+kiszolgálását kell bírni. Speciális HW SW architektúra.
+– Ügyfelenként (kliens) egy-egy párhuzamos
+tevékenység, amely egy közös erőforrást kezel. Az
+azonos párhuzamos tevékenységhez (pl. http
+kiszolgálás) szálakat rendelnek (gyorsabb
+környezetváltás).
+
+26
+
+

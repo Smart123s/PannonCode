@@ -1,0 +1,229 @@
+OS. gyak 4
+---
+bash script futtatása, értékadás, kiíratás, argomentumok (paraméterek), változóba olvasás, elagázás, teszt utasítások, többszörös elágazás
+
+A tanult parancsokat tudjuk összefűzni egy programmá.
+Fordítóra nincs szükség, a shell magát a forráskódot értelmezi.
+A programok elyan szöveges fájlok, amelyek futtathatók lesznek.
+Kiterjesztés .sh, de bármi lerhet.
+
+Shell script létrehozása
+---
+1. nano helloworld.sh
+2.
+#!/bin/bash <- kötelező sor a shell script útvonala
+echo "Hello World"
+3. chmod u+x helloworld.sh
+4. ./helloworld.sh <-relatív útvonal (vagy abszolult útvonal)
+(Ez azért van így, hogy meg lehessen különböztetni a parancsoktól a scriptet)
+
+A változók tipusnélküliek, tartalmazhatnak szöveget és számot is
+A változókat nem kell deklarálni.
+
+Értékadás
+---
+numbers=10
+salary=$numbers (numbers változó értékét adom át a salary változónak)
+text=hello
+longtext="A fizetesem   $salary alma"
+
+Kiíratás
+---
+echo $salary
+10
+
+echo $longtext
+# A szóközöket csak paraméter elválasztásnak tekinti
+A fizetesem 10 alma
+
+echo "$longtext"
+# Visszadja a teljes formázott stringet
+A fizetesem 10   alma
+
+echo '$longtext'
+# Tartalom szószerinti kiíratása
+A fizetesem $salary alma
+
+Változónév elkülönítés zárójelezéssel:
+
+A shell a helloworld nevű változót keresi:
+$helloworld
+A shell a hello nevű változót keresi a world-öt pedig stringként kezeli:
+${hello}world
+
+Parancssori argomentumok
+./elso.sh arg1 arg2 (az arg1 a $1-ben, az arg2 a $2 tárolódik)
+
+Hello World kiíratása argomentumokkal
+#!/bin/bash
+echo "$1" "$2"!
+
+Az első argomentum hozzáfűzése egy fájlhoz
+#!/bin/bash
+echo "$1">"$2"
+
+Az első argomentum másolása a másik argomentum mappájába
+#!/bin/bash
+cp "$1" "$2"
+
+Szöveg bekérése
+----
+A read parancs segítségével szöveg bekérése a shell scriptbe
+A read egy sort olvas be
+read változo1 változo2
+read x y z (ha csak egy szó szó van akkor az y, z változó üres lesz)
+
+Példa (login.sh)
+#!/bin/bash
+echo "Kerem, adja meg a nevet:"
+read name
+echo "Kerem, adja meg a jelszavat:"
+read -s password # beírt karakterek elrejtése
+echo "Kedves ${name}, most már belephet!"
+
+Elágazás (if)
+---
+if; then; fi
+
+Rövid alak, a blokkok elválasztása ";"-vel
+if ls sorok.txt; then echo "Van ilyen fajl"; else echo "Nincs ilyen fajl"; fi
+
+Hosszú alak, nem minden sorban egy új blokk
+if ls sorok.txt
+	then echo "Van ilyen fajl"
+	else echo "Nincs ilyen fajl"
+fi
+
+Az if utasítással használható a test utasítása, amely segítségével különböző tulajdonságokat tudunk megvizsgálni
+test -e: exist, létezik-e
+test -f: file, fájl-e az adott bejegyzés
+test -d: directory, könyvtár-e az adott bejegyzés
+
+pl. Létezik-e sorok.txt
+if test -e "~/dokumentumok/sorok.txt"
+	then echo "Van ilyen fajl"
+	else echo "Nincs ilyen fajl"
+fi
+
+test utasításnak van egy rövidített formája a szögletes zárójel: []
+Fontos, hogy miden elemet szóközzel kell elválasztani pl. [ "$1" -gt "$2" ]
+
+Egész számok (integer) összehasonlítása
+-eq egyenlő
+if [ "$a" -eq "$b" ]
+-ne nem egyenlő
+if [ "$a" -ne "$b" ]
+-gt nagyobb
+if [ "$a" -gt "$b" ]
+-ge nagyobb vagy egyenlő
+if [ "$a" -ge "$b" ]
+-lt kisebb
+if [ "$a" -lt "$b" ]
+-le kisebb vagy egyenlő
+if [ "$a" -le "$b" ]
+
+Egész számok összehasonlítása C szintaxisban. Csak dupla zárójellel működik!
+kisebb ( < )
+(("$a" < "$b"))
+kisebb vagy egyenlő ( <= )
+(("$a" <= "$b"))
+nagyobb ( > )
+(("$a" > "$b"))
+nagyobb vagy egyenlő ( >= )
+(("$a" >= "$b"))
+
+Szövegek (string) összehasonlítása
+= Egyenlő
+== Az egyenlőség operátor (==) másként viselkedik a dupla zárójeles teszten belül, mint az egyszerű zárójelben.
+
+A dupla zárójel ([[ ... ]]) a bash shell speciális szerkezete, amelyet általában a feltételes kifejezésekhez használunk. A dupla zárójelben a bash kevésbé érzékeny a speciális karakterekre, mint például a <, >, &&, ||, amelyek az egyszerű zárójelben ([ ... ]) általában problémákat okozhatnak. Mivel a dupla zárójelben a bash sokkal rugalmasabban értelmezi ezeket a karaktereket, így általában nem szükséges a karakterek escape-je.
+
+[[ $a == z* ]]   # Igaz, ha $a "z"-vel kezdődik (mintaillesztés).
+[[ $a == "z*" ]] # Igaz, ha $a megyezik z*-al (szó szerinti egyezés).
+[ "$a" == z* ] # Igaz, ha $a "z"-vel kezdődik (mintaillesztés).
+[ "$a" == "z*" ] # Igaz, ha $a megyezik "z*"-al (szó szerinti egyezés).
+
+!= nem egyenlő
+if [ "$a" != "$b" ]
+
+< kisebb, mint (ASCII ábécé sorrend alapján)
+if [[ $a < $b ]] # Nem kell zárójel, ha a változó nem tartalmaz speciális karaktereket
+if [ "$a" \< "$b" ] # "\" mondja meg a bash-nek, hogy a "<" jelet szószerint értelmezze
+
+> nagyobb, mint (ASCII ábécé sorrend alapján)
+if [[ "$a" > "$b" ]]
+if [ "$a" \> "$b" ]
+
+-z üres string, a hossza zéró
+if [ -z "$s" ]
+
+-n nem nulla
+if [ -n "$s" ]
+
+Példa nagyobb.sh (paraméteres)
+Döntsük el, hogy az első paraméterben megadott szám-e a nagyobb-e, mint a második paraméterben megadott szám.
+
+#!/bin/bash
+
+if [ "$1" -gt "$2" ] #if (("$1" > "$2"))
+    then
+        echo "Az elso szam a nagyobb."
+    else
+        if [ "$1" -eq "$2" ] #if (("$1" == "$2"))
+            then
+                echo "A ket szam egyenlo."
+            else
+                echo "A masodik szam a nagyobb."
+        fi
+fi
+
+Többszörös elágazás (case)
+---
+case: többszörös elágazás
+A case után egy kifejezés, ezt követi egy in kulszó, majd a minta1, minta2
+
+Példa szamkivalaszto.sh
+#!/bin/bash
+
+echo "Kerem, valasszon egy szamot 1 és 3 kozott:"
+read number
+
+case $number in
+  1)
+    echo "Elso szamot valasztotta."
+    ;;
+  2)
+    echo "Masodik szamot valasztotta."
+    ;;
+  3)
+    echo "Harmadik szamot valasztotta."
+    ;;
+  *)
+    echo "Hibas szamot valasztott."
+    ;;
+esac
+
+expr (expresson parancs)
+---
+Aritmetikai és logikai kifejezések értékelésére szolgál
+
+sum=$(expr 5 + 3) # összeadás
+difference=$(expr 10 - 4) # kivonás
+product=$(expr 4 * 6) # szorzás
+quotient=$(expr 24 / 4) # osztás
+remainder=$(expr 27 % 5) # maradékos osztás
+
+C-szintaxisban:
+sum=$((5 + 3))
+difference=$((10 - 4))
+product=$((4 * 6))
+quotient=$((24 / 4))
+remainder=$((27 % 5))
+
+Példa osszeado.sh
+
+#!/bin/bash
+a=5
+b=3
+c=$(expr $a + $b)
+echo "Az eredmeny: $c"

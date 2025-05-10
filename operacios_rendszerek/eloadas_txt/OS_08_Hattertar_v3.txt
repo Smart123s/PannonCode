@@ -1,0 +1,710 @@
+Operációs rendszerek
+
+8. A háttértár kezelése
+
+v3.0
+
+8. A háttértár kezelése
+Bevezetés
+Háttértárak típusai
+A lemezegység fizikai szervezése
+Lemezműveletek ütemezése
+– Fejmozgás optimalizálása
+– Elfordulás optimalizálása
+
+Az adattárolás megbízhatósága
+
+2
+
+8.1 Bevezetés
+Miért van szükség háttértárra?
+– központi tár drága és kicsi a tárolókapacitása
+– a kikapcsolással az információk elvesznek a
+központi tárban
+
+3
+
+8.2 Háttértárak típusai
+• Mágneslemez (merev, hajlékony)
+• Mágnesszalag
+• Magneto-optikai lemez
+• Optikai lemez
+• Flash
+• A jövő (?):
+– Holografikus tárolás
+– MEMS tárolók
+
+Legelterjedtebb a mágneslemez
+4
+
+Mágneslemez
+• Vékony mágnes-réteggel bevont lemezek
+
+(merev- vagy hajlékony lemez)
+• Fej vékony levegőrétegen fut a lemez felett
+• Hajlékony:
+- 240MB
+
+• Merev:
+4MB -
+
+5
+
+Mágnesszalag
+• Nagy adatmennyiségek tárolására.
+– LTO9: 18TB / 45TB
+• Nincs véletlen hozzáférés, lassú a keresés, de
+
+az átvitel a lemezekéhez hasonló sebességű.
+• Főleg mentési, archiválási célokra.
+• Gazdaságos.
+
+6
+
+Magneto-optikai lemez
+• Merev, mágneses réteggel bevont lemez. Üveg
+
+védőréteg.
+• Fej távolabb van, mint a mágneses lemeznél.
+• Rögzítés: Lézerrel felmelegítenek egy pontot
+(1 bit), amelyre a gyenge mágneses tér most
+már rögzíti az információt.
+• Olvasás: Kerr-effektussal. Lézerrel
+megvilágítjuk a mágneses pontot (1 bit),
+amelyről visszaverődő lézersugár polarizációja
+tartalmazza az információt.
+7
+
+Csak olvasható optikai lemez
+• CD-ROM, DVD-ROM
+• Vékony alumíniumfólia üveg védőréteg alatt
+• A fóliában nyomtatással lyukakat alakítanak ki
+• Fóliáról fény visszaverődik / vagy nem
+
+8
+
+Egyszer írható optikai lemez
+• CD-R, DVD-R
+• WORM: write-once, read-many-times
+• Vékony alumíniumfólia üveg védőréteg alatt
+• Írás: lézerrel „lyuk” égetése a fóliába
+• Olvasás: visszaverődés mérése
+
+9
+
+Írható/olvasható optikai lemez
+• CD-RW, DVD-RW, Blu-ray
+• A lemez anyaga vagy kristályos (áttetsző),
+
+vagy amorf (opálos) lehet. Alatta
+fényvisszaverő réteg.
+• Írás/olvasás: lézersugárral
+– Alacsony energia: olvasás
+– visszaverődött fény mennyiségét érzékeli
+– Közepes energia: törlés
+– olvaszt és kristályos állapotba szilárdít
+– Nagy energia: írás
+– amorf állapotba olvaszt
+10
+
+Flash memória
+• Egy speciális EEPROM
+• Információ egy MOSFET szigetelt elektródáján
+
+(GATE1) tárolt töltés formájában tárolódik
+• Kiolvasás: GATE2-re adott vezérlő (olvasó)
+feszültség hatását módosítja a GATE1-en tárolt
+töltés  a DS áram értékéből  0 vagy 1 bit.
+(Léteznek több bites eszközök is!)
+• Írás-törlés: nagy feszültség (10-15V)  alagút
+effektus
+• Csak blokkosan törölhető/írható
+• Egyes kialakításai (NOR) bitenként is olvashatók,
+mások (NAND) csak blokkonként.
+• Korlátozott élettartam: kb. 1millió írás/törlés
+11
+
+HDD vs. SSD
+
+Forrás: Reddit
+12
+
+HDD vs. szalag
+
+Forrás: TAPE STORAGE.net
+13
+
+HDD vs. SSD vs. szalag
+
+Forrás: Linked in
+14
+
+Holografikus rögzítés
+• Kísérleti stádiumban van még mindig
+– jövő? / zsákutca?
+• Hologram tekinthető egy 3D-s mátrixnak
+• Minden pixel egy bit (fekete-fehér)
+• Nagyon gyors lehet: egy lézervillanással egy
+
+egész kép (sok bit) rögzíthető
+• Jelenleg max. 500GB/lemez
+
+15
+
+MEMS tárolás
+• MEMS: micro-electronic mechanical systems
+• Több ezer kis író/olvasó fej, felettük 1cm2
+
+mágneses tároló felület
+• A felület mozgatható a fejek felett, így a fejek
+– elérhetik az információt,
+– a mozgatás alatt pedig írni és olvasni tudnak.
+
+16
+
+8.3 A lemezegység fizikai szervezése
+• Mágneses bevonatú forgó korongok, a felület
+
+felett író-olvasó fej.
+• Sáv (track) a lemezterület (gyűrű) azon része,
+amelyet a fej elmozdulás nélkül egy fordulat
+alatt elér.
+• Cilinder (cylinder) az összes fej alatti sáv
+• Szektor (sector), a sáv azonos méretű
+blokkokra osztva. Az információátvitel
+legkisebb egysége: a lemezvezérlő egy teljes
+szektort olvas vagy ír.
+17
+
+A lemezegység fizikai szervezése
+Író/olvasó fej
+
+Sáv
+
+Cilinder
+
+Kar
+Szektor
+
+18
+
+Szektorok címzése 1.
+• 0. szektor: a legkülső cilinder első sávjának
+
+első szektora.
+• 1.,2., stb. szektorok: ugyanezen a sávon
+egymás után következő szektorok, míg el nem
+fogy a sáv.
+• Ezután ugyanezen a cilinderen belül a
+következő sáv következik (a következő fej
+alatt), amíg el nem fogy az összes sáv a
+cilinderen belül.
+• Ezután a következő cilinder következik.
+19
+
+Szektorok címzése 2.
+• Az OS a lemez szektorait lineárisan címzi. A
+
+lemezillesztő viszont több komponensű
+• b = s * (i * t + j) + k;
+• ahol
+– s sávon lévő szektorok száma,
+– t a cilindereken lévő sávok száma,
+– i a kijelölt cilinder,
+– j a fej (lemez felület) száma,
+– k a sávon belüli szektorok száma.
+
+• b  (i; j; k)
+20
+
+További fogalmak
+Az átvitel kiszolgálásának ideje
+– fejmozgási idő (seek time): az az idő, amely alatt
+a fej a kívánt sávra (cilinderre) áll
+– elfordulási idő (latency time): az az idő amely
+alatt a kívánt szektor a fej alá fordul
+– az információ átviteli ideje (transfer time)
+
+• Az idők között nagyságrendi különbségek
+
+vannak, a fejmozgási idő a leghosszabb.
+
+21
+
+8.4 A lemezműveletek ütemezése
+• Egyszerre több folyamat verseng a háttértár
+
+perifériáért. Egyszerre több kérés várakozhat
+kiszolgálásra. Cél az átlagos seek és a latency
+idő csökkentése.
+• Természetesen így egyes folyamatok
+
+rosszabbul járnak, de a cél a globális
+teljesítmény növelése.
+
+22
+
+Értékelési szempontok
+• átbocsátó képesség (időegység alatt
+
+lebonyolított átvitelek száma)
+• átlagos válaszidő (a kéréstől a végrehajtásig
+eltelt idő)
+• válaszidő szórása (megjósolható viselkedés,
+futás ne ingadozzon külső okok miatt)
+Feltételezzük az átviteli kérések címeinek
+egyenletes eloszlását.
+
+23
+
+Fejmozgás optimalizálása
+• Sorrendi kiszolgálás (FCFS)
+• Legrövidebb fejmozgási idő (SSTF)
+• Pásztázó (SCAN)
+• N-lépéses pásztázó (N-SCAN)
+• Körbeforgó pásztázó (C-SCAN)
+• Kombinált módszerek
+
+24
+
+Tesztsorozat
+• Az algoritmusok bemutatására a következő
+
+egyszerű tesztet alkalmazzuk:
+• Cilinderek száma: 0-199
+• Várakozó sor (cilinderek):
+98, 183, 37, 122, 14, 124, 65, 67
+• Jelenlegi fejpozíció:
+53. cilinder
+
+0
+
+14
+
+37
+
+53
+
+65 67
+
+98
+
+122 124
+
+183
+
+199
+
+25
+
+Sorrendi kiszolgálás
+First Come First Served, FCFS
+• A kérések sorrendjében történik a kiszolgálás.
+– kicsi átbocsájtó képesség
+– nagy az átlagos válaszidő
+– szórás viszonylag kicsi
+
+26
+
+Példa: FCFS
+Várakozó sor: 98, 183, 37, 122, 14, 124, 65, 67
+Jelenlegi fejpozíció: 53
+0
+
+14
+
+37
+
+53
+
+65 67
+
+98
+
+122 124
+
+183
+
+199
+
+Össz út: 640 cilinder
+27
+
+Legrövidebb fejmozgási idő
+Shortest Seek Time First, SSTF
+• Azt a kérést szolgálja ki, amely az aktuálishoz
+a legközelebbi cilinderen van. FCFS-nél jobb.
+– nagy a szórás
+– kiéheztetés
+– közepes átbocsájtás
+– kis átlagos válaszidő
+
+28
+
+Példa: SSTF
+Várakozó sor: 98, 183, 37, 122, 14, 124, 65, 67
+Jelenlegi fejpozíció: 53
+0
+
+14
+
+37
+
+53
+
+65 67
+
+98
+
+122 124
+
+183
+
+199
+
+Össz út: 236 cilinder
+
+29
+
+Pásztázó
+SCAN (LOOK)
+• Az aktuális mozgási iránynak megfelelő
+kéréseket szolgálja ki; irányváltás, ha nincs
+több ilyen kérés.
+– közepes válaszidő
+– nagy átbocsátás
+– kis szórás
+
+• Sajátossága, hogy a középső cilindereket
+
+többször látogatja meg.
+
+30
+
+Példa: SCAN
+Várakozó sor: 98, 183, 37, 122, 14, 124, 65, 67
+Jelenlegi fejpozíció: 53
+0
+
+14
+
+37
+
+53
+
+65 67
+
+98
+
+122 124
+
+183
+
+199
+
+Össz út: 208 cilinder
+
+31
+
+N-lépéses pásztázó
+N-SCAN
+• Egy irányba mozogva N kérést (amelyek a
+pásztázás elején már megérkeztek) szolgál ki.
+• A közben érkező kérésekre a következő
+irányváltás után kerül sor.
+– nagy átbocsátás
+– kis válaszidő
+– kis szórás (kisebb mint a SCAN)
+
+32
+
+Példa: N-SCAN (N=4)
+Várakozó sor: 98, 183, 37, 122 | 14, 124, 65, 67
+Jelenlegi fejpozíció: 53 (csökkenő irányba)
+0
+
+14
+
+37
+
+53
+
+65 67
+
+98
+
+122 124
+
+183
+
+199
+
+Össz út: 331 cilinder
+
+33
+
+Körbeforgó-pásztázó
+C-SCAN
+• Csak az egyik irányú fejmozgás során történik
+a kérések kiszolgálása.
+• Ez is lehet N lépéses.
+– nagy átbocsátás
+– kis válaszidő
+– kis szórás
+
+34
+
+Példa: C-SCAN
+Várakozó sor: 98, 183, 37, 122, 14, 124, 65, 67
+Jelenlegi fejpozíció: 53
+0
+
+14
+
+37
+
+53
+
+65 67
+
+98
+
+122 124
+
+183
+
+199
+
+Össz út: 322 cilinder
+
+35
+
+Kombinált módszerek
+• A terhelés függvényében változtatja a
+
+stratégiákat:
+– alacsony terhelés  SCAN
+– közepes terhelés  C-SCAN
+– nagy terhelésnél  C-SCAN és elfordulási idő
+optimalizálás
+
+36
+
+Az elfordulás optimalizálása
+• Az egy cilinderen belüli kérések a lemez
+
+aktuális pozíciójának, valamint a szektorok
+sorrendjének ismeretében a kiszolgálás előtt
+sorba rendezhetők.
+
+37
+
+Egyéb szervezési elvek a teljesítmény
+növelésére 1.
+• Lemezterület tömörítése (Disc Compaction)
+– lokalitáson alapul
+– Az egymáshoz tartozó blokkokat a lemezen is egymás
+mellé tesszük. Időnként egy rendezőprogrammal
+tömöríteni kell a háttértárat.
+
+• A gyakran szükséges adatok a lemez közepén
+• Gyakran használt adatok több példányban
+– több cilinderen is tároljuk
+– így minden fejálláshoz elég közel van
+– Csak nagyon ritkán változó adatokkal érdemes csinálni:
+• adatok konzisztenciája
+• kölcsönös kizárás
+38
+
+Egyéb szervezési elvek a teljesítmény
+növelésére 2.
+• Több blokk átvitele egyszerre
+– Az idő nagy része a fejmozgással telik  ha már ott vagyunk,
+vigyünk át minél több blokkot
+• Blokkok átmeneti tárolása
+
+Disc Cache (periférián lévő, központi tár)
+– write through ,egyidejűleg kiírjuk a lemezre
+– copy back, csak akkor írjuk ki ha az átmeneti tárra szükségünk
+van (teljesítmény növelő, de meghibásodás esetén a
+módosítások nem kerülnek a lemezre)
+
+• Adattömörítési eljárások használata (Data Compression)
+– Az lemezen az információ tömörített formában van. A ki-be
+tömörítést a perifériakezelő vagy célhardver végzi.
+– Átvitel nő, adatvesztés valószínűsége nagyobb
+
+39
+
+8.5 Az adattárolás megbízhatósága
+• Adatok mentése (backup)
+A lemez teljes vagy a megváltozott (incremental
+backup) tartalmát időnként más tárolóra (szalag, CD,
+másik diszk) kell másolni. Hiba esetén a szükséges
+rész visszaállítható.
+• Az átmeneti tár és a háttértár szinkronizálása
+Az cache-ben lévő fontosabb változások, vagy az
+egész cache tartalmának kiírása (időnként).
+• Lemezegységek többszörözése: RAID
+40
+
+RAID
+• Redundant Array of Inexpensive/Independent
+
+Disks
+• Cél:
+
+– Adatátvitel sebességét növelni
+– Adattárolás biztonságát növelni
+
+• Alapötletek:
+– Lemezegységek kétszerezés (disc shadowing, mirroring)
+– Az írásokat mindkét egységen elvégezzük, hiba esetén
+a másik példány használható.
+ megbízhatóság nő, sebesség nem változik
+– Tároljuk egy adatbájt bitjeit külön tárolókon.
+Párhuzamos hozzáférés.
+–  megbízhatóság kissé csökken, sebesség kb. 8x
+
+• Megvalósítás: RAID 0-6
+41
+
+RAID 0
+• Non-redundant stripping
+• Az egymás utáni blokkok külön háttértárakon
+
+helyezkednek el, nincs redundancia (tükör, vagy
+paritás)
+• Adatátvitel sebessége megnő.
+• Biztonság némileg csökken (több kisebb tároló
+közül gyakrabban hibásodik meg egy, mint
+egyetlen nagyobb kapacitású tároló)
+
+Adat (blokkos szervezés)
+
+42
+
+RAID 1
+• Disk mirroring
+• Minden háttértárnak van egy tükre.
+• Hiba esetén a tükrön lévő adat használható, a
+
+hibás egység erről helyreállítható
+• Sokkal nagyobb biztonság, de a sebesség nem
+nő.
+M
+
+Adat
+
+M
+
+M
+
+M
+
+Másolat
+43
+
+RAID 2
+• Memory-style error correcting
+• Minden bitet más tároló tárol
+• A memóriákhoz hasonlóan paritás biteket
+
+használunk.
+• 1 bit hiba a paritás bitekből javítható
+• Nagy sávszélesség és nagy biztonság kisebb
+redundanciával, mint RAID 1 esetén.
+P
+
+Adat (bites szervezés)
+
+P
+
+P
+
+Paritás bitek
+44
+
+RAID 3
+• Bit-interleaved parity
+• RAID-2 továbbfejlesztése
+• Ötlet: ez nem memória! Hiba detektálása
+
+minden háttértáron önállóan működik  elég 1
+paritás bit a javításhoz
+• Nagy sávszélesség és nagy biztonság nagyon kis
+redundanciával (egyetlen extra háttértárral).
+P
+
+Adat (bites szervezés)
+
+Paritás bit
+45
+
+RAID 4
+• Block-interleaved parity
+• Mint RAID 3, de blokkos szervezés
+• Az egyik háttértár paritás-blokkokat tartalmaz
+• Biztonságos, nagy adathalmaz kezelésénél nő az
+
+átviteli sávszélesség is.
+• Kis adatméretek esetén (pl. 1 blokk) nem nő a
+sávszélesség. (Sőt: 1 blokk írása  P olvasása,
+adatblokk írása, P írása)
+P
+
+Adat (blokkos szervezés)
+
+Paritás blokk
+
+46
+
+RAID 5
+• Block-interleaved distributed parity
+• Mint RAID 4, de a paritás blokkok elosztva
+• Ok: a RAID 4 esetén a paritás tárolót
+
+aránytalanul sokat használjuk  hamarabb
+meghibásodik. Itt a terhelés kiegyenlítődik
+P
+P
+
+P
+
+P
+
+P
+
+Adat és paritás (blokkos szervezés)
+
+47
+
+RAID 6
+• P+Q redundancy scheme
+• Mint RAID 5, de több (a példában 2) paritás
+
+blokkot tartalmaz
+• Véd a többszörös diszkhibák ellen is.
+
+P
+P
+
+P
+P
+P
+
+P
+
+P
+
+P
+P
+
+P
+P
+
+Adat és paritás (blokkos szervezés)
+
+48
+
+

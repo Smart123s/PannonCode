@@ -1,0 +1,167 @@
+Old meg bash szkriptekkel:
+
+1. Készíts egy bash scriptet, amely összeszámolja a kiindulási könyvtárban lévő összes .txt fájl sorait, amelyet egy változóban tárol el. Írja ki végül az összes sor értékét.
+
+#!/bin/bash
+
+total_lines=$(cat *.txt | wc -l)
+echo "Az összes .txt fájlban összesen $total_lines sor található."
+
+2. Írj egy bash szkriptet, ami kiírja a 0-tól 10 a számokat kettesével.
+#!/bin/bash
+
+for i in {0..10..2}
+do
+    echo $i
+done  
+
+3. Írj egy bash szkriptet, ami egy tömbben tárolja néhány kedvenc gyümölcsödet, majd kiírja az összes elemet külön sorba.
+#!/bin/bash
+
+fruits=("alma" "korte" "szolo" "narancs")
+for fruit in "${fruits[@]}"
+do
+    echo $fruit
+done
+
+4. Írj egy bash szkriptet, amely az "Ellenseges kemhalozat felkutatasa es semlegesítése" szövegben minden "e" karaktert "X" karakterre cserél. Írassa ki az eredményt.
+
+#!/bin/bash
+modified_text=$(echo "Ellenseges kemhalozat felkutatasa es semlegesítese" | sed 's/e/X/g')
+
+echo "Módosított szöveg: $modified_text"
+
+5. Írj egy bash szkriptet, amely argomentumban megkap egy fájlnevet. Először ellenőrizze, hogy a megadott fájl létezik-e. Ezt követően írassa ki a kapott fájl utolsó előtti sorát.
+
+#!/bin/bash
+
+if [ ! -f "$1" ]
+then
+    echo "Hiba: A megadott fájl nem létezik."
+    exit 1
+fi
+
+second_last_line=$(tail -n 2 "$1" | head -n 1)
+echo "A(z) '$1' fájl utolsó előtti sora: $second_last_line"
+
+6. Írjon egy bash szkriptet, amely bekér három darab számot. A számok közül keresse meg a legnagyobbat, majd írassa ki.
+
+#!/bin/bash
+
+echo "Kérem az első számot:"
+read szam1
+
+echo "Kérem a második számot:"
+read szam2
+
+echo "Kérem a harmadik számot:"
+read szam3
+
+if [ $szam1 -gt $szam2 ] && [ $szam1 -gt $szam3 ]; then
+    echo "$szam1 a legnagyobb."
+elif [ $szam2 -gt $szam1 ] && [ $szam2 -gt $szam3 ]; then
+    echo "$szam2 a legnagyobb."
+elif [ $szam3 -gt $szam1 ] && [ $szam3 -gt $szam2 ]; then
+    echo "$szam3 a legnagyobb."
+else
+    echo "Egyenlőség van."
+fi
+
+7. Írjon olyan bash scriptet, amely a standard inputról bekér egy számot, ezt a számot hozzáfűzi az aktuális mappában lévő azon fájlokhoz, amelyek neve tartalmazza az "vizsga" szót.
+
+#!/bin/bash
+echo "Adjon meg egy szamot"
+read number
+for file in ./*vizsga*
+do
+	echo ${number} >> ${file}
+done
+
+8. Írjon olyan bash scriptet, amely az aktuális könyvtárban létrehoz egy alma.txt nevű fájlt, amelynek a tartalma az aktuális mappában található fájlok száma.
+
+#!/bin/bash
+find . -maxdepth 1 -type f | wc -l > alma.txt
+
+9. Írjon egy bash szkriptet, amely egy bejelentkezési funkciót valósít meg. Ha felhasználói névként az admin2, jelszóként pedig a secret szerepel, akkor írja ki a program, hogy a bejelentkezés sikeres, ellenkező esetben azt, hogy sikertelen a bejelentkezés.
+
+#!/bin/bash
+# Type your Login Information
+read -p 'Felhasznaloi nev: ' username
+read -sp 'Jelszo: ' password
+
+if (( $username == "admin2" && $password == "secret" ))
+then
+     echo -e "\nSikeres bejelentkezés"
+else
+     echo -e "\nSikertelen bejelentkezés"
+fi
+
+10. Írjon egy bash szkriptet, amely egy egyszerű játékot valósít meg. A játék, kérjen be egy számot és ha az a szám a 10 vagy az 20, akkor írja ki, hogy megnyerted a játékot, különben pedig azt, hogy elvesztetted a játékot.
+#!/bin/bash
+
+echo "Gondoltam egy számra! Próbáld meg kitalálni!"
+
+read szam
+
+if [ "$szam" -eq 10 ] || [ "$szam" -eq 20 ]
+then
+  echo "Gratulalok, nyertel!"
+else
+  echo "Sajnalom, nem nyertel!"
+fi
+
+11. Írjon egy bash szkriptet, amely paraméterként nevsor.txt fájl tartalmát soronként kiíratja.
+
+#!/bin/bash
+filename=$1
+while read line
+do
+echo $line
+done < $filename
+
+12. Írjon olyan bash scriptet, amelynek tetszőleges számú paramétert megadhatunk. Írja ki a megadott paramétereket egymás alá, mindegyiket új sorba!
+
+#!/bin/bash
+
+for input in "$@"; do
+    echo "$input"
+done
+
+13. Írjon olyan bash scriptet, amely paraméterként egy fájlt vár. Ha a fájl nem létezik, írja ki, hogy: "Nem megvalosithato.", majd lépjen ki. Ha létezik a fájl, akkor Írja ki a felhasználónak a fájl sorainak és szavainak a szorzatát!
+
+#!/bin/bash
+
+if [ -f $1 ]
+then
+        line=$(cat $1 | wc -l)
+        echo "Sorok: $line"
+        word=$(cat $1 | wc -w)
+        echo "Szavak: $word"
+        echo "Összesen: $((line * word))"
+else
+        echo "Nem megvalosithato."
+fi
+
+14. Írj egy bash szkriptet, ami átmásolja az összes .txt kiterjesztésű fájlt egy új mappába, amelynek neve "txt_files". A szkript először ellenőrizze, hogy létezik-e az adott mappa, ha nem, hakkor hozza létre.
+
+#!/bin/bash
+
+if [ ! -d "txt_files" ]
+then
+    mkdir txt_files
+fi
+
+cp *.txt txt_files/
+
+15. Írj egy bash szkriptet, amely kiírja az aktuális könyvtárban található legkisebb és legnagyobb méretű fájl nevét.
+
+#!/bin/bash
+
+# Legkisebb méretű fájl neve
+smallest_file=$(ls -l | sort -n -k5 | head -n 2 | tail -n 1 | cut -d ' ' -f 9)
+
+# Legnagyobb méretű fájl neve
+largest_file=$(ls -l | sort -nr -k5 | head -n 2 | tail -n 1 | cut -d ' ' -f 9)
+
+echo "A legkisebb méretű fájl neve: $smallest_file"
+echo "A legnagyobb méretű fájl neve: $largest_file"

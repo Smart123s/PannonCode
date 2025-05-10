@@ -1,0 +1,106 @@
+OS. gyak 1
+---
+cd, ls, mkdir, touch, cp, rm
+
+bal, jobb nyíl: a beírt karakterek között tudunk lépegetni
+fel, le nyíl: korábban kiadott parancsok között tudunk lépegetni
+tab: parancsok kiegészítése/befejezése
+clear: képernyő törlése
+
+gyökér könyvtár: /, ha van alkönyvtára, vagy gyerekkönyvtára akkor /valami
+
+speciális elérési útvonalat
+. (egy pont): aktuális könytár
+.. (kettő pont): egy szinttel lejebb lévő könyvtár
+~ (hullámvonal): aktuális felhasználó home könytára
+
+könyvtárak közötti mozgás: cd elérési_út
+cd /: főkönyvtár
+cd ..: egy könyvtárral feljebb lépünk
+
+abszolut útvonal a gyökérkönyvtártól a teljes mappa struktúrát tartalmazza
+
+pwd: kiíratja, hogy melyik könyvtárban tartózkodunk
+
+ls: könyvtár tartalmának listázása
+
+Legyakrabban használt kapcsolók:
+
+-l: Hosszú formátumú listázás. Részletes információkat nyújt a fájlokról és könyvtárakról, beleértve a jogosultságokat, tulajdonost, csoportot, méretet, időbélyeget stb.
+ls -l
+
+-a: Minden fájlt és könyvtárat listáz, beleértve a rejtett fájlokat is (a ponttal kezdődő nevek).
+ls -a
+
+-h: Human-readable méret. Az állományok méretét emberi olvashatóságra optimalizált mértékegységekben jeleníti meg (KB, MB, GB).
+ls -lh
+
+-t: Időrendi sorrendben listáz. A legfrissebb fájlok elől jelennek meg.
+ls -lt
+
+-r: Fordított sorrendben listáz. A legrégebben létrehozott vagy módosított fájlok elől jelennek meg.
+ls -lr
+
+-R: Rekurzív listázás. Az alkönyvtárak tartalmát is listázza.
+ls -R 
+
+1: Minden fájlt vagy könyvtárat egyetlen oszlopban jelenít meg.
+ls -1
+  
+egybevonhatók a kapcsolók: ls -l -a == ls -la
+
+rejtett fájl: ponttal kezdődik a fájl neve, pl .serverlogs
+
+fontos megjegyezni: hogy .txt nem biztos, hogy egy szövegfájl, linux alatt mindegy, hogy mi a fájl neve
+
+ls -l (hosszú listázás értelmezése)
+első sor a logben elfoglalt összes sor
+ezt követően a fájlok kilistáza
+1. oszlop (típus, jogosultság)
+2. oszlop (link számláló)
+3. oszlop (tulajdonos)
+4. oszlop (csoportok)
+5. oszlop (fájl mérete byte-ban)
+6. oszlop (módosítás dátuma/ideje)
+7. oszlop (név)
+
+1. oszlop, 
+1 karakter: fájl, mappa, soft link
+2-9 karakter, tulajdonos (u), csoport (g), mások (o) jogai
+r: olvasási
+w: írási
+x: végrehajtási (lefuttatható a fájl, be lehet lépni a mappába)
+-: adott jog nem engedélyezett
+
+parancsok leírása: man parancs, man ls (list parancs szintaxisa)
+
+mkdir elérési_út (könyvtár létrehozása): aktuális könyvtárba csinál egy mappát
+
+mkdir ./os/szilva/korte
+mkdir ./os/szilva/korte/barack (ha nincs meg egy köztes könyvtár, jelen esetben korte, akkor hibád dob a rendszer)
+
+a -p kapcsoló az összes köztes könyvtárat létrehozza (mkdir -p elérési út/mappa)
+
+space-szel elválasztva több könyvtár is létreoztható
+
+touch fájlnév: tartalom nélküli fájl létrehozása
+
+Fájlok másolása:
+cp [kapcsoló] honnan hová
+cp alma.txt ujalma.txt (meglévő fájlból egy másolat)
+
+ha van ilyen fájl, akkor azonnal felülírás
+-i kapcsolóval ha van ilyen fájl, akkor felülírás előtt rákérdez (y/n)
+
+cp -r kapcsolóval könyvtárakat is másolhatunk, alapesetben nem működik
+
+shell minták használata: "*" karakter, egy joker karakter, amely jelentése bármilyen karakter bármennyiszer
+
+cp *.txt cseresznye (aktuális könytárból a cseresznye könyvtárba másolja a txt kiterjesztésű fájlokat)
+
+Törlés:
+rm fájlnév/könyvtárnév: fájl/könyvtár törlése
+rm -i: megerősítéses törlés
+rm -d: üres mappa törlése
+rm -r: összes almappa és fájl (rekurzív) törlése
+rm -f: kérdés nélkül töröl (nem számítanak a hibaüzenezek pl. nem létezik egy fájl)

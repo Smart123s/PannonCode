@@ -1,0 +1,916 @@
+Operációs rendszerek
+
+2. Folyamatok
+Felhasznált irodalom:
+• Kóczy-Kondorosi (szerk.): Operációs rendszerek mérnöki megközelítésben
+• Tanenbaum: Modern Operating Systems 2nd. Ed.
+• Silberschatz, Galvin, Gagne: Operating System Concepts
+
+v4.0
+
+2. Folyamatok
+• Bevezetés
+• Folyamatkezelés multiprogramozott
+
+rendszerben
+• Környezet váltás
+• Folyamatleírók, I/O leírók
+• Szálak
+• Megszakítások
+2
+
+Bevezetés
+A folyamat (process) a multiprogramozott
+OS rendszerek alapfogalma
+Definíció:
+A folyamat egy végrehajtás alatt álló
+program.
+
+3
+
+Folyamatok
+Multitaszkos rendszer  több egyidejű
+folyamat
+Elnevezések:
+– munka (job) – batch rendszereknél
+– feladat (task) – real time
+– felhasználó – időosztásos rendszereknél
+– folyamat – ez az általános elnevezés
+
+4
+
+2.1 Folyamatkezelés
+• Folyamatok modellezése
+
+multiprogramozott környezetben
+• Folyamatok állapotgráfja
+• Az állapotok és állapotátmenetek
+• Kibővített állapotgráf
+
+5
+
+Folyamatok modellezése
+
+a) Multiprogramozott rendszer (1 PC)
+b) Multiprocessing rendszer (4 PC)
+c) Folyamatok időbeli eloszlása multiprogramozott
+
+rendszerben
+
+6
+
+Folyamatok modellezése
+Több folyamat
+– Szétválasztás
+– Vezérlés
+– Erőforrás kiosztás
+
+Modell
+– Állapotok
+– Állapot átmenetek
+
+7
+
+Folyamatok állapotai
+• Több folyamat , 1 CPU  látszólagos párhuzamosság.
+• CPU kitüntetett erőforrás, egy adott pillanatban csak
+
+1 program hajtódik végre.
+• Gráffal lehet ábrázolni. Állapotok:
+– Fut: A CPU a folyamathoz tartozó utasításokat hajtja végre,
+CPU-nként egyetlen ilyen folyamat lehet.
+– Várakozik, blokkolt: A folyamat várakozni kényszerül,
+működését csak valamilyen esemény bekövetkezésekor tudja
+folytatni. Több ilyen is lehet a rendszerben.
+– Futásra kész: Minden feltétel adott, a CPU éppen foglalt.
+Több ilyen is lehet a rendszerben.
+
+8
+
+Folyamatok állapotai
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+elindul
+
+Fut
+
+megszűnik
+
+Folyamatok állapot-átmeneti gráfja
+9
+
+Folyamatok állapotátmenetei
+• Folyamat létrehozása
+• Folyamat befejeződése
+• Eseményre vár
+• Esemény bekövetkezik
+• Folyamat elindul
+• Futás megszakad
+
+10
+
+Folyamat létrehozása 1.
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+Mikor jön létre egy folyamat?
+• Rendszer elindításakor (boot)
+
+elindul
+
+megszűnik
+
+Fut
+
+– Pl. felhasználói interfészek, démonok
+
+• Folyamatot létrehozó rendszerhívás hatására (pl. fork)
+– Egy folyamat gyermek folyamatot hozhat létre
+• Hierarchia (UNIX): „process group”
+• Minden folyamat egyenlő (Windows)
+
+• Felhasználó
+– Program indítása
+
+• Új batch-job indítása
+– Kötegelt rendszereknél OS dönti el, mikor kezdhet futni egy
+új munka
+11
+
+Folyamat létrehozása 2.
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+• Létrehozó folyamat: szülő,
+
+elindul
+
+megszűnik
+
+Fut
+
+a létrejöttek a gyerekek.
+• Leszármazási reláció, hierarchikus struktúra.
+• Erőforrás kell neki
+– OS-től kapja
+– szülő erőforrásain osztozik
+
+• Szülőtől paramétereket kap (befolyásolja a futását)
+• Gyerek a szülővel párhuzamosan fut, szülő bevárja a
+
+gyerekének, gyerekeinek befejeződését.
+• Szülő azonosítja a gyerekét.
+12
+
+Unix rendszerindulás lépései
+
+init indul elsőként
+
+13 13
+
+Windows rendszerindulás
+BIOS
+kernel
+SMSS.exe (munkamenet kezelő)
+Winit.exe (windows indító)
+Csrss.exe (windows alrendszer)
+Winlogon.exe (bejelentkezés kezelő)
+LogonUI.exe (bejelentkezési képernyő)
+
+14 14
+
+Folyamat befejeződése
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+• Önszántából
+
+elindul
+
+megszűnik
+
+Fut
+
+– végrehajtotta utolsó utasítását
+– hiba miatt leáll
+
+• OS vagy rokon (általában a szülő) leállítja
+– Hibás utasítás, erőforrás használat túllépése
+– kill utasítás (másik folyamat)
+
+• Erőforrások felszabadulnak
+– attól függően, hogy kitől kapta: felszabadul vagy szülőhöz
+kerül
+
+• Szülőnek információt adhat vissza.
+15
+
+Eseményre vár
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+elindul
+
+• Fut  várakozik
+
+megszűnik
+
+Fut
+
+• Valamit kér, amire várnia kell
+– jelzés,
+– erőforrás, stb.
+• OS feljegyzi, hogy ki mire vár.
+• Több folyamat is várhat ugyanarra.
+
+16
+
+Esemény bekövetkezik
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+elindul
+
+megszűnik
+
+Fut
+
+• Várakozik  futásra kész
+• A várt esemény bekövetkezett
+• Még nem fut!
+
+17
+
+Folyamat elindul
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+elindul
+
+megszűnik
+
+Fut
+
+• Futásra kész  fut
+• ha a CPU felszabadul, egy folyamat
+
+futhat
+• kiválasztás kritériumok alapján (CPU
+ütemezés)
+
+18
+
+Futás megszakad
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+futás
+megszakad
+eseményre vár
+
+elindul
+
+megszűnik
+
+Fut
+
+• Fut  futásra kész
+• Önként lemond a CPU-ról.
+– Pl. kooperatív viselkedés: hosszú feladatok esetén
+újraütemezést kér.
+• OS elveheti a CPU-t, még akkor is, ha a
+
+folyamat egyébként nem kényszerül
+várakozásra (preemptív ütemezés)
+– Pl. időosztásos rendszerek. Túl sok ideje futott.
+Óra megszakítás jelzi az eseményt.
+19
+
+Folyamatok kibővített állapotai
+• Bővítés: az OS felfüggeszthet folyamatokat
+
+(középtávú CPU ütemezés)
+
+– a rendszer túl van terhelve (sok program vetélkedik a futás
+jogáért, vagy a tár túlzottan megtelt, stb.)
+– vészhelyzet esetén
+– felhasználó kezdeményezésére
+
+• A felfüggesztett folyamatok erőforrásaikat elvesztik
+
+(de a rendszer számon tartja őket, később
+folytatódhatnak)
+• Két új állapot:
+– felfüggesztve vár
+– felfüggesztve futásra kész
+
+20
+
+Folyamatok kibővített állapot-átmeneti gráfja
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+felfüggeszt
+
+futás
+megszakad
+eseményre vár
+
+elindul
+felfüggeszt
+aktivál
+
+Fut
+
+megszűnik
+Aktív
+állapotok
+
+esemény
+Felfüggesztve bekövetkezik
+futásra kész
+
+Felfüggesztve
+várakozik
+
+Passzív
+állapotok
+
+21
+
+Új állapotátmenetek
+• Felfüggeszt
+– OS felfüggeszti (futásra kész vagy várakozik állapotból)
+– erőforrásokat elveszi (pl. memória), néhányat megtarthat (pl.
+nyomtató)
+
+• Aktivál
+– Erőforrásokat visszaad
+
+• Felfüggesztve várakozik  felfüggesztve
+
+futásra kész
+– Esemény bekövetkezik, de CPU-t nem kaphat
+
+• A felfüggesztve vár  várakozik átmenetnek nincs
+
+értelme (tovább várakozna, de lekötné az
+erőforrásokat)
+22
+
+Unix állapot átmeneti diagram
+
+23
+
+Windows állapot átmeneti diagram
+
+24
+
+Ütemezés
+
+esemény
+bekövetkezik
+létrejön
+
+Futásra
+kész
+
+Várakozik
+felfüggeszt
+
+futás
+megszakad
+eseményre vár
+
+elindul
+
+felfüggeszt
+
+aktivál
+
+Felfüggesztve
+futásra kész
+
+Fut
+
+megszűnik
+Aktív
+állapotok
+
+esemény
+bekövetkezik
+
+Felfüggesztve
+várakozik
+
+Passzív
+állapotok
+
+• Rövidtávú
+– ki kapja meg a CPU-t
+
+• Középtávú
+– pillanatnyi túlterhelés megszüntetése
+
+• Hosszútávú
+– A multiprogramozás mértékének meghatározása
+25
+
+Ütemezés jellemzése
+• Minden rendszer
+– méltányosság
+– szabálykövetés
+– kiegyensúlyozottság
+
+• Kötegelt rendszerek
+– áteresztőképesség
+– körülfordulási idő
+– CPU kihasználtság
+
+• Interaktív rendszerek
+– válaszidő
+– arányosság
+
+• Valós idejű rendszerek
+– határidők betartása
+– kiszámíthatóság
+26
+
+2.2 Környezetváltás
+Környezet váltás (context switching):
+Definíció: Környezet váltás során az operációs
+rendszer átvált egyik folyamatról egy másikra.
+– a futó folyamat elhagyja a futó állapotot,
+– egy futásra kész pedig elindul.
+
+Állapotot meg kell őrizni
+– folyamat állapota
+– végrehajtó gép állapota (környezet)
+27
+
+A folyamat állapota
+Állapotváltozók:
+– programkód
+– változók aktuális értéke
+– verem tartalma
+– hol tart a program végrehajtása
+
+Folyamatok a tárban  csak a végrehajtó
+gép állapotát kell menteni.
+
+28
+
+A végrehajtó gép állapota
+Definíció: Kontextus a végrehajtó gép
+állapotleíróinak összessége.
+A rendszer rétegszerkezete miatt több szintű
+– Hardver
+• CPU regiszterek
+
+– Operációs rendszer (szoftver)
+• rendszertáblák
+• memóriakezelési információk
+• periféria hozzárendelések
+29
+
+Állapotleírók
+• Speciális adatszerkezetek
+• Az OS-nek a folyamatok és az I/O
+
+egységek kezeléséhez szükséges adatait
+tárolja
+– Process Control Block, PCB
+– Input Output Control Block, IOCB
+
+• Környezetváltás során ezeket el kell
+
+menteni  költséges
+30
+
+Folyamatleíró blokk
+Process Control Block, PCB:
+–
+–
+–
+–
+–
+–
+–
+–
+–
+
+folyamat azonosítója
+szülők, gyerekek azonosítója
+folyamat állapota
+folyamathoz tartozó összes tárterület leírása (mutatók,
+virtuális tárkezeléshez tartozó adatok, cím transzformáció)
+a folyamat által használt egyéb erőforrások leírása (pl.
+nyitott állományok)
+regiszterek tartalma
+várakozó folyamatoknál: várt esemény leírása
+ütemezéshez információk (prioritás, várakozási idő)
+statisztikák
+
+31
+
+Folyamatleírók kezelése
+Láncolt listák:
+• Futó folyamat
+PCB4
+
+•
+
+Futásra kész folyamatok
+PCB1
+
+PCB3
+
+PCB5
+
+32
+
+I/O műveletek leírása
+Input Output Control Block, IOCB:
+–
+–
+–
+–
+–
+
+művelet típusa (írás, olvasás, ...)
+tárterület címe (ahonnan, ahova a művelet
+végrehajtandó)
+I/O készülék egyéb adatai (mágneslemez
+szektorcíme, stb.)
+átviendő adatmennyiség
+állapotjelző
+
+33
+
+I/O leírók kezelése
+Az IOCB a PCB-hez fűződik:
+•
+1. periféria várakozási sora
+PCB6
+IOCB6
+
+•
+
+2. periféria várakozási sora
+PCB7
+
+PCB2
+IOCB7
+
+IOCB2
+
+34
+
+Környezetváltás
+Környezetváltás történik
+• időszelet lejár
+• IO kezelés
+• megszakítás (külső környezetből)
+
+35
+
+2.3 Időszelet lejár
+Lépések:
+– HW megszakítás
+– CPU mód váltás
+– vezérlés az OS-re kerül
+– PCB kitöltése
+– PCB átláncolása futásra kész sorhoz
+– ütemezés
+– kiválasztott folyamat PCB átláncolása futó sorhoz
+– PCB-ből állapotot visszaállít
+– kiválasztott folyamatot meghívja
+36
+
+2.4 I/O műveletek végrehajtása
+Folyamat:
+–
+–
+
+Kitölti az IOCB-t
+Rendszerhívás, paraméter az IOCB
+
+–
+–
+–
+–
+–
+
+Láncolja az IOCB-t a PCB-hez
+PCB-t befűzi a periféria várakozási sorába
+Ha a sor üres, indítja a perifériát az IOCB paramétereivel
+Folyamatot várakozó állapotba teszi
+Újraütemez és visszatér (másik folyamatra)
+
+OS
+
+Periféria
+–
+
+Feladat végeztével megszakítást okoz
+
+–
+–
+–
+–
+–
+
+IOCB-be a végrehajtás eredményére utaló jelzést ír (helyes/helytelen)
+PCB-t a futásra kész állapotba helyezi
+Ha van még várakozó a perifériára, akkor a perifériát indítja
+Újraütemez
+Visszatér
+
+OS
+
+37
+
+I/O műveletek végrehajtása
+fut
+
+Folyamatok
+
+OS
+
+Perifériák
+
+rendszerhívás
+elindít
+
+várakozik
+
+ütemezés
+
+IT
+
+futásra kész
+
+elindít
+
+fut
+
+ütemezés
+38
+
+2.5 Megszakítások (interrupt)
+Osztályai:
+– perifériák (berendezések állapotának változásai,
+átvitel befejezése)
+– belső hardver (timer)
+– utasítás végrehajtási hiba (pl. 0-val való osztás,
+memória hiba, virtuális tárkezelésben laphiba, stb.)
+– hardver hiba (pl. tápfeszültség)
+– szoftver megszakítás (trap), speciális gépi utasítás
+pl. rendszerhívás
+
+39
+
+Prioritás
+• Nem minden megszakítás azonos súlyú
+– pl. egy magasabb megszakíthat egy
+alacsonyabb prioritású kiszolgálást
+• Megszakítások letilthatók /
+
+engedélyezhetők
+– csak korlátozott ideig hiszen pl. a
+perifériáknál az átvitelkor adatok
+veszthetnek el).
+
+40
+
+Megszakítások kezelése
+Nincs környezet váltás
+–
+
+Megszakítás hatására OS rutin indul el, folyamat
+felfüggesztve, csak a kiszolgáló rutin által
+használt regisztereket mentjük el (ezek általában
+rövid kis programok).
+
+Van környezet váltás
+–
+
+A megszakítás elindít egy arra váró folyamatot. A
+folyamat várakozóból rögtön futni fog (elkerüli a
+futásra kész állapotot).
+
+41
+
+Megszakításkezelés folyamata
+Lépések:
+– A futó folyamat megszakad, vezérlés az OSnek
+– Megszakított folyamat állapotmentése
+(1. vagy 2. módban)
+• pl. regiszterek mentése (van HW támogatás)
+
+– Vezérlést a kiszolgáló rutin kapja meg
+– Befejezés után állapot visszaállítás
+(1. vagy 2. mód)
+– Megszakított - vagy egy másik - folyamat
+folytatja a futását.
+42
+
+Megszakításkezelés támogatása
+Hardver támogatás
+• A megszakított folyamat folytatásához
+ad segítséget
+– regiszter mentés
+– regiszter visszatöltés
+– folyamatok állapotainak megváltoztatása
+
+43
+
+2.6 Szál (thread)
+Program – statikus
+– háttértáron tárolva
+– nem fut
+
+Folyamat – dinamikus
+-
+
+memóriában tárolva
+végrehajtás alatt áll
+saját memória terület
+-
+
+-
+
+mások nem látják
+
+multitasking (környezetváltás)
+44
+
+Szál
+Folyamat hozza létre
+– Nincs saját memória, saját erőforrás
+• csak a regiszterek és a verem sajátja (+állapot)
+• minden más közös a folyamatával
+
+– Állapot-átmeneti gráfja megegyezik a
+folyamatoknál tárgyalttal.
+
+45
+
+Folyamat vs. szál
+Minden folyamatnak van:
+• címtér
+• (globális) változók
+• megnyitott fájlok
+• gyermek folyamatok
+• várt események listája
+• signal-ok és signal kezelők
+• nyilvántartás
+
+Minden szálnak van:
+• programszámláló
+• regiszterek
+• stack
+• állapot
+
+Előny:
+• gyors váltás
+• osztott erőforrások (!!!)
+46
+
+Szál leíró
+Thread control block
+– Szál azonosító (TID)
+– Stack mutató (SP)
+– Utasításszámláló (PC)
+– Állapot (fut, futásra kész, vár)
+– Regiszterkészlet
+– Mutató a PCB-re
+47
+
+Folyamatok és szálak
+
+a) Három folyamat egy-egy szállal
+b) Egy folyamat három szállal
+48
+
+Példa: szövegszerkesztő
+
+•
+•
+•
+
+Billentyűzet-kezelő szál
+Tördelő szál
+Automatikus mentés szál
+49
+
+Példa: web-szerver 1.
+
+•
+•
+
+Dispatcher szál: fogadja a kérést és kiosztja a munkát
+Worker szál: teljesíti a kérést
+50
+
+Példa: web-szerver 2.
+
+a)
+b)
+
+Dispatcher szál
+Worker szál
+
+51
+
+Felbukkanó (pop-up) szálak
+
+a)
+b)
+
+Üzenet megérkezése előtt
+Üzenet megérkezése után
+52
+
+

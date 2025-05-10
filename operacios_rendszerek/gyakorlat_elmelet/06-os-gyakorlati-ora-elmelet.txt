@@ -1,0 +1,156 @@
+OS gyak. 6 - Reguláris kifejezések és a grep parancs használata
+
+Mi az a reguláris kifejezés?
+----------------------------
+A reguláris kifejezések (regex) olyan karakterláncok, amelyek segítségével szabályszerű minták alapján kereshetünk szövegekben.
+
+Példa – Telefonszámok keresése
+------------------------------
+Lehetséges formátumok:
+- 06704564453
+- +3670569678
+
+Regex minta:
+^(\+36|06)(20|30|70)[0-9]{7}$
+
+Reguláris kifejezés elemei
+--------------------------
+Normál karakterek:
+- 'abc' – pontos egyezés az 'abc'-re
+
+Karakterosztályok:
+- '[hjkl]' – bármelyik karakter
+- '[a-z]' – kisbetűk
+- '[^abc]' – nem 'a', 'b', 'c'
+- '[0-9]' - számok
+- '\d' – számjegy
+- '\s' – szóköz
+- '\b' – szóhatár
+- '.' – bármilyen karakter
+
+Kvantifikátorok:
+- 'a?' – 0 vagy 1 'a'
+- 'a*' – 0 vagy több 'a'
+- 'a+' – 1 vagy több 'a'
+- 'a{3}' – pontosan 3 db
+- 'a{3,}' – legalább 3 db
+- 'a{3,6}' – 3 és 6 közötti db
+
+Speciális elemek:
+- '^' – sor eleje
+- '$' – sor vége
+- '|' – vagy kapcsolat
+- '()' – csoportosítás
+- $'...' - speciális karakterek keresése: \t (tab), \n (új sor), \r (), \x41 (hexadecimálisan megadott karakter, pl. A) 
+
+Bővített példa – Magyarországi telefonszámok (mobil + vezetékes)
+^(06|\+36)((20|30|70)\d{7}|[1-9][0-9]\d{6})$
+
+Példák:
++36201234567
+06301234567
++3670123456
+06881234567
++36221234567
++361234567
+0612345678
+0670123456
++36301234
+
+Idézőjelek grep-ben
+--------------------
+- '...' : mindent szó szerint kezel – ajánlott reguláris kifejezésekhez
+  Példa: grep '\.$' file.txt
+- "..." : Bash értelmezi a változókat, escape karaktereket
+  Példa: pattern="^Az"; grep "$pattern" file.txt
+
+Használat:
+grep 'minta' file.txt
+
+Alapviselkedés:
+- Soronként keres
+- Visszatérési érték: 0 találat esetén, 1 ha nincs
+
+Hasznos opciók:
+-i : kis/nagybetű nem számít
+-v : a megadott minta ne forduljon elő
+-n : ne írja ki az illeszkedő sor számát
+-E : kibővített regexp
+-o : csak az egyezést adja vissza nemaz egész sort
+-q : csendes üzemmód, csak a visszatérési érték jelzi az egyezést
+
+Gyakori grep példák
+-------------------
+grep '^Az ' file.txt         # Sor elején 'Az'
+grep '\.$' file.txt          # Sor végén pont
+grep '..len' file.txt        # Tetszőleges 2 karakter + 'len'
+grep ' [ea]z ' file.txt      # 'ez' vagy 'az'
+grep '^[A-Z]' file.txt       # Nagybetűs sor
+grep '\.' file.txt           # Pont karakter
+
+Mikor kell használni a grep -E kapcsolót?
+-----------------------------------------
+A grep -E opciót akkor használjuk, ha kibővített reguláris kifejezésekre van szükség. Ez lehetővé teszi a következő elemek használatát:
+- | : vagy kapcsolat
+- + : legalább egy ismétlés
+- ? : nulla vagy egy ismétlés
+- {min,max} : ismétlések számának megadása
+- () : csoportosítás
+
+Példák:
+grep -E 'ab|cd' file.txt #ab vagy cd sorok
+grep -E '[0-9]{2,4}' file.txt #2-4 számjegy
+grep -E '\([a-z]+\)' file.txt #zárójelbe tett szavak
+grep -E '^A.*z$' file.txt #A betűvel kezdődő és z-re végződő sorok
+
+Bővített grep -E példák
+-----------------------
+# (0 vagy több betű zárójelben)
+grep -E '\([A-Za-z]*\)' sorok.txt
+
+# (legfeljebb 1 betű zárójelben)
+grep -E '\([A-Za-z]?\)' sorok.txt
+
+# (legalább 1 betű zárójelben)
+grep -E '\([A-Za-z]+\)' sorok.txt
+
+# (pontosan 2 betű zárójelben)
+grep -E '\([A-Za-z]{2}\)' sorok.txt
+
+# (1 vagy 2 betű zárójelben)
+grep -E '\([A-Za-z]{1,2}\)' sorok.txt
+
+# (szóközökkel körülvett, pontosan 4 kisbetűből álló szó)
+grep -E ' [a-z]{4} ' sorok.txt
+
+Szóhatárok
+----------
+grep '\bapple\b' myfile.txt
+
+Ez csak az önálló 'apple' szót találja meg, de pl. 'pineapple'-t nem.
+
+Fájl beolvasás és soronkénti szűrés ciklusban
+---------------------------------------------
+while read line; do
+  echo "$line" | grep 'valami'
+done < file.txt
+
+További példák
+--------------
+Dupla szűrés. Tartalmazza a "Hiba" kifejezést, de ne tartalmazza a "figyelmeztetes" kifejezést)
+grep 'Hiba' logok.txt | grep -v 'figyelmeztetes'
+
+Email címek keresése: 
+grep -E '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}' file.txt
+
+Telefonszám magyarországi formátumban: 
+grep -E '^(06|\+36)[0-9]{9}$'
+
+Csak számokat tartalmazó sorok: 
+grep -E '^[0-9]+$'
+
+Üres sorok: 
+grep '^$'
+
+Nem üres sorok: 
+grep -v '^$'

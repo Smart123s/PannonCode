@@ -1,0 +1,102 @@
+Old meg bash parancsokkal:
+
+01.
+Hozz létre egy "dokumentumok" nevű könyvtárat, majd benne egy "fontos.txt" fájlt, amelynek az első három sorába írd bele a következő adatokat az echo parancs segítségével:
+
+Kovács;Lajos;Baja;6500
+Nagy;László;Székesfehérvár;8000
+Tamási;Péter;Veszprém;8200
+
+mkdir dokumentumok
+echo -e "Kovács;Lajos;Baja;6500\nNagy;László;Székesfehérvár;8000\nTamási;Péter;Veszprém;8200" > dokumentumok/fontos.txt
+
+02.
+Készíts egy "projekt" nevű könyvtárat, majd benne egy "adatok.txt" és "kimenet.txt" fájlt! A "kimenet.txt" üres legyen az "adatok.txt" pedig a következőket tartalmazza:
+
+Kovacs Tamas    Szeged  6000    06-30-3874656
+Szanto Katalatin        Szekesfehervar  8000    06-20-2398763
+Nagy Lilla      Veszprem        8200    06-70-8574923
+Toth Tihamer    Budapest        1118    06-20-4987327
+Vince Iren      Balatonalmadi   8220    06-70-3977428
+Nagy Zsofi      Szeged  6000    06-70-8574923
+Zold Peter      Ajka    8400    06-20-2345976
+Pal Peter       Veszprem        8200    06-88-1234567
+
+mkdir projekt
+nano projekt/adatok.txt
+másolás, beillesztés, mentés
+touch projekt/kimenet.txt
+
+03.
+Listázd ki a "dokumentumok" könyvtár tartalmát, majd jelenítsd meg az utolsó három sort!
+
+ls -l dokumentumok | tail -n 3
+
+04.
+Írasd ki egyszerre a "dokumentumok/fontos.txt" és "projekt/adatok.txt" fájlok tartalmának első négy sorát!
+
+cat dokumentumok/fontos.txt projekt/adatok.txt | head -n 4
+
+05.
+Vágd ki a "projekt/adatok.txt" fájl tartalmának második és harmadik karakterét!
+
+cat projekt/adatok.txt | cut -c 2-3
+
+06.
+Rendezd sorrendbe az "dokumentumok/fontos.txt" sorait az első mező alapján növekvő sorrendben!
+
+cat dokumentumok/fontos.txt | sort -k 1
+
+07.
+Listázd ki az összes .txt fájlt a "projekt" könyvtárban, majd számold meg őket!
+
+ls -1 projekt/*.txt | wc -l
+
+08.
+Vágd ki az "dokumentumok/fontos.txt" fájlban található sorok második mezőjét, amelyeket a ";" karakter választ el!
+
+cat dokumentumok/fontos.txt | cut -d';' -f2
+
+09.
+Hozz létre három fájlt a "projekt" könyvtárban: "file1.txt", "file2.txt", "file3.txt". Minden fájl a következőt tartalmazza:
+
+1. sor: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac justo vel nisi vestibulum aliquet.
+2. sor: Suspendisse potenti. Fusce eget tincidunt risus, ac vehicula nulla. Quisque auctor justo nec ante ullamcorper, at sodales justo tempor.
+3. sor: Integer ac justo vel orci consequat vulputate. In hac habitasse platea dictumst. Proin quis urna vel turpis dictum scelerisque.
+4. sor: Etiam at vestibulum velit. Sed vel justo vel ipsum vehicula bibendum. Nulla facilisi.
+5. sor: Vivamus fringilla mi vitae augue auctor, in scelerisque libero tristique. Nunc euismod, libero nec varius luctus, erat velit vulputate odio.
+
+nano file1.txt
+cp file1.txt file2.txt
+cp file1.txt file3.txt
+
+10.
+Hozz létre egy "backup" nevű könyvtárat, majd másold át az "projekt" könyvtár összes .txt fájlját!
+
+mkdir backup
+cp projekt/*.txt backup/
+
+11.
+Keress meg minden .txt fájlt kizárólag a "dokumentumok" könyvtárban.
+
+find dokumentumok -maxdepth 1 -type f -name "*.txt"
+
+12.
+Keress meg minden .txt fájlt rekurzívan a "projekt" könyvtárban, és írd ki a nevüket sorban!
+
+find projekt -type f -name "*.txt" -exec ls -1 "{}" \;
+
+13.
+Keress meg minden .txt fájlt a "dokumentumok" könyvtárban, majd írd ki az első három sorát mindegyiknek!
+
+find dokumentumok -type f -name "*.txt" -exec head -n 3 "{}" \;
+
+14.
+Keress meg minden .txt fájlt a "backup" könyvtárban, majd másold át az összeset a "projekt" könyvtárba .old kiterjesztéssel!
+
+find backup -type f -name "*.txt" -execdir cp "{}" projekt/"{}".old \;
+
+15.
+Keress meg minden .jpg fájlt a "~" könyvtárban, ne rekurzívan, amelyek mérete kisebb mint 50 KB!
+
+find ~ -maxdepth 1 -type f -name "*.jpg" -size -50k

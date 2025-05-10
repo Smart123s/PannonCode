@@ -1,0 +1,104 @@
+Old meg reguláris kifejezésekkel:
+
+1. Adott egy gyumolcs.txt szöveges állomány, amelyben minden sor egy szó vagy mondat. Írj egy reguláris kifejezést, amely csak azokat a sorokat adja vissza, amelyek "apple", "banana" vagy "orange" szavakat tartalmaznak!
+
+Példa adatok
+I like apples.
+I hate tomatoes.
+Bananas are my favorite fruit.
+Oranges are rich in vitamin C.
+I eat an apple a day.
+I don't like bananas.
+
+2. Adott egy nevek.txt szöveges fájl, amely tartalmazza az emberek nevét és életkorát, minden sorban egy személy. Írj egy reguláris kifejezést, amely csak azokat a sorokat adja vissza, amelyekben az életkor 18 és 25 év között van!
+
+Példa adatok:
+Anna, 20
+Bela, 30
+Csilla, 22
+David, 16
+Eszter, 27
+
+3. Adott egy emailcimek.txt szöveges állomány, amelyben minden sor egy e-mail címet tartalmaz. Írj egy reguláris kifejezést, amely csak azokat a sorokat adja vissza, amelyek gmail.com vagy yahoo.com e-mail címeket tartalmaznak!
+
+Példa adatok:
+johndoe@gmail.com
+janedoe@yahoo.com
+mike.smith@outlook.com
+sarahjones@gmail.com
+peterparker@yahoo.com
+bobdoe@gmail.com
+
+4. Adott egy ipcimek.txt szöveges állomány, amelyben minden sor egy IP-címet tartalmaz. Írj egy reguláris kifejezést, amely csak azokat a sorokat adja vissza, amelyek 192.168.x.x vagy 10.x.x.x IP-címeket tartalmaznak!
+
+Példa adatok:
+192.168.1.1
+192.168.2.1
+10.0.0.1
+10.0.0.2
+192.168.1.10
+172.16.0.1
+
+5. Adott egy evszamok.txt szöveges állomány, amelyben minden sor egy dátumot tartalmaz a következő formátumban: "éééé-hh-nn". Írj egy reguláris kifejezést, amely csak azokat a sorokat adja vissza, amelyek 2022. év április hónapban történt eseményekre utalnak!
+
+Példa adatok:
+2022-03-29
+2022-04-01
+2022-04-12
+2022-05-15
+2022-04-30
+2021-04-15
+
+6. Bash script. Adott egy adatok.txt szöveges állomány, amelyben minden sor egy e-mail cím. Írj egy reguláris kifejezést, amely csak azokat a sorokat adja vissza, amelyek domain névként "example.com"-ot használnak, és az e-mail cím felhasználói neve legalább 5 karakter hosszú!
+
+Példa adatok:
+john@example.com
+jane@example.com
+joe@example.com
+mary@example.com
+jack@example.org
+alice@example.com
+
+7. Adott egy fontos.txt szöveges állomány, amelyben minden sor egy URL címet tartalmaz. Írj egy reguláris kifejezést, amely csak azokat a sorokat adja vissza, amelyek "http://" vagy "https://" protokollal kezdődnek, és ".com" vagy ".hu" végződéssel rendelkeznek!
+
+Példa adatok:
+http://example.com
+https://openai.org
+https://stackoverflow.com
+http://google.hu
+https://github.com
+
+8. Írj egy bash scriptet a grep és reguláris kifejezések használatával, amely beolvassa az allomasok.txt fájl tartalmát egy ciklus segítségével, majd egymás alá írassa ki a városok neveit.
+
+Példa adatok:
+Budapest, Moricz Zsigmond korter: 5 busz, 7 villamos, 2 metro all meg.
+Szeged, Dom ter: 1 villamos, 3 busz, 2 trolibusz indul el.
+Debrecen, Nagyerdei korut: 4 busz, 1 villamos, 1 metro halad el.
+Pecs, Szechenyi ter: 2 trolibusz, 6 busz érkezik.
+Gyor, Baross Gabor ter: 3 trolibusz, 4 villamos, 1 busz all meg.
+Szekesfehervar, Bory-var: 2 busz, 1 trolibusz, 1 villamos indul el
+
+9. Írj egy bash scriptet a grep és reguláris kifejezések használatával, amely beolvassa az allomasok.txt fájl tartalmát egy ciklus segítségével, majd egymás alá írassa ki a vilamosok számát. 
+
+Példakimenet:
+7 villamos
+4 villamos
+2 villamos
+
+Példa adatok:
+Budapest, Moricz Zsigmond korter: 5 busz, 7 villamos, 2 metro all meg.
+Szeged, Dom ter: 1 villamos, 3 busz, 2 trolibusz indul el.
+Debrecen, Nagyerdei korut: 4 busz, 1 villamos, 1 metro halad el.
+Pecs, Szechenyi ter: 2 trolibusz, 6 busz érkezik.
+Gyor, Baross Gabor ter: 3 trolibusz, 4 villamos, 1 busz all meg.
+Szekesfehervar, Bory-var: 2 busz, 1 trolibusz, 1 villamos indul el
+
+10. Írj egy bash scriptet a grep és reguláris kifejezések használatával, amely beolvassa az allomasok.txt fájl tartalmát egy ciklus segítségével, majd összeadja a buszok számát, amelyet végül kiírat.
+
+Példa adatok:
+Budapest, Moricz Zsigmond korter: 5 busz, 7 villamos, 2 metro all meg.
+Szeged, Dom ter: 1 villamos, 3 busz, 2 trolibusz indul el.
+Debrecen, Nagyerdei korut: 4 busz, 1 villamos, 1 metro halad el.
+Pecs, Szechenyi ter: 2 trolibusz, 6 busz érkezik.
+Gyor, Baross Gabor ter: 3 trolibusz, 4 villamos, 1 busz all meg.
+Szekesfehervar, Bory-var: 2 busz, 1 trolibusz, 1 villamos indul el

@@ -1,0 +1,475 @@
+Operációs rendszerek
+
+11. Elosztott állománykezelés
+Felhasznált irodalom:
+• Kóczy-Kondorosi (szerk.): Operációs rendszerek mérnöki megközelítésben
+• Tanenbaum: Modern Operating Systems 2nd. Ed.
+• Silberschatz, Galvin, Gagne: Operating System Concepts
+
+v4.0
+
+11. Elosztott állománykezelés
+• Bevezetés
+• Hivatkozás állományokra
+• Műveletek végzése
+– Távoli eljáráshívás
+– Műveletek helyi átmeneti tárban
+• A szolgáltató implementációja
+• Állományok többszörözése
+
+2
+
+11.1 Bevezetés
+• A helyi operációs rendszer állománykezelési
+
+szolgáltatásainak kiterjesztése egymással kommunikációs
+csatornán keresztül kapcsolódó számítógépek halmazára.
+• Az állomány lehet helyi (local) illetve távoli (remote),
+ideális esetben az állomány tényleges elhelyezkedése a
+felhasználó előtt rejtve van.
+• Az állományt tároló számítógép a szolgáltató (server) az
+ügyfelek (kliens) számára szolgáltatásként műveleteket
+biztosít az állományain.
+• Az osztott állománykezelés lassabb (állományok
+megtalálása, állományok átvitele).
+
+3
+
+Teljesítmény növelése
+• speciális hardver elemek
+– gyors kommunikációs csatorna
+– szolgáltatók nagy sebességű háttértárai
+– szolgáltatók speciális architektúrája, nagy központi
+tárja
+• szoftver módszerek
+– gyors (kevés információt tartalmazó) kommunikációs
+protokollok
+– a szolgáltató OS-ének, ütemezési algoritmusának a
+feladathoz hangolásával
+– átmeneti tárolás (szolgáltatónál, ügyfélnél) (cache)
+4
+
+11.2 Hivatkozás állományokra
+Név
+• A név egyedileg azonosítja az állományt
+• A felhasználó elől elrejti a tárolás részleteit
+(melyik gépen van, gépen belül hol van, stb.)
+Az állományok nevei
+• Két szintet különböztetünk meg
+– felhasználói szintű neveket
+– rendszerszintű neveket
+
+• Az állománykezelő feladata a két szintű
+
+azonosító egymáshoz rendelése.
+
+5
+
+Állománynév leképezés
+• Rejtett elhelyezkedés (location transparency)
+– Az állomány neve nem utal arra, hogy az melyik
+gépen található.
+• Elhelyezkedés-függetlenség (location
+
+independence)
+
+– Az állomány neve nem változik meg, ha az átkerül
+egy másik gépre. Állomány vándorlás (file migration)
+az elosztott rendszer kezdeményezésére történik.
+
+• Első esetben a név leképezése statikus
+
+táblázatok alapján történik, a második esetben
+dinamikusan változó leképezési információt kell
+használni (kevésbé támogatott, lényegesen
+bonyolultabb).
+6
+
+Az elhelyezkedés-független név előnyei
+• A név elrejt minden, a fizikai tárolással
+
+kapcsolatos információt (az állomány teljesen
+absztrakt fogalom)
+• Az állományvándorlás segítségével az elosztott
+OS az egész háttértárat egységesen kezeli, a
+szabad területeket rendszerszinten kezeli
+(kihasználtság dinamikus kiegyensúlyozása).
+• Az elnevezési rendszer teljesen független a
+kapcsolódás konkrét szerkezetétől, nem
+szükséges speciális állományokat előre kijelölt
+csomópontokon tárolni.
+7
+
+Megnevezési módszerek
+•
+
+Csomópont explicit megnevezése
+–
+–
+–
+–
+
+•
+
+Az állomány hivatkozás két részből áll:
+csomópont megnevezés és
+a helyi állományrendszerben az állomány neve
+pl. VMS esetében <csomópont név>::<állomány név>
+
+A távoli állományrendszer a helyi könyvtár-hierarchia egy pontjára
+képezik (mount)
+– Meg kell nevezni a távoli gépet is.
+– A művelet után a távoli állományok a helyiekkel azonos módon
+kezelhetők.
+– Pl. UNIX Network File System, NFS
+– Korlátozott, csak a távoli gépen felajánlott hierarchia-részek láthatók,
+egy bizonyos állomány elérési útvonala különbözik az egyes gépeken.
+
+•
+
+Teljes elosztott rendszert lefedő egységes elnevezések
+– Globális (a rendszer egészére) nevek használata.
+
+8
+
+Elosztott állománynév-rendszer
+implementációja
+Elnevezési rendszer feladata: felhasználói
+nevek leképezése konkrét csomópontokra és
+azon belüli fizikai elhelyezkedésre.
+Táblázatok használata.
+Optimalizálás kell:
+– állománycsoportok szerinti leképezés
+– leképezési táblák többszörözése
+– kétszintű leképezési táblák
+9
+
+Állománycsoportok szerinti leképezés
+– Leképzési tábla túl nagy lenne, ha minden
+állomány szerepelne benne.
+– Állományok csoportokba szervezése
+(component units), a leképezést ezekre a
+csoportokra együtt végezzük.
+– Pl. NFS-ben távoli könyvtár-hierarchiák.
+
+10
+
+Leképezési táblák többszörözése
+– A táblához minden csomópontnak hozzá kell
+férnie, központosítás veszélyes.
+– A többszörözés okai:
+• decentralizált, hibatűrő rendszer
+• adatbiztonság
+• táblázatok gyors elérése
+
+– Csomópontonként csak a szükséges részek
+átmeneti tárolása (caching), aktualizálás
+fontos.
+11
+
+Kétszintű leképezési táblák
+• felhasználó szintű név
+
+
+• elhelyezkedés független alacsony szintű
+név
+
+• csomópont, fizikai hely
+12
+
+11.3 Műveletek végzése
+• A felhasználó a helyi állománykezelésnek
+
+megfelelő műveleteket akarja elvégezni az
+állományon (miután a rendszer megtalálta
+a hivatkozott állományt).
+• Műveletek módjai:
+– távoli szolgáltatásokon keresztül,
+– helyi átmeneti tárak segítségével.
+
+13
+
+11.3.1 Távoli szolgáltatások igénybevétele
+A felhasználói műveletek kérésként jelennek meg a szolgáltató
+csomópontnál.
+Távoli eljáráshívás (RPC):
+Minden művelethez tartozik egy távoli eljárás. Az ügyfél határozza
+meg az eljárás paramétereit, a szolgáltató válasza az eljárás
+visszatérési értéke.
+• A szolgáltatói oldalon minden távoli eljáráshoz tartozik egy speciális
+démon folyamat (daemon), feladata a kliensek felől érkező kérések
+kiszolgálása.
+• A folyamat egy hozzá rendelt kaput figyel, az azon érkező kérést
+végrehajtja, majd a választ a kérésből megállapítható feladónak
+küldi vissza.
+• A kliens folyamat és a démon között asszimetrikus kommunikáció
+van (az ügyfélnek meg kell neveznie a kaput, és ezzel a hozzá
+tartozó démont).
+•
+
+14
+
+Távoli eljáráshívások menete
+kliens
+Felhasználó a kernelt
+hívja: RPC üzenet küldése
+X eljárásnak
+
+üzenetek
+
+szerver
+
+A kernel üzenetet küld a
+házasságközvetítőnek: mi
+a port száma?
+
+From: client
+To: server
+Port: matchmaker
+Re: address for RPC X
+
+A házasságközvetítő
+fogadja az üzenetet és
+megkeresi a választ.
+
+A kernel beírja a P port
+címét a felhasználó
+üzenetébe
+
+From: server
+To: client
+Port: kernel
+Re: RPC X Port P
+
+A házasságközvetítő
+elküldi a kliensnek a
+választ: P port.
+
+A kernel elküldi az RPC
+üzenetet.
+
+From: client
+To: server
+Port: P
+<tartalom>
+
+A P portot figyelő démon
+fogadja az üzenetet.
+
+A kernel fogadja a választ,
+majd továbbítja a
+felhasználónak
+
+From: PRC
+Port P
+To: client
+Port: kernel
+<eredmény>
+
+A démon feldolgozza a
+kérést és az eljárás
+eredményét elküldi.
+15
+
+Távoli eljáráshívások speciális problémái
+• Hálózati kommunikáció nem megbízható.
+– Fontos, hogy minden kérés pontosan egyszer hajtódjon végre.
+– A kéréseket a kliensek sorszámozzák, időbélyeget fűznek hozzá
+(time stamp), az egyszer már kiszolgált sorszámú kérést a
+szerver ignorálja.
+
+• Kliens oldalon a távoli eljárásokat a megfelelő kapukra
+
+kell képezni, itt a megfelelő démon várakozik. A leképzés
+lehet:
+– statikus
+minden művelethez előre kijelölt kapu tartozik
+– dinamikus
+műveletenként a kapu számát egy kötött kapuban lévő démon
+szolgáltatja (házasságközvetítő, matchmaker).
+
+16
+
+11.3.2 Műveletek helyi átmeneti tárban
+A teljesítmény növelése, hálózati adatforgalom csökkentése
+érdekében a helyi gépek a szükséges adatállományokat átmenetileg
+tárolják, a művelteket azon végzik.
+• Az elv azonos a virtuális tárkezelésben alkalmazott átmeneti
+tárkezeléssel (caching).
+•
+
+–
+–
+–
+–
+•
+
+ha szükséges, az új információknak helyet csinálunk
+a szükséges információt a hálózaton keresztül az átmeneti tárba töltjük
+a műveleteket a helyi másolaton végezzük el
+változás esetén az információkat visszaírjuk
+
+Problémák:
+–
+–
+–
+–
+
+Az átviteli egység meghatározása
+Hol legyen az átmeneti tárolás
+A változások érvényre juttatása (update)
+Az átmeneti tár konzisztenciája
+
+17
+
+Az átviteli egység meghatározása
+• rendelkezésre álló átmeneti tár mérete
+• az alapszintű hálózati protokoll
+
+(megengedett blokkméret), illetve az RPCben (Remote Procedure Calling)
+megengedett blokkméret.
+
+18
+
+Az átmeneti tárolás helye
+• helyi gép központi tárjában
+– gyors,
+– háttértár nélkül is alkalmazható.
+• helyi gép háttértártárjában
+– megbízható,
+– teljes állományokat is tartalmazhat.
+
+19
+
+A változások érvényre juttatása (update)
+• A módosításokat a szolgáltatóval közölni kell:
+– azonnal
+• lassú,
+• biztonságos
+
+– késleltetve (delayed write)
+• gyors,
+• nem biztonságos.
+
+• Visszaírás történhet:
+– ha szükség van helyre az átmeneti tárban,
+– időközönként,
+– az állomány lezárásakor.
+20
+
+Az átmeneti tár konzisztenciája
+Egy állományt több kliens is használhat, módosítás után az állomány már nem
+aktuális.
+Aktualizálni kell:
+• a kliens kérésére (az ügyfél gyanakszik, kéri az ellenőrzést, hogy a saját
+példánya helyes-e)
+– minden hozzáférésnél
+– az állomány újra megnyitásakor
+– időközönként
+
+•
+
+a szolgáltató kezdeményezésére
+– A szolgáltató nyilvántartja az ügyfelek helyi tárolásait (speciális üzenetek a
+kliensektől),
+– ha az állományokban olyan változás van, ami inkonzisztenciát okoz, értesíti a
+klienseket.
+– értesítés (consistency semantics):
+• azonnal, állomány lezárásakor
+• előrelátható problémák esetében üzenhet a kliensnek, hogy ne használjon helyi
+tárolást, inkább használja a távoli szolgáltatásokat.
+
+21
+
+A két módszer összehasonlítása
+• A távoli szolgáltatás előnyei:
+– nincs konzisztencia probléma (az egyetlen példányt a szolgáltató
+kezeli)
+– a kliens erőforrásai nem korlátozzák a művelet végrehajtását (pl.
+nincs elég hely a helyi tároláshoz)
+– a távoli szolgáltatások felülete megegyezik a helyi
+állománykezelő szolgáltatások felületével
+
+• Az átmeneti tárolás előnyei:
+– a műveletek jelentős része helyben végrehajtható, gyorsabb
+futás, csökken a hálózati terhelés
+– nagy blokkok átvitele gazdaságosabb
+• a hálózati protokoll a blokk méretéhez képest kevesebb plusz
+információt tesz hozzá
+• a szolgáltató lemezműveletei gyorsulnak
+22
+
+11.4 A szolgáltató implementációja
+• Állapotot tároló (stateful) szolgáltató
+• Állapot nélküli (stateless) szolgáltató
+
+23
+
+Állapotot tároló (stateful) szolgáltató
+•
+•
+
+A szolgáltató a kliensek kéréseiről, kiszolgálásuk folyamatáról, állapotáról
+információt tárol.
+Az állományok megnyitásakor kapcsolat-leírót készít, lezárásig nyomon
+követi a műveletet.
+
+Előnyei:
+• nagyobb teljesítmény
+– az állományohoz való egymás utáni hozzáférések már elő vannak készítve,
+szekvenciális megnyitás esetén előre olvashat
+
+•
+
+konzisztencia problémák figyelése, kezelése
+
+Hátrányai:
+• szolgáltató leállásakor az ügyfelek kéréseit nem tudja kiszolgálni, azoknak is
+terminálniuk kell, újra fel kell építeni az elveszett állapotinformációkat
+(bonyolult protokollt igényel).
+• a kliens váratlan terminálását a szolgáltatónak fel kell ismernie (orphan
+detection), hogy érvénytelenítse az állapotinformációkat.
+
+24
+
+Állapot nélküli (stateless) szolgáltató
+• Nincs információ tárolás a kliensekről, minden kérés
+
+önállóan is kielégíthető.
+Előnye:
+• Az állományok meghibásodása nem okoz gondot (ha az
+ügyfél nem kap választ, akkor újra próbálkozik)
+Hátránya:
+• Lassú:
+– kérésenként több információk kell átvinni
+– minden kérés kiszolgálásához az állományt meg kell találni
+
+25
+
+11.5 Az állományok többszörözése
+Érdemes az állományokat megsokszorozni (file replication)
+A rendszer hibatűrő képessége nő (másolatok független
+csomópontokba helyezése),
+• gyorsabb kiszolgálás (pl. "legközelebbi" állomány, vagy legkevésbé
+terhelt csomópont kiválasztása).
+•
+
+Problémák:
+• Az állomány megnevezését (a felhasználó számára láthatatlan
+módon) egy másolathoz kell kötni,
+• automatikusan kell kezelni a többszörözést, a másolatok
+elhelyezését, megszüntetését,
+• a szükséges módosításokat az összes másolaton el kell végezni
+(konzisztencia).
+
+26
+
+Esettanulmány: NFS
+
+27
+
+Esettanulmány: NFS
+
+28
+
+

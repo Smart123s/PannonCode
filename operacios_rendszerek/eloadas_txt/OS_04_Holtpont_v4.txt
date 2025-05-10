@@ -1,0 +1,1531 @@
+Operációs rendszerek
+
+4. A holtpont és kezelése
+
+v4.0
+
+Tartalom
+• Bevezetés
+– A holtpont kialakulásának szükséges feltételei
+– Az erőforrás-használati gráf
+• A holtpont kezelése
+– holtpont megelőzése
+– holtpont elkerülése
+– holtpont felismerése és megszüntetése
+• Kombinált stratégiák
+• Kommunikációs holtpontok
+2
+
+Bevezetés ...
+
+3
+
+4.1 Holtpont definíciója
+Folyamatok egy halmaza akkor van holtponton,
+ha a halmaz minden folyamata olyan
+eseményre* vár, amelyet csak egy másik,
+ugyancsak halmazbeli (várakozó) folyamat
+tudna előidézni.
+*Az esemény többnyire egy erőforrás felszabadulását jelenti.
+
+4
+
+Érdekesség ...
+„When two trains approach each other
+at a crossing, they shall both come to a
+full stop and neither shall start up until
+the other has gone.”
+Kansas állam törvénye a XX. sz. elejéről
+
+5
+
+Rendszermodell 1.
+• A rendszerben véges számú erőforrás áll
+
+rendelkezésre véges számú folyamat
+számára
+• Az erőforrások osztályokba sorolhatók, az
+egy osztályon belüli erőforrások azonosak
+(egy igénylő folyamat bármelyiket igénybe
+veheti)
+• Az erőforrás lehet
+– elvehető (preemptív) [pl. CPU, memória]
+– nem elvehető (nem preemptív) [pl. nyomtató]
+6
+
+Rendszermodell 2.
+• Erőforrás használat lépései
+– Igénylés. Ha az igény nem teljesíthető (erőforrás
+foglalt) akkor a folyamat várakozik.
+– Felhasználás. A folyamat az erőforrást
+kizárólagosan használja.
+– Felszabadítás. Folyamat elengedi az erőforrást. Ha
+más folyamatok várakoznak rá, akkor valamelyik
+várakozó folyamat továbbléphet.
+• Az 1. és 3. lépések általában rendszerhívások
+– request – release (device)
+– open – close (file)
+– allocate – free (memory)
+7
+
+4.2 Holtpont kialakulásának szükséges feltételei
+Holtpont akkor jöhet létre, ha az alábbi négy feltétel
+egyszerre teljesül:
+• Kölcsönös kizárás
+– Egy erőforrást egyszerre legfeljebb egy folyamat használhat.
+• Foglalva várakozás
+– Van olyan folyamat, amely lefoglalva tart erőforrásokat,
+miközben más erőforrásokat kér (és azokra várakozik).
+• Nem elvehető erőforrások vannak a rendszerben.
+– Az erőforrást a folyamat csak önszántából szabadíthatja fel.
+• Körkörös várakozás
+– Létezik egy olyan {P0, P1, ..., Pn} sorozat, amelyben P0 egy
+P1 által lefoglalva tartott erőforrásra vár, Pi egy Pi+1 által
+foglaltra, végül Pn pedig egy P0 által foglalt erőforrásra vár.
+
+8
+
+Teljesülnek a feltételek?
+
+9
+
+4.3 Az erőforrás-használati gráf
+A rendszer pillanatnyi állapotát a rendszer erőforráshasználati gráfja (resource allocation graph) írja le.
+– P = {P1, P2, ..., Pn}, a rendszer folyamatainak halmaza
+– R = {R1, R2, ..., Rn}, az erőforrás-osztályok halmaza
+– Pi  Ri erőforrás igénylés
+– Ri  Pi erőforrás használat
+
+Ha az igény kielégíthető, akkor az erőforrás igénylés
+átvált erőforrás használattá.
+
+10
+
+Az erőforrás-használati gráf
+• Folyamat
+• Erőforrás osztály 4 erőforrással
+• Pi egy Ri osztálybeli erőforrást
+
+igényel
+
+• Pi egy Ri osztálybeli erőforrást
+
+foglal
+
+Pi
+Rj
+
+Pi
+Rj
+
+11
+
+Példa holtpont kialakulására
+A:
+Requests R
+Requests S
+Release R
+Release S
+B:
+Requests S
+Requests T
+Release S
+Release T
+C:
+Requests T
+Requests R
+Release T
+Release R
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+A requests R
+
+B requests S
+
+C requests T
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+A requests S
+
+B requests T
+
+C requests R
+12
+
+Egy erőforrás-használati gráf
+• R1-et P2 használja
+• P1 vár R1-re
+• R2 egy-egy példányát
+
+használja P1 és P2
+• R4-et nem használják
+
+13
+
+Egy erőforrás-használati gráf holtponttal
+• Mindhárom folyamat
+
+vár
+• Az igényelt erőforrások
+felszabadítását csak
+ezen folyamatok
+tudnák elvégezni
+
+14
+
+Egy erőforrás-használati gráf körrel, de holtpont nélkül
+
+• Az erőforrásokat P2 és P4
+
+is felszabadíthatja!
+
+• A kör szükséges és
+
+elégséges feltétel, ha
+minden erőforrásosztályba csak egy
+erőforrás tartozik.
+• Szükséges, de nem
+elégséges, ha egy
+erőforrás-osztály több
+egyedet is tartalmaz.
+
+15
+
+A kör és a holtpont...
+• Ha nincs kör, nincs holtpont. (A kör szükséges
+
+feltétel.)
+• Ha van kör és minden erőforrás-osztályba csak
+
+egy erőforrás tartozik, akkor holtpont van.
+(Egyszeres erőforrásoknál a kör elégséges
+feltétel is.)
+• Ha van kör és egy erőforrás-osztály több
+egyedet is tartalmaz, akkor holtpont kialakulhat,
+de nem szükségszerűen. (A kör léte többszörös
+erőforrásoknál nem elégséges feltétel.)
+16
+
+Példa: holtpont elkerülése
+A:
+Requests R
+Requests S
+Release R
+Release S
+B:
+Requests S
+Requests T
+Release S
+Release T
+C:
+Requests T
+Requests R
+Release T
+Release R
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+A requests R
+
+C requests T
+
+A requests S
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+A
+
+B
+
+C
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+R
+
+S
+
+T
+
+C requests R
+
+A releases R
+
+A releases S
+17
+
+4.4 A holtpont kezelése
+Stratégiák:
+1. Strucc algoritmus: nem veszünk tudomást a problémáról és nem
+
+teszünk semmit.
+
+– Bizonyos típusú rendszereknél (nagy kockázat) nem engedhető meg.
+– Megengedhető kisebb kockázatú rendszereknél, ahol tolerálható a
+„kiszállunk-beszállunk elv”.
+– Mérlegelni kell a probléma súlyát és a megoldás árát.
+2. Védekezés holtpont kialakulása ellen
+– Az erőforrások használatánál bevezetünk szabályokat, ami biztosítja
+hogy ne alakuljon ki holtpont.
+– holtpont megelőzés (deadlock prevention)
+– holtpont elkerülés (deadlock avoidance)
+3. Detektálás/feloldás: a holtpont kialakulása után avatkozunk bele
+– holtpont felismerés (deadlock recognition)
+– holtpont megszüntetés (deadlock recovery)
+
+18
+
+4.5 Holtpont megelőzés (deadlock prevention)
+A holtpont kialakulásnak szükséges feltételek
+közül valamelyiket kizárjuk.
+– Kölcsönös kizárás
+– Foglalva várakozás
+– Erőforrások nem elvehetők
+– Körkörös várakozás
+19
+
+4.5.1 Foglalva várakozás kizárása
+Két stratégia:
+1. A folyamat elindulásakor egyszerre igényli az összes
+szükséges erőforrást. Csak akkor mehet tovább, ha
+mindegyiket megkapta.
+2. Folyamat csak akkor igényelhet, ha más erőforrást
+nem foglal.
+•
+Problémák:
+–
+–
+
+•
+
+rossz erőforrás kihasználtság, szükségesnél tovább
+birtokolják azokat
+fennáll a kiéheztetés veszélye: ha egy folyamat több
+"népszerű" erőforrást használ, nagy az esélye, hogy
+egyszerre az összes erőforrást soha nem kapja meg.
+
+Példa: Számítás szalagról nyomtatóra. Erőforrások:
+szalagos tároló – diszk – nyomtató
+20
+
+4.5.2 Erőforrások elvétele
+Két hasonló stratégia
+1. Ha egy folyamat valamely erőforrásigénye nem
+elégíthető ki, akkor az összes többit is elvesszük tőle.
+Ezekre a továbbiakban várakozik. Akkor futhat
+tovább, ha az összes erőforrásigényét egyszerre ki
+lehet elégíteni.
+2. Ha egy P folyamatnak olyan erőforrásigénye van,
+amelyeket más várakozó {Qi } folyamatok foglalnak,
+akkor az erőforrásokat Qi folyamatoktól elveszik és P
+futhat tovább (de csak ha P összes igénye egyszerre
+kielégíthető!), különben pedig P is várakozik.
+• Problémák:
+– Az erőforrások egy része csak úgy vehető el, ha közben a
+futási eredmények is elvesznek.
+– Fennáll a kiéheztetés veszélye.
+21
+
+4.5.3 Körkörös várakozás elkerülése
+• Rendeljünk a rendszer összes erőforrásához egy
+
+növekvő számsorozat egy-egy elemét.
+• Két algoritmus:
+1. A folyamatok csak növekvő sorrendben igényelhetik
+az erőforrásokat.
+2. A folyamat csak akkor igényelhet egy erőforrást, ha
+nem használ az igényeltnél magasabb sorszámút.
+• Problémák:
+– Nehéz az erőforrásokat olyan módon beszámozni, hogy az
+tükrözze az erőforrás szokásos sorrendjét.
+– Interaktív rendszereknél nem jó (nem lehet megjósolni a
+folyamatok erőforrás használatát).
+
+• Logikailag függő folyamatokra alkalmazható.
+22
+
+4.6 Holtpont elkerülése
+A kért erőforrásokat óvatosan allokáljuk. A
+rendszer minden kérésnél mérlegeli, hogy nem
+vezet-e holtpontveszélyre a kérés, fenntarthatóe a biztonságos állapot.
+Feltételezések:
+– Ismerjük a folyamatok erőforrás-típusonkénti
+maximális igényeit.
+– Feltételezzük, hogy ha egy folyamat minden
+erőforrásigényét kielégítettük, az véges időn belül
+lefut.
+
+23
+
+4.6.1 Biztonságos állapot
+Biztonságos állapot: létezik az összes folyamatot
+tartalmazó biztonságos sorozat.
+Biztonságos sorozat: a folyamatok olyan {P0,P1,
+..., Pn} sorozata, ahol bármelyik Pk folyamat
+erőforrásigénye kielégíthető a rendelkezésre
+álló, valamit a többi Pi (i < k) folyamat által
+használt (és majdan felszabadított) erőforrással.
+
+24
+
+A biztonságos állapot és a holtpont
+• A rendszer biztonságos
+
+állapotban van  nincs
+holtpont
+• A rendszer nem biztonságos
+állapotban van  holtpont
+lehetséges
+• Holtpont elkerülése:
+biztosítani kell, hogy a
+rendszer soha nem kerül
+nem biztonságos állapotba
+
+holtpont
+
+nem biztonságos
+
+biztonságos
+
+25
+
+Példa: biztonságos állapot
+• A kiinduló állapot biztonságos
+• (1 erőforrás-osztályra, 10 erőforrással)
+Aktuális foglalás Max. igény
+F
+
+M
+
+F
+
+M
+
+F
+
+M
+
+F
+
+M
+
+F
+
+M
+
+A 3 9
+B 2 4
+C 2 7
+
+A 3 9
+B 4 4
+C 2 7
+
+A 3 9
+B 0 C 2 7
+
+A 3 9
+B 0 C 7 7
+
+A 3 9
+B 0 C 0 -
+
+Szabad: 3
+
+Szabad: 1
+
+Szabad: 5
+
+Szabad: 0
+
+Szabad: 7
+
+Éppen szabad erőforrások száma
+26
+
+Példa: nem biztonságos állapot
+A második állapot már nem biztonságos!
+F
+
+M
+
+F
+
+M
+
+F
+
+M
+
+F
+
+M
+
+A 3 9
+B 2 4
+C 2 7
+
+A 4 9
+B 2 4
+C 2 7
+
+A 4 9
+B 4 4
+
+A 4 9
+B - -
+
+C 2 7
+
+C 2 7
+
+Szabad: 3
+
+Szabad: 2
+
+Szabad: 0
+
+Szabad: 4
+
+27
+
+4.6.2 Bankár algoritmus (Dijkstra,1965)
+Az algoritmus előfeltételei:
+Az erőforrás-osztályok több egyedből
+állhatnak
+2. Minden folyamat előzetesen megadja
+maximális igényét
+3. Az igénylő folyamat várakozni kényszerülhet
+4. Ha egy folyamat megkapja az igényelt
+erőforrásait, véges időn belül visszaadja.
+1.
+
+28
+
+Bankár algoritmus – kérés feldolgozása
+Alapötlet:
+• Ha a kérés egyébként teljesíthető,
+akkor tegyünk úgy, mintha már
+teljesítettük volna.
+• Vizsgáljuk meg, hogy ez az állapot
+biztonságos-e.
+• Ha igen, valóban teljesíthetjük a
+kérést.
+29
+
+Bankár algoritmus - adatszerkezetek
+•
+•
+•
+•
+•
+•
+•
+•
+
+n = folyamatok száma
+m = erőforrás-osztályok száma
+SZABAD: m elemű vektor. Ha SZABAD[j] = k, akkor az Rj típusú
+erőforrásból k példány elérhető.
+MAX: n x m méretű mátrix. A MAX[i] m elemű sorvektor jelzi, hogy
+az egyes erőforrásosztályokból Pi folyamat maximum hány példányt
+használhat (2. előfeltétel alapján).
+FOGLAL: n x m méretű mátrix. A FOGLAL[i] m elemű sorvektor
+jelzi, hogy az egyes erőforrásosztályokból Pi folyamat jelenleg hány
+példányt használ.
+MÉG: n x m méretű mátrix. A MÉG[i] m elemű sorvektor jelzi, hogy
+az egyes erőforrásosztályokból Pi folyamatnak feladata
+befejezéséhez még hány példányra lehet szüksége.
+KÉR: n x m méretű mátrix. A KÉR[i] m elemű sorvektor jelzi Pi
+folyamat kérését az egyes erőforrásosztályokra.
+Nyilvánvalóan: MÉG[i,j] = MAX[i,j] – FOGLAL[i,j].
+30
+
+Bankár algoritmus – kérés feldolgozása
+Pi folyamat kéri a KÉR[i] erőforrásokat:
+A kérés ellenőrzése:
+if KÉR[i] > MÉG[i] then STOP; (HIBA: túllépte a maximális igényt)
+if KÉR[i] > SZABAD then VÉGE; (Most nincs elég szabad erőforrás)
+1. A nyilvántartás átállítása az új állapotra:
+SZABAD := SZABAD - KÉR[i];
+FOGLAL[i] := FOGLAL[i] + KÉR[i];
+MÉG[i] := MÉG[i] - KÉR[i];
+2. Vizsgálat: a létrejött állapot biztonságos-e? (lásd később)
+3. if BIZTONSÁGOS then
+KÉRÉS TELJESÍTÉSE;
+else állapot visszaállítása a (2) pont előttire:
+SZABAD := SZABAD + KÉR[i];
+FOGLAL[i] := FOGLAL[i]-KÉR[i];
+MÉG[i] := MÉG[i] - KÉR[i];
+KÉRÉS ELUTASÍTÁSA: A FOLYAMATNAK VÁRNIA KELL
+31
+
+Bankár algoritmus – biztonságos állapot vizsgálata
+Működés (biztonságos sorozat keresése):
+• Keressünk olyan folyamatot, ami le tud futni a most
+éppen rendelkezésre álló szabad erőforráskészlettel.
+• (Ha nincs ilyen, de van várakozó folyamat, akkor
+holtpont van)
+• A gondolatban lefuttatott folyamat által birtokolt
+erőforrásokat visszaadjuk, így most már több
+erőforrással próbálkozhatunk újra.
+• Újabb változók:
+– SZABAD_MOST: mint SZABAD. Munkaváltozó.
+– LEFUT: n elemű vektor. Ha LEFUT[j] = igaz, akkor Pj folyamat
+mindenképpen le tud futni.
+
+32
+
+Bankár algoritmus – biztonságos állapot vizsgálata
+B1. Kezdőérték beállítása:
+SZABAD_MOST := SZABAD
+LEFUT[i] := hamis minden i-re (i=1,2,...,N)
+B2. Továbblépésre esélyes folyamatok keresése:
+Keress i-t amelyre (LEFUT[i] = HAMIS AND MÉG[i] <= SZABAD_MOST);
+if van ilyen i, then
+SZABAD_MOST := SZABAD_MOST + FOGLAL[i];
+LEFUT[i] := igaz;
+ismételd a B2. lépést
+else folytasd a B3. lépéssel
+B3. Kiértékelés
+if LEFUT[i] = igaz minden i-re (i=1,2,...,N), then
+BIZTONSÁGOS
+else
+NEM BIZTONSÁGOS
+(Pi folyamatok, amelyekre LEFUT[i] = hamis holtpontra juthatnak)
+33
+
+Bankár algoritmus – jellemzés
+Az algoritmus problémái:
+• Időigényes
+• Az alapfeltételek (ismert folyamatszám,
+maximális igények, folyamat biztos
+befejeződése) nem biztosíthatók.
+• Túlzott óvatosság, feleslegesen várakoztat
+folyamatokat (az erőforrások kihasználtsága
+rosszabb, mint holtpont elkerülés nélkül).
+
+34
+
+Bankár algoritmus – példa
+• 5 folyamat: P0, P1, P2, P3, P4
+• 3 erőforrás-osztály: A (10), B (5), C (7)
+• A rendszer kiinduló állapota:
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+200
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+332
+
+Még
+ABC
+743
+122
+600
+011
+431
+
+• Ez biztonságos állapot, mert van egy
+
+biztonságos sorozat: pl. <P1, P3, P4, P2, P0>
+35
+
+Bankár algoritmus – példa
+• Teljesíthető-e P1 (1,0,2) kérése?
+• Ellenőrzés:
+– (1,0,2) <= (1,2,2) (KÉR[1] <= MÉG[1]: OK)
+– (1,0,2) <= (3,3,2) (KÉR[1] <= SZABAD: OK)
+• Kiinduló állapot:
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+200
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+332
+
+Még
+ABC
+743
+122
+600
+011
+431
+
+36
+
+Bankár algoritmus – példa
+• Kérés teljesítése (1,0,2)
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+302
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+230
+
+Az algoritmusban
+ez a SZABAD_MOST
+átmeneti változóban
+tárolódik
+
+Még
+ABC
+743
+020
+600
+011
+431
+
+37
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 1.
+– P1 le tud futni
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+302
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+230
+
+Még
+ABC
+743
+020
+600
+011
+431
+
+38
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 1.
+– P1 lefut és ...
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+302
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+230
+
+Még
+ABC
+743
+020
+600
+011
+431
+
+39
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 1.
+– P1 lefut és erőforrásait visszaadja
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+532
+
+Még
+ABC
+743
+600
+011
+431
+
+40
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 2.
+– P3
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+532
+
+Még
+ABC
+743
+600
+011
+431
+
+41
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 2.
+– P3 lefut
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+302
+000
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+743
+
+Még
+ABC
+743
+600
+431
+
+42
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 3.
+– P4
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+302
+000
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+743
+
+Még
+ABC
+743
+600
+431
+
+43
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 3.
+– P4 lefut
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+302
+000
+000
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+745
+
+Még
+ABC
+743
+600
+-
+
+44
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 4.
+– P2
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+302
+000
+000
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+745
+
+Még
+ABC
+743
+600
+-
+
+45
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 4.
+– P2 lefut
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+000
+000
+000
+
+Max
+Szabad
+ABC ABC
+7 5 3 10 4 7
+322
+902
+222
+433
+
+Még
+ABC
+743
+-
+
+46
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 5.
+– P0
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+000
+000
+000
+000
+
+Max
+Szabad
+ABC ABC
+7 5 3 10 4 7
+322
+902
+222
+433
+
+Még
+ABC
+743
+-
+
+47
+
+Bankár algoritmus – példa
+• Biztonságos sorozat keresése 5.
+– P0 lefut
+
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+000
+000
+000
+000
+000
+
+Max
+Szabad
+ABC ABC
+7 5 3 10 5 7
+322
+902
+222
+433
+
+Még
+ABC
+-
+
+Biztonságos sorozat: <P1, P3, P4, P2, P0>
+48
+
+Bankár algoritmus – gyakorló példák
+1.
+2.
+
+Teljesíthető-e P4 (3,3,0) kérése?
+Teljesíthető-e P0 (0,2,0) kérése?
+
+Kiinduló állapot:
+P0
+P1
+P2
+P3
+P4
+
+Foglal
+ABC
+010
+200
+302
+211
+002
+
+Max
+ABC
+753
+322
+902
+222
+433
+
+Szabad
+ABC
+332
+
+49
+
+4.7 A holtpont felismerése
+• Egyszeres erőforrások esete
+– Kör keresése az erőforrás-foglalási gráfban
+• Többszörös erőforrások esete
+– Itt a kör nem elégséges feltétel, tehát
+bonyolultabb vizsgálat kell.
+– Hasonlóan a biztonságos állapot
+vizsgálatánál közölt algoritmushoz
+(vigyázat: nem ugyanaz az algoritmus!)
+
+50
+
+Coffman algoritmus - adatszerkezetek
+• N = folyamatok száma
+• M = erőforrás-osztályok száma
+• SZABAD: m elemű vektor. Ha SZABAD[j] = k, akkor az
+•
+•
+
+•
+•
+
+Rj típusú erőforrásból k példány elérhető.
+SZABAD_MOST: mint SZABAD. Munkaváltozó.
+FOGLAL: n x m méretű mátrix. A FOGLAL[i] m elemű
+sorvektor jelzi, hogy az egyes erőforrásosztályokból Pi
+folyamat jelenleg hány példányt használ.
+KÉR: n x m méretű mátrix. A KÉR[i] m elemű sorvektor
+jelzi Pi folyamat kérését az egyes erőforrásosztályokra.
+LEFUT: n elemű vektor. Ha LEFUT[j] = igaz, akkor a Pj
+folyamat a mostani erőforrásigények szerint le tud futni.
+51
+
+Holtpont-detektáló algoritmus (Coffman)
+C1. Kezdőérték beállítása:
+SZABAD_MOST := SZABAD
+LEFUT[i] := hamis minden i-re (i=1,2,...,N)
+C2. Továbblépésre esélyes folyamatok keresése:
+Keress i-t amelyre (LEFUT[i] = HAMIS AND KÉR[i] <= SZABAD_MOST);
+if van ilyen i, then
+SZABAD_MOST := SZABAD_MOST + FOGLAL[i];
+LEFUT[i] := igaz;
+ismételd a C2. lépést
+else folytasd a C3. lépéssel
+C3. Kiértékelés
+if LEFUT[i] = igaz minden i-re (i=1,2,...,N), then
+NINCS HOLTPONT
+else
+HOLTPONT:
+Azon Pi folyamatok, amelyekre LEFUT[i] = hamis
+
+52
+
+Coffman algoritmus – példa
+•
+
+Kiinduló állapot:
+P0
+P1
+P2
+P3
+P4
+
+•
+
+Kér
+ABC
+000
+202
+000
+100
+002
+
+Szabad
+ABC
+000
+
+Van-e holtpont?
+–
+
+•
+
+Foglal
+ABC
+010
+200
+303
+211
+002
+
+Nincs: <P0, P2, P3, P1, P4>
+
+Mi a helyzet, ha P2 kér még egy C-t?
+–
+
+Holtpont: (P1, P2, P3, P4)
+53
+
+A holtpont-detektálás időzítése
+Mikor kell a detektáló algoritmust futtatni?
+• Erőforrás-igény kielégítésekor
+– Sok időt igényel
+– Rögtön kiderül a holtpont
+– Tudjuk, melyik folyamat zárta be a holtpontot
+
+• Meghatározott időnként
+– Nehéz meghatározni a megfelelő gyakoriságot
+– Túl sűrű futtatás: sok időt igényel
+– Túl ritka futtatás: holtpont sokáig fennáll
+
+54
+
+4.8 A holtpont felszámolása
+•
+
+Holtpont felismerése után azt operátori beavatkozással vagy
+automatikusan - fel kell számolni.
+
+•
+
+Módszerek:
+1. Folyamatok terminálása
+2. Erőforrások elvétele
+
+55
+
+A holtpont felszámolása: folyamatok terminálása
+• Minden holtpontban résztvevő folyamatot
+
+megszüntetünk (radikális)
+
+– Biztos, de költséges (megszűnt folyamatok
+eredményei elvesznek)
+
+• Egyesével szüntetjük meg folyamatokat, amíg
+
+a holtpont meg nem szűnik.
+
+– Minden terminálás után újabb detektálás
+– Szempontok a folyamat kiválasztásához:
+• hány holtpont körben szerepel
+• mekkora a prioritása
+• mennyi ideje futott, mennyit futna még (ha ismerjük)
+• mennyi erőforrást tart lefoglalva
+• mennyi további erőforrásra lenne szüksége
+• interaktív vagy batch program
+56
+
+A holtpont felszámolása: erőforrások elvétele
+• A holtpontra jutott folyamatoktól egyesével
+
+elvesszük az erőforrásokat.
+• Megoldandó problémák:
+
+– Kitől vegyük el és melyik erőforrást?
+– Kiszemelt folyamatot vissza kell léptetni egy olyan
+állapotba, ahonnan a futását folytatni tudja
+(leggyakrabban újra kell kezdenie a futását).
+Egyes OS-ek a folyamatokhoz ellenőrzési pontokat
+rendelnek (checkpoint); a futást a legutóbbi
+ellenőrzési ponttól kell folytatni.
+– El kell kerülni a folyamatok kiéheztetését (ne
+mindig ugyanattól a folyamattól vegyünk el
+erőforrásokat).
+57
+
+4.9 Kombinált holtpont-kezelő stratégiák
+Erőforrásokat csoportokra osztjuk, és az egyes csoportokra
+különböző stratégiát alkalmazunk. Pl.:
+• Belső erőforrások (rendszertáblák, leírók, stb.)
+– Rendszer-folyamatokat érinti. Folyamatok létrejöttekor azonos
+sorrendben igénylik ezen erőforrásokat, a rendezett erőforrásfoglalás könnyen megvalósítható.
+
+ME
+•
+
+– Menthető állapotú erőforrás, így alkalmazható az erőszakos elvétel
+módszere.
+
+D/F
+•
+
+Egy munkához tartozó erőforrások (állományok, eszközök)
+ME
+
+– A munka leírásából ismerhetjük az igényeket, használhatunk
+holtpont elkerülő algoritmust.
+
+EK
+•
+ME
+
+Operatív tár
+
+Munkaterület a lemezen (swap)
+– általában ismert igények vannak, egyszerre kell kérni a szükséges
+méretet, nincs rákérés (előzetes lefoglalás).
+
+58
+
+4.10 Kommunikációs holtpontok
+• Holtponthelyzet nemcsak erőforrás-használat miatt
+
+alakulhat ki, hanem folyamatok tetszőleges olyan
+együttműködése során, amely a folyamatok körkörös
+várakozásra vezet.
+• Pl.
+– Kliens-szerver architektúrájú rendszer, ahol az ügyfelek és a
+szolgáltatók is folyamatok. Az ügyfél-szolgáltató lánc záródik.
+
+• A gráfos reprezentáció itt is használható: várakozási
+
+gráf (wait-for graph)
+
+– csomópontjai a folyamatok
+– irányított élei pedig a várakozást jelzik (várakozóból a
+várakoztatóhoz vezet).
+
+59
+
+

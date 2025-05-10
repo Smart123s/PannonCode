@@ -1,0 +1,701 @@
+Operációs rendszerek
+
+9. Állományok kezelése
+
+4.0
+
+9. Állományok kezelése
+• Alapfogalmak
+• Szabad blokkok nyilvántartása
+• A lemez blokkjainak allokációja
+• Állományok szerkezete
+• Könyvtárak szerkezete
+• Műveletek
+• Osztott állománykezelés
+• Hozzáférés szabályozása
+2
+
+Állomány (file)
+• A létrehozó által összetartozónak ítélt információk
+
+gyűjteménye.
+• Több százezer állomány egyidejűleg, egyedi azonosító
+(név) különbözteti meg őket.
+• Az OS elrejti az állomány tárolásának, kezelésének
+fizikai részleteit:
+– Melyik fizikai eszközön található (logikai eszköznevek
+használata);
+– a perifériás illesztő tulajdonságai;
+– az állományhoz tartozó információk elhelyezkedése a
+lemezen;
+– az állományban lévő információk hogyan helyezkednek el a
+fizikai egységen (szektor, blokk);
+– az információ átvitelénél alkalmazott blokkosítást, pufferelést.
+3
+
+Könyvtár
+• Az állományok csoportosítása, OS és a
+
+felhasználó szerint.
+• A könyvtár tartalmát katalógus írja le.
+
+4
+
+Az állománykezelő feladatai
+• információátvitel (állomány és a folyamatok
+
+között)
+• műveletek (állományokon, könyvtárakon)
+• osztott állománykezelés
+• hozzáférés szabályozása
+– más felhasználók által végezhető műveletek
+korlátozása (access control)
+– tárolt információk védelme az illetéktelen olvasások
+ellen (rejtjelezés, encryption)
+– információ védelme a sérülések ellen, mentés
+5
+
+Az állományrendszer réteges
+implementációja
+Egymásra épülő programrétegek
+1. a perifériát közvetlenül kezelő periféria meghajtó
+Feladata a tár és a periféria közötti átvitel
+megvalósítása. (device driver, átvitelt kezdeményező,
+megszakítást kezelő eljárások)
+2. elemi átviteli műveletek rétege
+A lineáris címzésű blokkok átvitele, átmeneti tárolása.
+3. állományszervezés rétege
+Háttértár szabad blokkjainak, illetve az állományhoz
+tartozó blokkoknak szervezése.
+4. logikai állományszervezés
+Kezeli a nyilvántartások szerkezetét, azonosító alapján
+megtalálja az állományt, szabályozza az állományszintű
+átvitelt.
+6
+
+Állományok tárolása a lemezen
+• Lemezterületet blokkonként (néhány
+
+szektor) kezeli. Mérete a lapmérethez
+hasonló meggondolások alapján.
+• Az állomány tárolásához blokkok
+kellenek, ezeket nyomon kell követni.
+– Szabad blokkok nyilvántartása
+– Blokkok allokálása
+
+7
+
+9.2 Szabad blokkok nyilvántartása
+• Bittérkép
+• Láncolt lista
+• Szabad helyek csoportjainak listája
+• Egybefüggő szabad terület tárolása
+
+8
+
+9.2.1 Bittérkép
+• Minden blokkra egy biten jelzi, hogy
+
+szabad-e
+1. A bittérkép a lemez kijelölt helyén van.
+Kiolvasása mindig lassú háttértártár művelet.
+2. A bitvektort a memóriában kell tárolni.
+Olvasás gyors, de sok blokk miatt sok
+memóriát igényel.
+
+9
+
+9.2.1 Bittérkép
+bittérkép
+1 1 0 1 0 0 0 0 1 0 1 1
+
+blokk
+
+10
+
+9.2.2 Láncolt lista
+• Az első szabad blokk címének tárolása,
+
+arra felfűzve a többi.
+• A blokk területéből vesszük le a cím
+területét.
+• Nem hatékony, lassú (sok lemezművelet).
+• Sérülékeny.
+
+11
+
+9.2.2 Láncolt lista
+blokk
+Első szabad blokk kezdőcíme
+
+Mutató a
+következő
+blokkra
+
+12
+
+9.2.3 Szabad helyek csoportjainak listája
+• Láncolt lista javítása, gyorsabb,
+
+hatékonyabb.
+• Minden blokk n db (ennyi cím fér el a
+blokkban) szabad blokkra hivatkozik
+• n - 1 ténylegesen szabad, az n. a lista új
+elemére mutat.
+• Sérülékeny.
+
+13
+
+9.2.3 Szabad helyek csoportjainak listája
+Első szabad blokk kezdőcíme
+
+blokk
+Mutató egy
+szabad blokkra
+Mutató egy
+szabad blokkra
+Mutató egy
+szabad blokkra
+Mutató a
+lista következő
+blokkjára
+
+14
+
+9.2.4 Egybefüggő szabad terület tárolása
+• Egy táblázatban tároljuk az összefüggő
+
+szabad blokkokat (első blokk sorszáma,
+blokkok száma)
+• Bittérkép javítása.
+
+15
+
+9.2.4 Egybefüggő szabad terület tárolása
+Táblázat
+Első blokk sorszáma
+
+Egybefüggő blokkok száma (2)
+
+Első blokk sorszáma
+
+Egybefüggő blokkok száma (5)
+
+16
+
+9.3 A lemez blokkjainak allokációja
+• Folytonos terület allokációja
+• Láncolt tárolás
+• Indexelt tárolás
+• Kombinált módszerek
+
+17
+
+9.3.1 Folytonos terület allokációja
+•
+•
+
+Az összetartozó információkat egymás melletti
+blokkokban tároljuk. Első blokk sorszámát és a blokkok
+számát kell tárolni.
+Hátrányai:
+– Külső tördelődés itt is fennáll
+A megoldáshoz itt is használhatók a már megismert
+algoritmusok (első illeszkedő, legjobban illeszkedő, legrosszabbul
+illeszkedő, következő illeszkedő).
+Nagyméretű tördelődés esetén tömöríteni kell.
+– Sokszor nem tudjuk előre, hogy hány blokkra lesz szükségünk.
+Lefoglaláskor becsülni kell, a rossz becslés gondot okozhat (hiba
+és leállás, átmásolni az eddig lefoglalt területet egy másik
+helyre)
+
+•
+
+Előnyei:
+– A tárolt információ soros és közvetlen elérése is lehetséges.
+– Jól használható tárcsere által kirakott szegmensekre (tudjuk
+előre a méretet)
+18
+
+9.3.2 Láncolt tárolás
+•
+•
+
+Blokkokat egyenként allokáljuk, minden blokkban fenntartva egy
+helyet a következő blokk sorszáma számára (a rendszer az első és
+az utolsó blokkot tárolja).
+Előnyei:
+–
+–
+
+•
+
+Hátrányai:
+–
+–
+–
+
+•
+
+Nincs külső tördelődés
+Rugalmas, a lefoglalt terület növekedhet.
+Csak soros elérés lehet.
+A blokkok sorszámaival nő az állomány mérete. A blokkos másoláskor a
+sorszámokkal külön kell foglalkozni.
+Sérülékeny, egyetlen láncszem hibája a tárolt információnak jelentős
+részének elvesztését jelenti.
+
+Módosított változata állomány allokációs tábla (file allocation table,
+FAT)
+–
+–
+
+A láncelemeket az állományoktól elkülönítve tároljuk.
+A szabad helyek tárolására is alkalmas a FAT.
+19
+
+FAT
+Könyvtári bejegyzés
+név
+
+FAT
+
+attribútumok
+
+...
+
+start (k)
+
+k
+
+k+3
+
+k+1
+k+4
+
+file:
+
+k
+
+k+3
+
+k+3
+
+k+2
+
+k+2
+
+k+1
+
+k
+
+k+2
+k+3
+
+k+4
+
+k+4
+
+EOF
+
+k+2
+
+k+4
+
+Blokkok sorszámai
+20
+
+9.3.3 Indexelt tárolás
+• Az állományhoz tartozó blokkok címei egy
+
+indextáblában vannak.
+• Előnyei:
+
+– Közvetlen hozzáférés
+– "Lyukas" állományok tárolása (nem minden blokk
+tartalmaz valós információt)
+
+• Hátrányai:
+– Az indextábla tárolása legalább egy blokkot elfoglal
+(kis állományok esetében pazarló)
+– Az indextábla mérete nem ismert, lehetővé kell tenni,
+hogy az növekedhessen.
+• láncolt indexblokkok
+• többszintű indextábla
+• kombinált mód, kis állományok esetében egy, majd
+többszintű indextábla
+
+21
+
+9.3.3 Indexelt tárolás
+Könyvtári bejegyzés
+név
+
+attribútumok
+
+indexblokk
+...
+
+indexblokk
+
+1. blokk száma
+2. blokk száma
+3. blokk száma
+
+N. blokk száma
+Következő
+indexblokk száma
+
+2. blokk
+
+3. blokk
+
+1. blokk
+
+4. blokk
+
+22
+
+9.3.4 Kombinált módszerek
+• hozzáférési módja szerint:
+– Soros hozzáférés esetén láncolt, közvetlen
+hozzáférés esetén indexelt
+• méret szerint:
+– Kis állomány esetén láncolt, nagyok indexelve
+
+23
+
+Példa: UNIX
+• 1 blokk = 4kByte
+
+24
+
+9.4 Az állományok belső szerkezete
+• Az állomány egy bitsorozat, amit a felhasználó a
+
+saját szempontjai szerint egységekbe
+csoportosíthat.
+
+– Mező (field)
+több bit, valamilyen típusú adatot ír le (byte-os
+szervezés általában)
+– Rekord (record)
+Mezők csoportja. Egy állomány azonos szerkezetű
+rekordok gyűjteménye vagy különböző, de
+azonosítható típusú rekordokból áll.
+
+• Mező és rekord lehet változó hosszúságú (a
+
+hossz egyértelműen meghatározható, végjel
+vagy hossz tárolása).
+25
+
+Az OS viszonya a belső szerkezethez
+• Nem foglalkozik vele
+
+Csak az állományt kezelő programok
+ismerik az állomány szerkezetét. Egyszerű
+és rugalmas megoldás.
+• Az OS eljárásokkal támogatja
+
+Mezőnkénti vagy rekordonkénti
+hozzáférési lehetőség az OS által. Nehéz
+megoldani, bonyolult, általában lehetetlen.
+26
+
+Hozzáférési módok
+•
+
+Soros (sequential)
+– A tárolt információt csak a byte-ok sorrendjében lehet olvasni.
+Sok feldolgozási feladathoz elegendő a soros hozzáférés.
+
+•
+
+Közvetlen (direct)
+– A tárolt elemek bármelyikét el lehet érni, ehhez meg kell adni az
+információ elem állományon belüli sorszámát.
+
+•
+
+Indexelt, index-szekvenciális (index sequential access
+method, ISAM)
+– Tartalom szerint akarunk hozzáférni.
+– Kulcs szerint rendezzük az állomány rekordjait. A kulcsok egy
+index fájlban vannak rendezetten tárolva.
+
+•
+
+Particionált
+– Az állományt soros rész-állományok alkotják, az állomány
+tartalmaz egy nyilvántartást arról, hogy a partíciók hol
+helyezkednek el a fájlban.
+27
+
+Indexelt, index-szekvenciális
+
+Pl.: árunyilvántartás
+28
+
+9.5 Könyvtárak szerkezete
+• Állományok, vagy más könyvtárak
+
+gyűjteménye.
+• Tartalmát egy nyilvántartás írja le.
+
+29
+
+Nyilvántartási bejegyzések (directory entry)
+A könyvtárban tárolt állományok leírása.
+•
+
+•
+
+•
+
+Az állomány neve:
+Könyvtáranként egyedi, homogén (lehet bármilyen karaktersorozat),
+részekre bontott (pl, név, típus - extension, verziószám).
+Az állomány fizikai elhelyezkedését leíró információk:
+hossz, a hozzá tartozó háttértár blokkjainak leírása, hozzáférés
+módja.
+Az állomány kezeléséhez kapcsolódó információk
+–
+–
+–
+–
+–
+
+típusa
+tulajdonosának, létrehozójának (owner) azonosítója
+időpontok (létrehozás, utolsó módosítás, utolsó hozzáférés,
+argumentumának utolsó módosítása, érvényessége)
+hozzáférési jogosultságok
+hivatkozás számláló, amennyiben az állományra több különböző néven
+és/vagy helyen hivatkoznak
+30
+
+Nyilvántartási bejegyzések (folyt.)
+Egyes OS-ek a tárolt információkat kettéválasztják
+(UNIX)
+• Kötet nyilvántartás (volume directory)
+A köteten lévő összes állományt leíró fizikai
+információk.
+• Az állomány nyilvántartások (file directory)
+Tartalmazza az állományok könyvtárba
+szervezésének leírását, valamint az
+állományokat leíró logikai információkat.
+31
+
+Nyilvántartási bejegyzések (folyt.)
+Egyéb információk (az OS központi tárban tárolja):
+• az átvitel állapota (folyamatonként)
+• soros hozzáférés pozíciója
+• megengedett műveletek (a folyamat az
+állományon milyen műveleteket végezhet
+• osztott kezeléssel kapcsolatos információk
+– hány folyamat használja egyidejűleg
+– kölcsönös kizárás milyen módon kell biztosítani
+– várakozó folyamatok listája
+32
+
+A könyvtárak hierarchiája
+• Kétszintű könyvtárszerkezet
+– Egyes felhasználóknak saját könyvtáruk van.
+• Faszerkezet
+– Könyvtár tartalmazhat könyvtárat is.
+– Fogalmak:
+• aktuális könyvtár (folyamatonként),
+• gyökér könyvtár,
+• elérési út,
+• keresési utak.
+33
+
+A könyvtárak hierarchiája (folyt.)
+•
+
+Körmentes irányított gráf
+–
+–
+
+Lehetnek linkek is. Linkek mentén viszont nem lehet kör.
+Link lehet:
+•
+•
+
+–
+–
+–
+
+•
+
+fizikai: az állomány leíró információkat megismételjük, pl UNIX-nál
+ugyanarra a kötet-nyilvántartás bejegyzésre hivatkozunk
+logikai
+
+Problémák:
+egy állományhoz többféle elérés tartozik (mentésnél, statisztikáknál,
+osztott elérésnél csak egy útvonalat kell figyelembe venni)
+annak meghatározása, hogy mikor kell egy állományt törölni (egy
+állományra hivatkozások számát nehéz meghatározni)
+
+Általános gráf
+–
+
+Kör lehetséges
+•
+•
+
+Keresésnél végtelen ciklus.
+Egy törlésével a teljes hurok a "levegőben lógva" maradhat (nem törölt
+könyvtárak, amik a gyökérből kiindulva nem érhetők el).
+
+34
+
+9.6 Műveletek állományokon
+•
+
+átvitel, írás, olvasás
+– Közvetlen átvitel esetén, információ címe szükséges
+– Soros hozzáférésnél az aktuális pozíciót a rendszer növeli és
+tárolja.
+– Szimultán írás-olvasás esetén soros hozzáférésnél közös vagy
+több pozíció használata.
+
+•
+
+hozzáadás (append)
+– Az állomány végéhez új információt írunk. Az állomány mérete
+növekszik, esetlegesen új blokk lefoglalása.
+
+•
+
+pozicionálás
+– Soros hozzáférés esetén megadhatjuk az aktuális pozíciót.
+35
+
+Műveletek állományokon (folyt.)
+• állomány megnyitása
+– az állomány megkeresése
+– jogosultságok ellenőrzése
+– az elvégezendő műveletek megadása
+– osztott állománykezelés szabályozása
+– soros hozzáférés pozíciójának beállítása
+• A műveletek hatékonyabbak, ha nem kell
+
+mindegyiknél az állományt a nyilvántartásból
+kikeresni.
+• A sikeres megnyitás után OS felépít egy
+adatszerkezetet, a további műveletek erre az
+adatszerkezetre hivatkoznak.
+36
+
+Műveletek állományokon (folyt.)
+•
+
+állomány lezárása
+– puffer esetén a ki nem írt információ kiírása, osztott
+állománykezelésnél az állomány felszabadítása.
+
+•
+
+állomány végrehajtása
+– Az OS létrehoz egy új folyamatot, a programállományt betölti a
+folyamat tárterületére és elindítja.
+
+•
+
+A könyvtárra is hatással levő műveletek:
+– állomány létrehozása (új bejegyzés, blokkok lefoglalása)
+– állomány törlése (bejegyzés megszüntetése, blokkok
+felszabadítása)
+
+37
+
+Műveletek könyvtárakon
+• Állomány attribútumának módosítása (az
+
+állományhoz tartozó logikai információk
+megváltoztatása)
+• Új könyvtár létrehozása
+• Könyvtár törlése
+– csak akkor törölhető, ha üres
+– törli a benne lévő állományokat
+– rekurzívan törli a benne lévő könyvtárakat is
+
+38
+
+Műveletek könyvtárakon (folyt.)
+• Keresés
+– Egy névhez meg kell találni a hozzátartozó állományt.
+A keresés típusa függ a nyilvántartás szerkezetétől:
+rendezetlen keresés, rendezett felező keresés, hash
+keresés.
+• Új bejegyzés létrehozása
+– Nyilvántartás méretének dinamikusan növekednie
+kell. Rendezett nyilvántartás esetén a rendezettséget
+meg kell tartani.
+• Bejegyzés törlése
+
+39
+
+9.7 Osztott állománykezelés
+•
+•
+•
+
+Ez is egy erőforrás, amelyet egyidejűleg több folyamat is
+használni akar.
+Csak olvasás esetén osztottan gond nélkül használható.
+Írás esetén kölcsönös kizárással kell védeni a
+folyamatot.
+– Egész állományra vonatkozó szabályozás (file lock)
+•
+
+Az állományt először megnyitó folyamat definiálja, hogy a későbbi
+megnyitási kérelmekből mit engedélyezhetünk.
+– kizárólagos használat
+– többi folyamat csak olvashatja
+– több folyamat is megnyithatja írási joggal
+
+•
+
+Írás esetén az olvasó folyamatok mikor veszik észre a változást:
+– azonnal,
+– ha a folyamat lezárta az állományt.
+
+– Állomány részeire vonatkozó kizárás
+•
+
+Rekordonként lehet kizárásokat definiálni.
+40
+
+9.8 A hozzáférés szabályozása
+•
+
+•
+
+Cél: jogosulatlanok ne férjenek hozzá állományokhoz, ne
+végezhessenek rajtuk műveleteket. A jogokat a
+létrehozója, vagy speciális jogokkal rendelkező
+felhasználó definiálja.
+Jogosultságok:
+– állományokra: írás, olvasás, végrehajtás, hozzáírás, törlés
+– könyvtárakra: könyvtár módosítása, listázás, keresés, új
+állomány létrehozása, könyvtár törlése.
+
+•
+
+Jogosultság tartozhat:
+– állományokhoz
+– elérési útvonalhoz (különböző elérésekhez más-más
+jogosultságok)
+
+•
+
+Jogosultság definiálható:
+– felhasználónként
+– felhasználó csoportonként
+41
+
+

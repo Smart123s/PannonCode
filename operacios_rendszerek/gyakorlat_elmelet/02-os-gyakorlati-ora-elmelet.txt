@@ -1,0 +1,126 @@
+OS. gyak 2
+---
+echo, mv, cat, >, >>, ln, chmod, head, tail
+
+Szöveg kiíratás:
+echo: szöveg kiíratása a konzolba
+echo szöveg
+Ha több space-t írunk, akkor is csak egy spacet használ, mert a szavakat paraméterként dolgozza fel és feltételezi, hogy a space maga szóelválasztó
+Megoldás: idézőjeleket kell használni
+Automatikusan sort emelt, ha ezt nem akarjuk, akkor -n kapcsoló
+-e escape szekveniák használata (pl. prog 1, printf: \t tabulátor, \n új sor)
+
+Áthelyezés:
+mv forrásfájl célfájl: fájlok áthelyezése
+Ugyanazon mappába kell áthelyezni egy fájlt, akkor átnevezi a fájl
+Ha két könyvtár eltér, akkor áthelyezés is történik
+Ha célfájl létezik, akkor ezt a mv parancs felül fogja írni
+
+Tobb fájl esetén mindegyiket a célmappába fogja átmozhatni (egyezés esetén felülírás)
+mv -i: áthelyezés kérdéssel
+
+Fájlok tartalának kiíratása:
+cat fáj1, fájl2, fájl3: fájlok tartalmának kiíratása
+cat *.txt: kiírja az összes txt kiterjesztésú fájl tartalmát
+cat paraméter nélkül, visszadja azt amit beírunk a konzolba (Ctrl+D-vel jelezzük a bevitel végét
+hosszú fájl esetén cat parancsa csak annyit mutat, amennyi kifér a képernyőre
+
+less fájlnév: képernyőként megy a tartalomon (kilépés a q gombbal)
+more fájlnév: hasonló, csak egy kicsit kevesebb tudással, mint a less (space: léptetés, q: kilépés)
+
+Kimenet átirányítása (pl. egy fájlba)
+---
+A kisebb nagyobb jel segítségével egy fájlba tudjuk irányítani a parancssor kimenetét
+ls -l
+ls -l > list.txt
+more lista.txt
+Fájlnév egyezés esetén felülírja a fájlt
+
+>> (dupla kisebb nagyobbb jel): hozzáfűzzük a fájl végéhez
+
+cat allatok.txt >> lista.txt (a lista.txt végére fűzi az állatok.txt fájlt)
+cat > newfile.txt: tartalom létrehozása, ennél jobb megoldás egy szerkesztő használata pl. nano, vim
+
+nano file.dat
+
+Bemenet átirányítása (pl. egy fájlba)
+---
+./pelda < bemenet.txt a példa fájlnak hozzáadjuk bemenetként a bemenet.txt fájl
+
+c kód futtatása esetén telepíteni kell a gcc-t 
+sudo apt-get update
+sudo apt-get install gcc
+
+Fájlok linkelése
+---
+
+Soft link
+Egy olyan speciális fájl, amely egy másik fájl elérési útját tartalmazza
+Egy link mutathat fájlra vagy könyvtárra is. Ez egyenértékű azzal, mint ha a másik fájlra hivatkoznánk kivéve (átnevezés, törlés stb.)
+Például egy gyakran használt fájlt amely nem a home könyvtáramban van, arra érdemes lehet készíteni egy hivatkozást
+
+ln -s (soft link) létező fájl [célkönyvtár vagy célfájl]
+
+Pl.:
+ln -s banan.txt bananlink
+ls -l bananlink
+lrwxrwxrwx 1 balazs balazs 9 Feb 22 13:31 bananlink -> banan.txt
+
+Emlékeztető: az ls -l paranccsal látható a hivatkozás, hogy hova mutat.
+
+Ha törlöm az eredeti fájt, akkor a link meghíváskor kiírja, hogy nincs ilyen fájl.
+
+Hard link
+Az eredeti tartalomhoz két fájlt hozunk létre.
+ln létező fájl hivatkozással új fájl jön létre.
+
+ls -l esetén regular fájlként lesz kilistázva, de a linkszámláláló nőtt
+
+Ha egy állományt törlök, akkor a másik megmaradt, a link 2-ről 1-re változik
+Könyvtárra hard linket nem lehet létrehozni, továbbá ha több fájlrendszer van, akkor a fájlrendszerek között csak soft linket lehet használni
+
+Jogosultsások módosítása
+---
+
+Kinek:
+u: user (tulajdonos)
+g: group (csoport)
+o: others (mások)
+a: all (mindenki)
+
+Mit:
+r: read (olvasási jog)
+w: write (írási jog)
+x: execure (vágrehajtási/belépési jog)
++: megad, -: elvesz
+
+-rw-r--r-- 1 balazs balazs   274 Apr  1  2021  zh01.sh
+
+chmod modosítás fájlok neve
+chmod o+w szoveg.txt (jogosultság hozzáadása)
+chmod o-w szoveg.txt (jogosultság elvétele)
+
+Oktális számok
+x: 1-esk
+w: 2-esek
+r: 4-esek
+-: 0-sok
+
+chmod 644 szoveg.txt
+
+senki semmilyen jogosultság: 000
+mindenkinek minden jogosultság: 777
+
+Kitekintő:
+chown ujtulaj fájlnév/elérés: új tulajdonos létrehozása
+chgrp ujcsoport fájlnév/elérés: új csoport létrehozása
+kombinálva: chown jozsef:security server.log (sudo használatára van szükség)    
+
+Fájl eleje és vége
+---
+head -n szám fájlnév: fájl első szám sorát íratja ki
+Ha nincs annyi sor, mint amennyit kérünk, nincs hiba
+tail -n szám fájlnév: fájl utolsó szám sorát íratja ki
+
+Kitekintés:
+tail -f tail miután kiírt x sort, nem tér vissza, hanem folyamatosan nézi, hogy kerülnek-e újabb sorok a fájlba, és azokat kiíratja, pl. log fájlok folyamatos bővülése

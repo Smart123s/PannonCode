@@ -1,0 +1,268 @@
+OS. gyak 5
+---
+backtick, for ciklus, while ciklus, tömb, speciális változók, elérési utak vágása, függvények, csere a sed segítségével
+
+Parancsbehelyettesítés
+---
+Szintaxis: $(command) vagy `command`
+` = altgr+7
+
+Példa:
+A text változó értéke a list.txt első sora
+text=$(cat ~/os/docs/list.txt | head -n 1)
+
+For ciklus (elsődlegesen listák bejárására)
+---
+Alap szintaxis:
+
+for változó in [LISTA]
+do
+  [UTASÍTÁSOK]
+done
+
+1. Szintaxis stringek esetén:
+for element in Hydrogen Helium Lithium Beryllium
+do
+  echo "Element: $element"
+done
+
+2. Szintaxis egy meghatározott intervallum (0-tól 3-ig számok) esetén:
+for i in {0..3}
+do
+  echo "Number: $i"
+done
+
+3. Szintaxis egy meghatározott intervallumon rögzített lépésközzel csökkenő módon:
+for value in {10..0..2}
+do
+echo $value
+done
+
+4. C szintaxis használata esetén:
+for ((num = 1; num <= 5; num++))
+do
+echo $num
+done
+
+5. Szintaxis fájlok bejárása:
+for file in ~/docs/*
+do
+  echo "Processing $file file..."
+  cat "$file"
+done
+
+Használható még a break utasítás (azonnal hagyja el a ciklust) és a continue utasítás (azonnal lépjen a következő iterációba) is.
+
+While ciklus (elsődlegesen teszt utasítások feltételeinek vizsgálatára, valamint fájlok soronkénti feldolgozására)
+---
+Alap szintaxis:
+while [teszt utasítás/parancs/feltétel]
+do
+<utasítások>
+done
+
+1. Szintaxis teszt utasítás használata esetén:
+
+Írjon egy basch scriptet while ciklus segítségével, amelyben a 1-től 10-ig íratjuk ki a számokat.
+
+#!/bin/bash
+
+counter=1
+while [ $counter -le 10 ]
+do
+echo $counter
+counter=$(( $counter + 1 )) #vagy (( counter++ ))
+done
+
+Ez egy egyszerű while ciklus, amelyben a counter változó kezdeti értéke 1. Test utasítás segítségével minden iterációban megvizsgáljuk, hogy a counter változó kisebb vagy egyenlő-e mint 10. A ciklusban az echo utasítás kiírja az adott számot a standard kimenetre, majd növeli az counter értékét egyel.
+
+2. Szintaxis egy fájl sorainak beolvasására:
+
+Írjon egy bash scriptet, amelyben beolvassuk soronként a sample.txt fájl tartalmát. Ha az aktuális sor tartalmazza az "ERROR" szót, akkor írassuk ki a képernyőre. 
+
+#!/bin/bash
+
+# Fájl neve
+file="sample.txt"
+
+# Olvassuk be a fájl tartalmát egy soronként
+while read line
+do
+  # Ha az aktuális sor tartalmazza az "ERROR" szót,
+  # akkor írjuk ki a sort a képernyőre
+  if [[ "$line" == *"ERROR"* ]]
+	then
+		echo "$line"
+  fi
+done < "$file"
+
+A fenti script egy sample.txt nevű fájlt olvas be, majd ha megtalálja az aktuális sorban az "ERROR" szót, akkor azt kiírja a képernyőre. A while read line sor olvassa be a fájl sorait, a if elagásban lévő test utasítás pedig ellenőrzi, hogy tartalmaz-e az aktuális sor "ERROR" szót. Ha igen, akkor a echo paranccsal kiírjuk az adott sort a képernyőre.
+
+Tömb
+---
+Tömb definiálása:
+number=(1 2 3 4 5 6)
+fruits=("apple" "banana" "orange")
+
+Adott elem elérése:
+echo ${fruits[0]}  # apple
+
+Tömb elemeinek kiíratása:
+echo "${fruits[*]}" # "*" - összes elem visszaadása szóközökkel elválasztva
+
+Tömb elemeinek soronkénti kiíratása:
+for fruit in "${fruits[@]}" # "@" - összes elem a tömbben
+do
+    echo $fruit # elemek kiíratása soronként
+done
+
+Tömb elemeinek bejárása:
+for ((i=0; i<${#fruits[@]}; i++)) # a "#" a fruits tömb teljes hosszát adja vissza
+do
+    echo "Index $i: ${fruits[i]}"
+done
+
+Új elem beszúrása a tömb végére 1. módszer:
+fruits+=("kiwi")
+
+Új elem beszúrása a tömb végére 2. módszer:
+
+# Eredeti tömb
+my_array=("banana" "orange")
+
+# Az új tömb hozzáfűzése az eredeti tömbhöz
+my_array=("${my_array[@]}" "apple")
+
+Új elem beszúrása a tömb elejére 1. módszer:
+# Eredeti tömb
+my_array=("banana" "orange")
+
+# Az új tömb hozzáfűzése az eredeti tömbhöz
+my_array=("apple" "${my_array[@]}")
+
+Új elem beszúrása a tömb elejére 2. módszer:
+# A tömbben lévő elemek azonosítóit egyel jobbra elcsúsztatom
+for ((i=${#fruits[@]}; i>0; i--))
+do
+    fruits[$i]=${fruits[$i-1]}
+done
+
+# Beszúrom az új elemet az első helyre
+fruits[0]="pear"
+
+Új elem beszúrása egy tetszőleges helyre:
+my_array=("${my_array[@]:0:1}" "$new_element" "${my_array[@]:1}")
+# Jelentés:
+# "${my_array[@]:0:1}" - az eredeti tömb 0. indexétől 1 hosszúságú vágásig (ez az eredeti tömb 0. indexű eleme)
+# "$new_element" - új elem
+# "${my_array[@]:1}") - az eredeti tömb 1. indexe és az ezt követő elemek
+
+Elem törlése:
+unset fruits[1]  # banana elem törlése
+
+Speciális változók
+---
+
+#!/bin/bash
+echo "A script neve: $0"
+echo "Az első argumentum: $1"
+echo "Az argumentumok száma: $#"
+echo "Az összes argumentum: $@"
+
+Listában lévő argomentumok kiíratása:
+#!/bin/bash
+
+Argomentumok kiíratása
+for argument in "$@"
+do
+	echo "$argument"
+done
+
+Az aktuális argomentumot kivágjuk az aktuális argomentumlistából és a többit pedig egyel előrébb csúsztatjuk:
+
+while [ $# -ne 0 ] # C-szintaxis (($# != 0))
+do
+	echo $1
+	shift
+	# A argomentumlista csúsztatása az első iteráció után argomentum esetén: $1 kivágba, $2 -> $1, $3 -> $2)
+	# shift szám esetén egy meghatározott szám szerint lép az argomentum listán
+done
+
+Elérési utak, elemek vágása
+---
+basename: az utolsó elemet hagyja meg
+dirname: az utolsó elemet vágja ki
+
+basename ./os/allatok.txt
+allatok.txt
+
+dirname ./os/allatok.txt
+./os/allatok
+
+Shell parancsok előfuttatása: $(parancs)
+
+find . -type f -name "hudemely.txt"
+./mellyen/mellyebben/legmellyebben/legeslegmellyebben/hudemely.txt
+
+Fájlnév kivágása:
+basename $(find . -type f -name "hudemely.txt")
+hudemely.txt
+
+Elérési út kivágása:
+dirname $(find . -type f -name "hudemely.txt")
+./mellyen/mellyebben/legmellyebben/legeslegmellyebben/
+
+Függvények
+---
+Lehetőségek van a bash-ban is függvényeket írni.
+
+A függvény saját paramétereit tudja elérni $1 $2 stb. változókkal, azonban a shell script változóit már nem, így azokat egy globális változóba kell tennünk, vagy át kell adnunk paraméterként.
+
+Példa. Írjon egy olyan bash scriptetben, amely bekér egy nevet, majd ezt a nevet a hello függvénynek átadva kiíratja egy köszönéssel.
+
+#!/bin/bash
+
+# függvény definíció
+hello() {
+  echo "Szia, $1!"
+}
+
+# A fő program
+echo "Kerem adja meg a nevet:"
+read name
+
+# függvény meghívása
+hello $name
+
+A fő programban bekérünk egy nevet a felhasználótól (read name), majd meghívjuk a hello függvényt ezzel a névvel (hello $name). A függvény meghívásakor a $name változó értéke átadódik a $1 paraméternek, majd végül kiíratásra kerül a köszönést követően.
+
+sed (stream editor, elsődlegesen cserére használjuk)
+---
+Számos funkcióval rendelkező eszköz a szövegfeldolgozásra. Főként a szövegfájlokban végzett keresésre és helyettesítésre használják.
+
+Szintaxis:
+sed 's/hello/goodbye/' file.txt # A file.txt-ben az első előfordulását cseréli a "hello" szövegnek "goodbye" szövegre.
+
+sed 's/mit/mire/; s/mit/mire/; s/mit/mire/;' file.txt # A file.txt-ben az első három előfordulás esetén cseréli a "hello" szöveget "goodbye" szövegre.
+
+sed 's/mit/mire/g' file.txt # A file.txt-ben minden "mit" szöveget "mire" szövegre cserél.
+
+sed -i 's/mit/mire/g' file.txt # Az -i kapcsolóval közvetlen a fájlban is elvégzi a cserét
+
+sed 's/apple/& pie/g' file.txt # Az & reprezentálja az eredeti találatot. Ebben a példában megtartja az eredetit (apple) és kiegészíti a pie-jal.
+
+sed 's/[a-z]/\U&/g' file.txt # Minden kisbetűt nagybetűre cserél. [a-z] reprezentálja a kisbetűket, a \U azt jelenti, hogy a találatot nagybetűsítjük.
+
+sed 's/[A-Z]/\L&/g' file.txt # Minden nagybetűt kisbetűre cserél. [A-Z] reprezentálja a nagybetűket, a \L azt jelenti, hogy a találatot kisbetűsítjük.
+
+sed 's/a//g' file.txt # Összes "a" betű törlése.
+
+echo AAAAAAlmafaaaaa | sed 's/\([Aa]\)\1*/\1/g' # "A" duplikátumok törlése
+# Magyarázat
+# \([Aa]\) - Egy regexp csoport, amely tartalmazza az "A" és "a" betűket
+# \1* - Sorszámozom az előző mintát, amely nullaszor vagy többször előfordulhat
+# \1 - Visszahivatkozok az eredeti sorszámra
+
+Példa. Cserélje le a hello összes "l" betűjét "L" betűre.
+
+echo "hello" | sed 's/l/L/g'

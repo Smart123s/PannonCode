@@ -1,0 +1,74 @@
+Old meg bash parancsokkal:
+
+01.
+Hozz létre egy új könyvtárat "gyakorlas" néven a home könyvtáradban.
+mkdir ~/gyakorlas
+
+02.
+Hozz létre egy "szoveg.txt" nevű szöveges fájlt a "gyakorlas" könyvtárban, és írj bele egy tetszőleges szöveget az echo parancs segítségével.
+echo "Ez egy példa szöveg." > ~/gyakorlas/szoveg.txt
+
+03. Bővítsd ki a szoveg.txt fájlt a Nano szerkesztő segítségével a következő sorokkal:
+
+Ej, mi a kő! tyúkanyó, kend
+A szobában lakik itt bent?
+Lám, csak jó az isten, jót ád,
+Hogy fölvitte a kend dolgát!
+ 
+Itt szaladgál föl és alá,
+Még a ládára is fölszáll,
+Eszébe jut, kotkodácsol,
+S nem verik ki a szobából.
+
+nano szoveg.txt
+ctrl+x
+yes
+enter
+
+04.
+Hozz létre egy másolatot a "szoveg.txt" fájlról a "gyakorlas" könyvtárban, és nevezd át "masolat.txt"-re.
+cp ~/gyakorlas/szoveg.txt ~/gyakorlas/masolat.txt
+
+05.
+Fűzd hozzá a "szoveg.txt" fájl tartalmát a "masolat.txt" fájlhoz.
+cat ~/gyakorlas/szoveg.txt >> ~/gyakorlas/masolat.txt
+
+06. 
+Helyezd át a szoveg.txt-t a projekt könyvtárba és nevezd át dokumentumok.txt-re.
+mv ~/gyakorlas/szoveg.txt ~/projekt/dokumentum.txt
+
+07.
+Módosítsd a "masolat.txt" fájl jogosultságait úgy, hogy csak a tulajdonos olvashassa és írhasa.
+chmod 600 ~/gyakorlas/masolat.txt
+
+08.
+Listázd ki a "gyakorlas" könyvtár tartalmát, beleértve a rejtett fájlokat is.
+ls -a ~/gyakorlas
+
+09.
+Írd ki a "masolat.txt" fájl első 3 sorát a konzolra.
+head -n 3 ~/gyakorlas/masolat.txt
+
+10.
+Írd ki a "masolat.txt" fájl utolsó 4 sorát a konzolra.
+tail -n 4 ~/gyakorlas/masolat.txt
+
+11.
+Hozz létre egy eredeti.txt fájlt a home könyvtáradban a következő tartalommal: "Jul  6 06:33:44 user1 ubuntu: dear cj"
+echo "Jul  6 06:33:44 user1 ubuntu: dear cj" > eredeti.txt
+
+12.
+Készíts az eredeti.txt fájlról egy soft linket soft_link.txt néven.
+ln -s eredeti.txt soft_link.txt
+
+13.
+Ellenőrizd a linket. Honnan látszik, hogy elkészült a soft link?
+ls -l
+
+14.
+Készíts az eredeti.txt fájlról egy hard linket hard_link.txt néven.
+ln eredeti.txt hard_link.txt
+
+15.
+Ellenőrizd a linket. Honnan látszik, hogy elkészült a hard link?
+ls -l
