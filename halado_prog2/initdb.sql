@@ -80,6 +80,19 @@ INSERT INTO dbo.Users (Id, Username, Email, PasswordHash, Balance) VALUES
 (1, N'testuser', N'test@example.com', '$2a$11$CPIfGDU06cxWMkUYCow9OeUTo.AtJTZbGP5AwFF7KvumXNnoVsC9y', 10000.0); -- User ID 1 with initial balance
 GO
 
+SET IDENTITY_INSERT dbo.Users OFF;
+GO
+
+SET IDENTITY_INSERT dbo.SystemSettings ON;
+GO
+
+INSERT INTO dbo.SystemSettings (SettingKey, SettingValue, LastModified) VALUES
+(N'TransactionFeeRate', 0.0020, GETUTCDATE());
+GO
+
+SET IDENTITY_INSERT dbo.SystemSettings OFF;
+GO
+
 -- Note: Users are not seeded here. They would be created via the API's registration endpoint.
 -- CryptoWallets are created/updated via Buy/Sell API calls.
 -- Transactions are created via Buy/Sell API calls.

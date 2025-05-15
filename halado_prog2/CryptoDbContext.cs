@@ -30,6 +30,7 @@ namespace halado_prog2
         public DbSet<CryptoWallet> CryptoWallets { get; set; } // Changed from UserCryptos
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<PriceHistory> PriceHistory { get; set; }
+        public DbSet<SystemSetting> SystemSettings { get; set; }
 
         // Configure the model using Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -117,6 +118,12 @@ namespace halado_prog2
             modelBuilder.Entity<PriceHistory>()
                 .Property(ph => ph.Price)
                 .HasColumnType("decimal(18, 8)");
+
+            modelBuilder.Entity<SystemSetting>(entity =>
+            {
+                entity.HasKey(e => e.SettingKey); // SettingKey is the primary key
+                entity.Property(e => e.SettingValue).HasColumnType("decimal(5, 4)"); // e.g., 0.0020
+            });
 
 
             // Configure string lengths explicitly - remain the same

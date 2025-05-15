@@ -10,10 +10,12 @@ namespace halado_prog2.Controllers
     {
         // Inject the service interface
         private readonly ITransactionService _transactionService;
+        private readonly ITransactionFeeService _feeService;
 
-        public TransactionsController(ITransactionService transactionService)
+        public TransactionsController(ITransactionService transactionService, ITransactionFeeService feeService)
         {
             _transactionService = transactionService;
+            _feeService = feeService;
         }
 
         [HttpGet("{userId}")]
@@ -45,6 +47,40 @@ namespace halado_prog2.Controllers
             }
 
             return Ok(transactionDto);
+        }
+
+        // GET /api/transactions/fees/{userId}
+        [HttpGet("fees/{userId}")]
+        [ProducesResponseType(typeof(TransactionFeeSummaryDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetTransactionFeeSummary(int userId)
+        {
+            var (summary, userFound) = await _feeService.GetFeeSummaryAsync(userId);
+            if (!userFound)
+            {
+                return NotFound($"User with ID {userId} not found.");
+            }
+            return Ok(summary); // summary will contain TotalFeesPaid = 0 if user has no fee transactions
+        }
+
+        // PUT /api/transactions/fees
+        [HttpPut("fees")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateTransactionFeeRate([FromBody] UpdateFeeRateRequestDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var (success, errorMessage) = await _feeService.UpdateFeeRateAsync(request.NewFee);
+            if (success)
+            {
+                return NoContent();
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError, errorMessage ?? "Failed to update fee rate.");
         }
     }
 }

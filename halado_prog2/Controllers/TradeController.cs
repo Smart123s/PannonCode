@@ -26,26 +26,14 @@ namespace halado_prog2.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)] // Other errors
         public async Task<IActionResult> BuyCrypto([FromBody] TradeRequestDto request)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var (tradeConfirmation, errorMessage, statusCode) = await _tradeService.BuyCryptoAsync(request);
+
+            if (tradeConfirmation != null)
             {
-                return BadRequest(ModelState);
+                return Ok(tradeConfirmation);
             }
-
-            var (transactionId, errorMessage, statusCode) = await _tradeService.BuyCryptoAsync(request);
-
-            if (transactionId.HasValue) // Success if transactionId is not null
-            {
-                // You can customize the success message if needed
-                var cryptoName = "crypto"; // Could fetch name again, but maybe not necessary for response
-                var response = new TradeResponseDto
-                {
-                    TransactionId = transactionId.Value,
-                    Message = $"Buy trade executed successfully."
-                };
-                return Ok(response);
-            }
-
-            // Handle errors based on status code from service
             var problemDetails = new ProblemDetails { Title = "Buy Error", Detail = errorMessage, Status = statusCode };
             return StatusCode(statusCode, problemDetails);
         }
@@ -58,26 +46,17 @@ namespace halado_prog2.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)] // Other errors
         public async Task<IActionResult> SellCrypto([FromBody] TradeRequestDto request)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var (tradeConfirmation, errorMessage, statusCode) = await _tradeService.SellCryptoAsync(request);
+
+            if (tradeConfirmation != null)
             {
-                return BadRequest(ModelState);
+                return Ok(tradeConfirmation);
             }
-
-            var (transactionId, errorMessage, statusCode) = await _tradeService.SellCryptoAsync(request);
-
-            if (transactionId.HasValue) // Success if transactionId is not null
-            {
-                var response = new TradeResponseDto
-                {
-                    TransactionId = transactionId.Value,
-                    Message = $"Sell trade executed successfully."
-                };
-                return Ok(response);
-            }
-
-            // Handle errors based on status code from service
             var problemDetails = new ProblemDetails { Title = "Sell Error", Detail = errorMessage, Status = statusCode };
             return StatusCode(statusCode, problemDetails);
         }
     }
+
 }

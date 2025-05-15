@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// File: Entities/Transaction.cs
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace halado_prog2.Entities
@@ -16,18 +18,26 @@ namespace halado_prog2.Entities
 
         [Required]
         [MaxLength(10)]
-        public string TransactionType { get; set; }
+        public string TransactionType { get; set; } // "Buy" or "Sell"
 
         [Required]
         [Column(TypeName = "decimal(18, 8)")]
-        public decimal Quantity { get; set; }
+        public decimal Quantity { get; set; } // Quantity of crypto traded
 
         [Required]
         [Column(TypeName = "decimal(18, 8)")]
-        public decimal PriceAtTrade { get; set; }
+        public decimal PriceAtTrade { get; set; } // Price per unit of crypto at trade
+
+        // --- New Field for Transaction Fee ---
+        [Required]
+        [Column(TypeName = "decimal(18, 8)")]
+        public decimal FeeAmount { get; set; } // The actual fee amount paid for this transaction
+        // ---
 
         [Required]
         public DateTime Timestamp { get; set; }
+
+        // Navigation properties
         public User User { get; set; }
         public Cryptocurrency Cryptocurrency { get; set; }
     }

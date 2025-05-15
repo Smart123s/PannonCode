@@ -1,13 +1,13 @@
-﻿using halado_prog2.DTOs;
+﻿// File: Services/ITradeService.cs
+using System.Threading.Tasks;
+using halado_prog2.DTOs;
 
 namespace halado_prog2.Services
 {
     public interface ITradeService
     {
-        // Returns Transaction ID on success, or error details
-        Task<(int? TransactionId, string? ErrorMessage, int StatusCode)> BuyCryptoAsync(TradeRequestDto request);
-
-        // Returns Transaction ID on success, or error details
-        Task<(int? TransactionId, string? ErrorMessage, int StatusCode)> SellCryptoAsync(TradeRequestDto request);
+        // Returns the detailed TradeResponseDto or error details
+        Task<(TradeResponseDto? TradeConfirmation, string? ErrorMessage, int StatusCode)> BuyCryptoAsync(TradeRequestDto request);
+        Task<(TradeResponseDto? TradeConfirmation, string? ErrorMessage, int StatusCode)> SellCryptoAsync(TradeRequestDto request);
     }
 }
