@@ -31,6 +31,7 @@ namespace halado_prog2
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<PriceHistory> PriceHistory { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
+        public DbSet<GiftTransaction> GiftTransactions { get; set; }
 
         // Configure the model using Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -131,6 +132,33 @@ namespace halado_prog2
             modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(255);
             modelBuilder.Entity<Cryptocurrency>().Property(c => c.Name).HasMaxLength(50);
             modelBuilder.Entity<Transaction>().Property(t => t.TransactionType).HasMaxLength(10);
+
+            modelBuilder.Entity<GiftTransaction>(entity =>
+            {
+                entity.HasKey(gt => gt.Id);
+
+                // Relationship: Sender
+                entity.HasOne(gt => gt.SenderUser)
+                    .WithMany() // A user can send many gifts
+                    .HasForeignKey(gt => gt.SenderUserId)
+                    .OnDelete(DeleteBehavior.Restrict); // Don't delete user if they sent gifts (or choose Cascade if appropriate)
+
+                // Relationship: Receiver
+                entity.HasOne(gt => gt.ReceiverUser)
+                    .WithMany() // A user can receive many gifts
+                    .HasForeignKey(gt => gt.ReceiverUserId)
+                    .OnDelete(DeleteBehavior.Restrict); // Don't delete user if they received gifts
+
+                // Relationship: Cryptocurrency
+                entity.HasOne(gt => gt.Cryptocurrency)
+                    .WithMany() // A crypto can be gifted many times
+                    .HasForeignKey(gt => gt.CryptoId)
+                    .OnDelete(DeleteBehavior.Restrict); // Don't delete crypto if it's in a gift transaction
+
+                entity.Property(gt => gt.Status)
+                      .HasConversion<string>() // Store enum as string for readability in DB
+                      .HasMaxLength(20);
+            });
 
             base.OnModelCreating(modelBuilder);
         }

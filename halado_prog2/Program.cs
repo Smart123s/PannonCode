@@ -40,6 +40,7 @@ builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IProfitService, ProfitService>();
 builder.Services.AddScoped<ITransactionFeeService, TransactionFeeService>();
+builder.Services.AddScoped<IGiftService, GiftService>();
 
 var app = builder.Build();
 
