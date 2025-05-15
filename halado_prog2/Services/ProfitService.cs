@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// File: Services/ProfitService.cs
+using Microsoft.EntityFrameworkCore;
+using halado_prog2.Entities;
 using halado_prog2.DTOs;
 
 namespace halado_prog2.Services
@@ -14,126 +16,185 @@ namespace halado_prog2.Services
             _logger = logger;
         }
 
-        // Public method matching the interface for detailed P/L
         public async Task<DetailedProfitLossDto?> GetDetailedProfitLossAsync(int userId)
         {
-            // Call the private calculation method
             return await CalculateProfitLossDetails(userId);
         }
 
-        // Public method matching the interface for total P/L
         public async Task<TotalProfitLossDto?> GetTotalProfitLossAsync(int userId)
         {
-            // Calculate detailed profit/loss first
             var details = await CalculateProfitLossDetails(userId);
+            if (details == null) return null;
 
-            if (details == null)
-            {
-                return null; // User not found
-            }
-
-            // Sum the profit/loss from the details
-            decimal totalProfitLoss = details.HoldingsProfitLoss?.Sum(h => h.ProfitLoss) ?? 0M; // Handle potential null list
-
-            var totalResult = new TotalProfitLossDto
-            {
-                UserId = userId,
-                TotalProfitLoss = totalProfitLoss
-            };
-
-            return totalResult;
+            decimal totalProfitLoss = details.HoldingsProfitLoss?.Sum(h => h.ProfitLoss) ?? 0M;
+            return new TotalProfitLossDto { UserId = userId, TotalProfitLoss = totalProfitLoss };
         }
 
-
-        // --- Private Helper Method for Calculation Logic (moved from controller) ---
         private async Task<DetailedProfitLossDto?> CalculateProfitLossDetails(int userId)
         {
-            // 1. Check if user exists
-            // We fetch the user directly to get their ID confirmed. AsNoTracking for read-only.
             var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
-                _logger.LogWarning("Profit/Loss details requested for non-existent User ID {UserId}", userId);
-                return null; // Indicate user not found
+                _logger.LogWarning("P/L details: User ID {UserId} not found.", userId);
+                return null;
             }
 
-            // 2. Get User's Current Holdings (CryptoWallet entries)
-            //    Include Cryptocurrency for current price and name. AsNoTracking for optimization.
             var userHoldings = await _context.CryptoWallets
-                .Include(cw => cw.Cryptocurrency) // Include Cryptocurrency (reads stored CurrentPrice)
-                .Where(cw => cw.UserId == userId && cw.Quantity > 0) // Only include cryptos currently held
+                .Include(cw => cw.Cryptocurrency)
+                .Where(cw => cw.UserId == userId && cw.Quantity > 0)
                 .AsNoTracking()
                 .ToListAsync();
 
-            // 3. Get all BUY transactions for this user. AsNoTracking for optimization.
+            // Get all transactions for the user (buys, sells, and accepted gifts to them, and gifts they sent)
+            // We need buys to establish cost basis.
+            // We need accepted gifts they received to establish 0 cost basis for those units.
+            // We need gifts they sent to apply FIFO for their cost basis reduction.
             var userBuyTransactions = await _context.Transactions
                 .Where(t => t.UserId == userId && t.TransactionType == "Buy")
+                .OrderBy(t => t.Timestamp) // Crucial for FIFO
                 .AsNoTracking()
                 .ToListAsync();
 
-            var profitLossDetailsList = new List<CryptoProfitLossDetailDto>();
-            _logger.LogDebug("Calculating profit/loss for User ID {UserId} with {HoldingCount} holdings.", userId, userHoldings.Count);
+            var acceptedGiftsReceived = await _context.GiftTransactions
+                .Where(gt => gt.ReceiverUserId == userId && gt.Status == GiftStatus.Accepted)
+                .OrderBy(gt => gt.ResolvedAt) // Order by acceptance time
+                .AsNoTracking()
+                .ToListAsync();
 
-            // 4. Calculate profit/loss for each holding
+            // Gifts sent by the user that were accepted (these reduce sender's cost basis via FIFO)
+            var acceptedGiftsSent = await _context.GiftTransactions
+                .Where(gt => gt.SenderUserId == userId && gt.Status == GiftStatus.Accepted)
+                .OrderBy(gt => gt.ResolvedAt) // FIFO based on when gift was resolved
+                .AsNoTracking()
+                .ToListAsync();
+
+
+            var profitLossDetailsList = new List<CryptoProfitLossDetailDto>();
+            _logger.LogDebug("Calculating P/L for User ID {UserId}. Holdings: {Count}", userId, userHoldings.Count);
+
             foreach (var holding in userHoldings)
             {
                 decimal currentQuantityHeld = holding.Quantity;
-                decimal currentPrice = holding.Cryptocurrency.CurrentPrice; // Read stored price
+                decimal currentPrice = holding.Cryptocurrency.CurrentPrice;
+                decimal totalCostBasisForHolding = 0;
+                decimal effectiveQuantityForAvgCost = 0; // Quantity used to calculate avg cost (excludes 0-cost gifts)
 
-                // Filter transactions for this specific crypto
-                var cryptoBuyTransactions = userBuyTransactions
-                    .Where(t => t.CryptoId == holding.CryptoId)
-                    .ToList(); // Materialize for calculation
+                // --- Determine Cost Basis using FIFO, considering Buys, Gifts Sent, and Gifts Received ---
 
-                decimal totalCostOfBuys = 0;
-                decimal totalQuantityBought = 0;
-                decimal averagePurchasePrice = 0;
+                // 1. Create a list of "acquisition lots" (Buys and Accepted Gifts Received)
+                var acquisitionLots = new List<(DateTime AcquiredAt, decimal Quantity, decimal CostPerUnit, bool IsGift)>();
 
-                if (cryptoBuyTransactions.Any())
+                foreach (var buyTx in userBuyTransactions.Where(tx => tx.CryptoId == holding.CryptoId))
                 {
-                    totalCostOfBuys = cryptoBuyTransactions.Sum(t => t.Quantity * t.PriceAtTrade);
-                    totalQuantityBought = cryptoBuyTransactions.Sum(t => t.Quantity);
+                    acquisitionLots.Add((buyTx.Timestamp, buyTx.Quantity, buyTx.PriceAtTrade, false));
+                }
+                foreach (var giftRx in acceptedGiftsReceived.Where(gr => gr.CryptoId == holding.CryptoId))
+                {
+                    // Gifts received have a cost basis of 0 for the recipient
+                    acquisitionLots.Add((giftRx.ResolvedAt.Value, giftRx.Quantity, 0, true));
+                }
+                acquisitionLots = acquisitionLots.OrderBy(lot => lot.AcquiredAt).ToList(); // Ensure chronological order
 
-                    if (totalQuantityBought > 0)
+                // 2. Create a list of "disposition lots" (Accepted Gifts Sent by this user)
+                //    For simplicity, we're not considering "Sell" transactions here as dispositions for calculating
+                //    cost basis of *current* holdings. Sells would be for realized P/L.
+                //    This calculation focuses on the UNREALIZED P/L of *current* holdings.
+                var dispositionGiftLots = acceptedGiftsSent
+                    .Where(gs => gs.CryptoId == holding.CryptoId)
+                    .Select(gs => (Timestamp: gs.ResolvedAt.Value, gs.Quantity))
+                    .OrderBy(lot => lot.Timestamp)
+                    .ToList();
+
+                // 3. Apply FIFO: Reduce acquisition lots by disposition (gifted) lots
+                //    This determines the cost basis of the *remaining* (currently held) units.
+                var remainingAcquisitionLots = new List<(DateTime AcquiredAt, decimal Quantity, decimal CostPerUnit, bool IsGift)>();
+                var tempAcquisitionLots = new Queue<(DateTime AcquiredAt, decimal Quantity, decimal CostPerUnit, bool IsGift)>(acquisitionLots);
+
+                foreach (var dispositionLot in dispositionGiftLots)
+                {
+                    decimal quantityToDispose = dispositionLot.Quantity;
+                    while (quantityToDispose > 0 && tempAcquisitionLots.Any())
                     {
-                        // Calculate average price based on ALL historical buys
-                        averagePurchasePrice = totalCostOfBuys / totalQuantityBought;
+                        var currentAcquisitionLot = tempAcquisitionLots.Peek();
+                        if (currentAcquisitionLot.Quantity <= quantityToDispose)
+                        {
+                            // This entire acquisition lot is disposed
+                            quantityToDispose -= currentAcquisitionLot.Quantity;
+                            tempAcquisitionLots.Dequeue(); // Remove it
+                        }
+                        else
+                        {
+                            // Part of this acquisition lot is disposed
+                            var remainingInLot = currentAcquisitionLot.Quantity - quantityToDispose;
+                            tempAcquisitionLots.Dequeue(); // Remove original
+                            tempAcquisitionLots = new Queue<(DateTime AcquiredAt, decimal Quantity, decimal CostPerUnit, bool IsGift)>(
+                                new[] { (currentAcquisitionLot.AcquiredAt, remainingInLot, currentAcquisitionLot.CostPerUnit, currentAcquisitionLot.IsGift) }
+                                .Concat(tempAcquisitionLots) // Add modified lot back to the front
+                            );
+                            quantityToDispose = 0;
+                        }
                     }
-                    _logger.LogDebug("CryptoId {CryptoId}: Total Cost={TotalCost}, Total Qty Bought={TotalQty}, Avg Price={AvgPrice}",
-                                    holding.CryptoId, totalCostOfBuys, totalQuantityBought, averagePurchasePrice);
                 }
-                else
+                remainingAcquisitionLots.AddRange(tempAcquisitionLots); // These are the lots that make up the current holding
+
+                // 4. Calculate total cost basis for the current holding from the remaining lots
+                //    This needs to account for the `currentQuantityHeld`. The FIFO logic above
+                //    just tells us which lots *constitute* the current holding.
+                //    We need to ensure we only consider lots up to currentQuantityHeld.
+                decimal accountedQuantity = 0;
+                foreach (var lot in remainingAcquisitionLots.OrderBy(l => l.AcquiredAt)) // Ensure FIFO for cost basis calc
                 {
-                    _logger.LogDebug("CryptoId {CryptoId}: No buy transactions found.", holding.CryptoId);
-                    // averagePurchasePrice remains 0 if never bought (shouldn't happen if they hold quantity?)
-                    // Or handle this case if a user could somehow acquire crypto without a 'Buy' transaction
+                    if (accountedQuantity >= currentQuantityHeld) break;
+
+                    decimal quantityFromThisLotToConsider = Math.Min(lot.Quantity, currentQuantityHeld - accountedQuantity);
+
+                    if (!lot.IsGift) // Only non-gifted acquisitions contribute to cost basis
+                    {
+                        totalCostBasisForHolding += quantityFromThisLotToConsider * lot.CostPerUnit;
+                        effectiveQuantityForAvgCost += quantityFromThisLotToConsider;
+                    }
+                    accountedQuantity += quantityFromThisLotToConsider;
                 }
 
-                decimal totalCostBasis = averagePurchasePrice * currentQuantityHeld;
+
+                decimal averagePurchasePriceForHolding = 0;
+                if (effectiveQuantityForAvgCost > 0) // Avoid division by zero if all held crypto was gifted
+                {
+                    averagePurchasePriceForHolding = totalCostBasisForHolding / effectiveQuantityForAvgCost;
+                }
+                else if (currentQuantityHeld > 0 && remainingAcquisitionLots.Any(l => l.IsGift))
+                {
+                    // If all remaining quantity is from gifts, average purchase price is 0
+                    averagePurchasePriceForHolding = 0;
+                }
+
+
+                _logger.LogDebug("User {UserId}, Crypto {CryptoId}: Held Qty={HeldQty}, Effective Qty for Avg Cost={EffQty}, Total Cost Basis={CostBasis}, Avg Price={AvgBuyPrice}",
+                                userId, holding.CryptoId, currentQuantityHeld, effectiveQuantityForAvgCost, totalCostBasisForHolding, averagePurchasePriceForHolding);
+
+
                 decimal currentMarketValue = currentPrice * currentQuantityHeld;
-                decimal profitLoss = currentMarketValue - totalCostBasis;
+                // Profit/Loss is based on the carefully calculated totalCostBasisForHolding
+                decimal profitLoss = currentMarketValue - totalCostBasisForHolding;
 
                 profitLossDetailsList.Add(new CryptoProfitLossDetailDto
                 {
                     CryptoId = holding.CryptoId,
                     CryptoName = holding.Cryptocurrency.Name,
                     QuantityHeld = currentQuantityHeld,
-                    AveragePurchasePrice = averagePurchasePrice,
+                    AveragePurchasePrice = averagePurchasePriceForHolding, // This is the effective average cost of non-gifted units
                     CurrentPrice = currentPrice,
-                    TotalCostBasis = totalCostBasis,
+                    TotalCostBasis = totalCostBasisForHolding,
                     CurrentMarketValue = currentMarketValue,
                     ProfitLoss = profitLoss
                 });
             }
 
-            var resultDto = new DetailedProfitLossDto
+            return new DetailedProfitLossDto
             {
                 UserId = userId,
                 HoldingsProfitLoss = profitLossDetailsList
             };
-            _logger.LogInformation("Successfully calculated detailed profit/loss for User ID {UserId}", userId);
-
-            return resultDto;
         }
     }
 }
