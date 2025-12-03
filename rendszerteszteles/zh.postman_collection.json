@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "8a78f7eb-d64f-4954-8045-019ca9358864",
+		"name": "A9XXGK-Proba2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22923697"
+	},
+	"item": [
+		{
+			"name": "Feladat1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 50ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(50);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://193.6.19.58:5000/api/course/list",
+					"protocol": "http",
+					"host": [
+						"193",
+						"6",
+						"19",
+						"58"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"course",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feladat2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let body = {\r",
+							"    mode: 'raw',\r",
+							"    raw: JSON.stringify({\r",
+							"        \"email\": \"tombor3@mik.uni-pannon.org\",\r",
+							"        \"name\": \"John Doe\",\r",
+							"        \"neptun\": \"QWEASD\",\r",
+							"        \"nickname\": \"Johnny\",\r",
+							"        \"password\": \"qweasd\"\r",
+							"    }),\r",
+							"    options: {\r",
+							"        raw: {\r",
+							"            language: 'json'\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"pm.request.body.update(body);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Save Neptun\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"neptun\", \r",
+							"        jsonData.neptun\r",
+							"    )\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://193.6.19.58:5000/api/student/add",
+					"protocol": "http",
+					"host": [
+						"193",
+						"6",
+						"19",
+						"58"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"student",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feladat3",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// az x-api-key-t a Headers tab-ban éllítottam be,\r",
+							"// azt nem kerte a feladat, hogy script-ben legyen\r",
+							"\r",
+							"let neptun = pm.collectionVariables.get(\"neptun\")\r",
+							"pm.request.addQueryParams(\"sId=\" + neptun)\r",
+							"pm.request.addQueryParams(\"cId=VEMISAB154RF\")\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "qweasdqweasdqweasd",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://193.6.19.58:5000/api/course/subscribe",
+					"protocol": "http",
+					"host": [
+						"193",
+						"6",
+						"19",
+						"58"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"course",
+						"subscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feladat4",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let neptun = pm.collectionVariables.get(\"neptun\")\r",
+							"\r",
+							"pm.test(\"course subscribed\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    var resp =JSON.stringify(jsonData)\r",
+							"\r",
+							"    var result = resp.includes(neptun)\r",
+							"    pm.expect(result).to.be.true\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "qweasdqweasdqweasd",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://193.6.19.58:5000/api/student/list/VEMISAB154RF",
+					"protocol": "http",
+					"host": [
+						"193",
+						"6",
+						"19",
+						"58"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"student",
+						"list",
+						"VEMISAB154RF"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
