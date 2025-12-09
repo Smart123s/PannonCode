@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34407.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D2ABAB84-BF74-430A-B69E-9DC6D40DDA17}") = "zh2", "zh2\zh2.dwproj", "{F68AE8CA-27D1-4813-B831-A31E57F5B140}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F68AE8CA-27D1-4813-B831-A31E57F5B140}.Development|Default.ActiveCfg = Development
+		{F68AE8CA-27D1-4813-B831-A31E57F5B140}.Development|Default.Build.0 = Development
+		{F68AE8CA-27D1-4813-B831-A31E57F5B140}.Development|Default.Deploy.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {471469BA-7EA2-4870-A7E8-07EB75CF5AA9}
+	EndGlobalSection
+EndGlobal
