@@ -1,0 +1,174 @@
+﻿<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="8ad7bfc9-78a3-4e1b-87e1-d99fbd1c9d71" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Test</ID>
+  <Name>Test</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>100</Value>
+    </Annotation>
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Dimensions>
+    <Dimension dwd:design-time-name="b1b5ee53-b295-4f66-ae68-7cd23c2f1812">
+      <ID>Dim Customers</ID>
+      <Name>Dim Customers</Name>
+      <DimensionID>Dim Customers</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="48324423-5eb2-46d2-83e5-877f15a89097">
+          <AttributeID>Customer Dw Key</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="49a170e9-ee66-4d3c-b2e9-f1d7ce53e2d4">
+          <AttributeID>Gender</AttributeID>
+        </Attribute>
+      </Attributes>
+    </Dimension>
+    <Dimension dwd:design-time-name="75dbffe1-d7ae-4a05-a4d6-f8f606216db7">
+      <ID>Dim Dates</ID>
+      <Name>Dim Dates</Name>
+      <DimensionID>Dim Dates</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="905ba965-a81d-4e84-ab0a-0001eeb767cf">
+          <AttributeID>Datekey</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="492454c0-a83a-4bfe-bf18-1393b121e795">
+          <AttributeID>Date Year</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="38da81ed-ffc2-46c2-baa2-cf8b18166cd2">
+          <AttributeID>Date Month</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="101f7ad0-e239-4707-a926-acc31d30dc12">
+          <AttributeID>Date Day</AttributeID>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy dwd:design-time-name="649be463-1406-41c8-bbb4-eb89d1bc9bed">
+          <HierarchyID>Hierarchy</HierarchyID>
+        </Hierarchy>
+      </Hierarchies>
+    </Dimension>
+  </Dimensions>
+  <MeasureGroups>
+    <MeasureGroup dwd:design-time-name="f6e22b4c-09d0-4131-834e-87e274dfdee7">
+      <ID>Fact Internetsales</ID>
+      <Name>Fact Internetsales</Name>
+      <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+      <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+      <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+      <State>Unprocessed</State>
+      <Measures>
+        <Measure dwd:design-time-name="830406c6-f0f3-4249-9496-2962c5568663">
+          <ID>Item Price</ID>
+          <Name>Item Price</Name>
+          <Source dwd:design-time-name="e108649d-fb22-4658-a270-e1345a45a6ba">
+            <DataType>Double</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="abc7a1f1-0124-4bda-a96d-00f8c123e7ed">
+              <TableID>dbo_fact_internetsales</TableID>
+              <ColumnID>ItemPrice</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="de23466d-f0a3-400c-a2f0-ebfd6985a4a7">
+          <ID>Discount Amount</ID>
+          <Name>Discount Amount</Name>
+          <Source dwd:design-time-name="58f40881-b87b-4326-9605-9efcb9abd741">
+            <DataType>Double</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="38237b69-5774-4af8-a99c-163c313ab1a7">
+              <TableID>dbo_fact_internetsales</TableID>
+              <ColumnID>DiscountAmount</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="5ea64244-4b39-4836-a601-52789daa0e7d">
+          <ID>Fact Internetsales Count</ID>
+          <Name>Fact Internetsales Count</Name>
+          <AggregateFunction>Count</AggregateFunction>
+          <Source dwd:design-time-name="900e0a14-6c9b-4efe-b52d-6d8174194c03">
+            <DataType>Integer</DataType>
+            <DataSize>4</DataSize>
+            <Source xsi:type="RowBinding" dwd:design-time-name="3a3d23c3-81e6-46fd-aae3-9b02bb3d4058">
+              <TableID>dbo_fact_internetsales</TableID>
+            </Source>
+          </Source>
+        </Measure>
+      </Measures>
+      <StorageMode>Molap</StorageMode>
+      <ProcessingMode>Regular</ProcessingMode>
+      <Dimensions>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="0353b40f-a5c2-435b-a321-b83d7ea98686">
+          <CubeDimensionID>Dim Customers</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="96de1a5e-19b9-432f-bcf1-dba92b869033">
+              <AttributeID>Customer Dw Key</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="ec8f78ed-867c-4188-b570-6a23f26811c7">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="61425995-29ba-472d-a118-992b50ad5f2c">
+                    <TableID>dbo_fact_internetsales</TableID>
+                    <ColumnID>CustomerDwKey</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="47387378-3885-46f8-937f-912a2a4275eb">
+          <CubeDimensionID>Dim Dates</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="e2169599-2573-4114-b7e9-224ec4e51f47">
+              <AttributeID>Datekey</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="94da0af5-13e4-46f7-9e2f-e358ecbdceff">
+                  <DataType>Date</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="18ea506a-7ebd-429d-b795-e5319dc0c08e">
+                    <TableID>dbo_fact_internetsales</TableID>
+                    <ColumnID>DateKey</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+      </Dimensions>
+      <Partitions />
+    </MeasureGroup>
+  </MeasureGroups>
+  <Source dwd:design-time-name="d5c15609-f63b-471e-9d28-991d15ae1835">
+    <DataSourceViewID>Test</DataSourceViewID>
+  </Source>
+</Cube>

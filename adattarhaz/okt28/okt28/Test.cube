@@ -1,0 +1,174 @@
+﻿<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="cd00c24c-3b9a-4b4b-9f74-e50641a32b37" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Test</ID>
+  <Name>Test</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>100</Value>
+    </Annotation>
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Dimensions>
+    <Dimension dwd:design-time-name="9b2b86d3-4968-4833-8971-a0dbf44cd207">
+      <ID>dim_Gyumolcs</ID>
+      <Name>dim_Gyumolcs</Name>
+      <DimensionID>dim_Gyumolcs</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="71e036b6-96b1-468d-8060-35706737b18c">
+          <AttributeID>Gyumolcs Id</AttributeID>
+        </Attribute>
+      </Attributes>
+    </Dimension>
+    <Dimension dwd:design-time-name="cb385817-5289-4d64-99c0-e7fe60a3688e">
+      <ID>dim_Nap</ID>
+      <Name>dim_Nap</Name>
+      <DimensionID>dim_Nap</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="6dddf669-fe60-4bc8-9f6a-b74cbf8b89fe">
+          <AttributeID>Nap Id</AttributeID>
+        </Attribute>
+      </Attributes>
+    </Dimension>
+    <Dimension dwd:design-time-name="da2514e4-6511-4a8a-8cc8-8bbcc2ff1cf4">
+      <ID>dim_Csapat</ID>
+      <Name>dim_Csapat</Name>
+      <DimensionID>Csapat</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="646b91db-ace1-4a3d-b4d7-c983b8b13eee">
+          <AttributeID>Csapat Id</AttributeID>
+        </Attribute>
+      </Attributes>
+    </Dimension>
+  </Dimensions>
+  <MeasureGroups>
+    <MeasureGroup dwd:design-time-name="ee490a1e-5963-457e-9cf9-ee27270f14e4">
+      <ID>Eredm</ID>
+      <Name>Eredm</Name>
+      <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+      <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+      <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+      <State>Unprocessed</State>
+      <Measures>
+        <Measure dwd:design-time-name="1316bd93-1752-4c28-8de3-74ad29af7650">
+          <ID>Leadott Lada</ID>
+          <Name>Leadott Lada</Name>
+          <Source dwd:design-time-name="ca2fb980-dad6-4602-891c-b6887b8a1634">
+            <DataType>Integer</DataType>
+            <Source xsi:type="ColumnBinding" dwd:design-time-name="7934b05b-bb61-47c0-b674-69155c9ace06">
+              <TableID>dbo_eredm</TableID>
+              <ColumnID>leadott_lada</ColumnID>
+            </Source>
+          </Source>
+        </Measure>
+        <Measure dwd:design-time-name="c2fb2af6-73b7-4274-8d0c-9c557f0c0202">
+          <ID>Eredm Count</ID>
+          <Name>Eredm Count</Name>
+          <AggregateFunction>Count</AggregateFunction>
+          <Source dwd:design-time-name="b291f6da-27bb-42cd-8fd4-7c7258b6b341">
+            <DataType>Integer</DataType>
+            <DataSize>4</DataSize>
+            <Source xsi:type="RowBinding" dwd:design-time-name="9f63012a-03f3-4d6b-8941-2772658bb9b2">
+              <TableID>dbo_eredm</TableID>
+            </Source>
+          </Source>
+        </Measure>
+      </Measures>
+      <StorageMode>Molap</StorageMode>
+      <ProcessingMode>Regular</ProcessingMode>
+      <Dimensions>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="f7059548-2226-4fe7-8cc3-2d21f19c93ce">
+          <CubeDimensionID>dim_Gyumolcs</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="44ff68a1-1e59-4682-a267-227e2c268a24">
+              <AttributeID>Gyumolcs Id</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="3e9d43dc-3e35-45b8-8910-4fab667f5083">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="49b1c82e-4d7c-4be0-bb5b-f23b2bd8baf5">
+                    <TableID>dbo_eredm</TableID>
+                    <ColumnID>gyumolcs_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="297b7419-9e98-4888-9f4a-5a6e8e66badf">
+          <CubeDimensionID>dim_Nap</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="cc80c1ab-beda-498a-8ed6-51cb8fac65e4">
+              <AttributeID>Nap Id</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="a5d3e244-5976-408e-9983-a7ccad1d7367">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="5bd1f471-4554-4b74-9439-de9ae8013efe">
+                    <TableID>dbo_eredm</TableID>
+                    <ColumnID>nap_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="dd41d9ab-063e-40f6-be36-b1fb41b72878">
+          <CubeDimensionID>dim_Csapat</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="081b3040-2320-4021-8b2c-d4803c835ded">
+              <AttributeID>Csapat Id</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="708f63f2-05f0-4215-86ea-0eaaeaf8256e">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="693f7eeb-879e-4ba8-a54c-5b0fe4c4cb7e">
+                    <TableID>dbo_eredm</TableID>
+                    <ColumnID>csapat_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+      </Dimensions>
+      <Partitions />
+    </MeasureGroup>
+  </MeasureGroups>
+  <Source dwd:design-time-name="d8572877-1c75-4f06-a7f3-c566a04fcc0c">
+    <DataSourceViewID>Test</DataSourceViewID>
+  </Source>
+</Cube>

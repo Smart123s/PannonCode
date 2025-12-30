@@ -1,0 +1,135 @@
+﻿<DataSourceView xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="103fddf4-6b18-4144-8a29-1a39a6be39e4" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Test</ID>
+  <Name>Test</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:CurrentLayout</Name>
+      <Value>_ALL_TABLES_</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:SchemaRestriction</Name>
+      <Value></Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:RetrieveRelationships</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:Layouts</Name>
+      <Value>
+        <Layouts xmlns="">
+          <Diagram>
+            <Name>_ALL_TABLES_</Name>
+            <DiagramLayout />
+            <ShowRelationshipNames>False</ShowRelationshipNames>
+            <UseDiagramDefaultLayout>True</UseDiagramDefaultLayout>
+            <DiagramViewPortLeft>0</DiagramViewPortLeft>
+            <DiagramViewPortTop>0</DiagramViewPortTop>
+            <DiagramBoundingLeft>0</DiagramBoundingLeft>
+            <DiagramBoundingTop>0</DiagramBoundingTop>
+            <DiagramZoom>100</DiagramZoom>
+          </Diagram>
+        </Layouts>
+      </Value>
+    </Annotation>
+  </Annotations>
+  <DataSourceID>Test</DataSourceID>
+  <Schema>
+    <xs:schema id="Test" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+      <xs:element name="Test" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:design-time-name="ece74222-6daf-48e2-a4a2-af45a2569ef6">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="dbo_csapat" msprop:design-time-name="1b787c36-da3b-4d4d-8d94-21d934434d26" msprop:DbTableName="csapat" msprop:FriendlyName="csapat" msprop:DbSchemaName="dbo" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="csapat_id" msprop:design-time-name="f58ff8e7-105e-49d8-89ab-b20ead1dfb12" msprop:DbColumnName="csapat_id" msprop:FriendlyName="csapat_id" type="xs:int" />
+                  <xs:element name="csapat_nev" msprop:design-time-name="23d4d321-1777-49fe-9818-c2f55c1119aa" msprop:DbColumnName="csapat_nev" msprop:FriendlyName="csapat_nev">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="50" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_eredm" msprop:design-time-name="ed19b25a-0e2a-46dd-b4ce-7299e92fa9fc" msprop:DbTableName="eredm" msprop:FriendlyName="eredm" msprop:DbSchemaName="dbo" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="eredm_id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:design-time-name="c8bb8a8f-74c1-42b6-b995-2521d9be6c90" msprop:DbColumnName="eredm_id" msprop:FriendlyName="eredm_id" type="xs:int" />
+                  <xs:element name="csapat_id" msprop:design-time-name="6570e371-3d9c-400c-8c5f-c3552bb023d7" msprop:DbColumnName="csapat_id" msprop:FriendlyName="csapat_id" type="xs:int" />
+                  <xs:element name="nap_id" msprop:design-time-name="5a106bec-e3ea-4bbc-8525-4b25b1a98f87" msprop:DbColumnName="nap_id" msprop:FriendlyName="nap_id" type="xs:int" />
+                  <xs:element name="gyumolcs_id" msprop:design-time-name="3b3de563-ceee-465d-90f2-f4e58fd9f77f" msprop:DbColumnName="gyumolcs_id" msprop:FriendlyName="gyumolcs_id" type="xs:int" />
+                  <xs:element name="leadott_lada" msprop:design-time-name="675674b5-e59d-45ca-8ae5-96b75d07291f" msprop:DbColumnName="leadott_lada" msprop:FriendlyName="leadott_lada" type="xs:int" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_gyumolcs" msprop:design-time-name="9e4c4612-08b2-4df3-8092-0a868df578c2" msprop:DbTableName="gyumolcs" msprop:FriendlyName="gyumolcs" msprop:DbSchemaName="dbo" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="gyumolcs_id" msprop:design-time-name="ab9201c6-8a1e-4133-b6e9-c8c0a0498618" msprop:DbColumnName="gyumolcs_id" msprop:FriendlyName="gyumolcs_id" type="xs:int" />
+                  <xs:element name="gyumolcs_nev" msprop:design-time-name="a3a9cab2-57f3-4454-b0b7-04eca4eb9f88" msprop:DbColumnName="gyumolcs_nev" msprop:FriendlyName="gyumolcs_nev">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="50" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_nap" msprop:design-time-name="6a687db7-3e9a-4bbc-a044-2ef4a607ad43" msprop:DbTableName="nap" msprop:FriendlyName="nap" msprop:DbSchemaName="dbo" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="nap_id" msprop:design-time-name="6a6a8511-fd79-461d-bbc4-cb18b9c1967a" msprop:DbColumnName="nap_id" msprop:FriendlyName="nap_id" type="xs:int" />
+                  <xs:element name="nap_nev" msprop:design-time-name="a440bba3-8ffd-4f02-9fc2-bdba89a2b71c" msprop:DbColumnName="nap_nev" msprop:FriendlyName="nap_nev">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="50" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+        <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_csapat" />
+          <xs:field xpath="csapat_id" />
+        </xs:unique>
+        <xs:unique name="dbo_eredm_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_eredm" />
+          <xs:field xpath="eredm_id" />
+        </xs:unique>
+        <xs:unique name="dbo_gyumolcs_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_gyumolcs" />
+          <xs:field xpath="gyumolcs_id" />
+        </xs:unique>
+        <xs:unique name="dbo_nap_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_nap" />
+          <xs:field xpath="nap_id" />
+        </xs:unique>
+        <xs:keyref name="FK__eredm__csapat_id__34C8D9D1" refer="Constraint1">
+          <xs:selector xpath=".//dbo_eredm" />
+          <xs:field xpath="csapat_id" />
+        </xs:keyref>
+        <xs:keyref name="FK__eredm__nap_id__35BCFE0A" refer="dbo_nap_Constraint1">
+          <xs:selector xpath=".//dbo_eredm" />
+          <xs:field xpath="nap_id" />
+        </xs:keyref>
+        <xs:keyref name="FK__eredm__gyumolcs___36B12243" refer="dbo_gyumolcs_Constraint1">
+          <xs:selector xpath=".//dbo_eredm" />
+          <xs:field xpath="gyumolcs_id" />
+        </xs:keyref>
+      </xs:element>
+    </xs:schema>
+    <Test xmlns="" />
+  </Schema>
+</DataSourceView>
