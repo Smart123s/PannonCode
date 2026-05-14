@@ -1,0 +1,2667 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="3/26/2024 8:34:09 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-GT5C1GK"
+  DTS:CreatorName="DESKTOP-GT5C1GK\db"
+  DTS:DTSID="{D89D6121-27BA-409C-B94E-409C1520C992}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5270.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="8"
+  DTS:VersionGUID="{60D8D47E-786E-4957-A56A-62508D0E831E}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.test]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{97E77830-5F31-4978-AF18-6E4202D0494F}"
+      DTS:ObjectName="LocalHost.test">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=test;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package-{97E77830-5F31-4978-AF18-6E4202D0494F}LocalHost.test;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.WideWorldImporters]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{D7D9E43D-16BA-4994-92F1-26B7F3DB6797}"
+      DTS:ObjectName="LocalHost.WideWorldImporters">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package-{D7D9E43D-16BA-4994-92F1-26B7F3DB6797}LocalHost.WideWorldImporters;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{3BA54076-BD9A-4691-B6FF-E1957B71CD1E}"
+      DTS:ObjectName="dev_mode"
+      DTS:Required="True">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">1</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{FE339DA9-D0C9-42FB-BF6F-8EC37C3F7BCD}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="delete_command">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{F9D10A43-8D61-4DFA-BCBB-6EDB6A7FDBCE}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="save_table">
+      <DTS:VariableValue
+        DTS:DataType="8">test.dim_stockitem</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\dev mode"
+      DTS:CreationName="Microsoft.ExpressionTask"
+      DTS:Description="Expression Task"
+      DTS:DTSID="{F61C8D65-5042-4109-ABEE-9CC02AD5573F}"
+      DTS:ExecutableType="Microsoft.ExpressionTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="dev mode"
+      DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <ExpressionTask
+          Expression="@[User::save_table] = ( @[$Package::dev_mode] &lt; 1 ? &quot;[dbo].[dim_stockitem]&quot; : &quot;[test].[dim_stockitem]&quot;)" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\dim load"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{105CABAF-99A6-47C5-AE87-FB4F637E9CE2}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="dim load">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\dim load\delete command"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:Description="Expression Task"
+          DTS:DTSID="{806FE400-5FEC-40A4-888F-F3751332741A}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="delete command"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::delete_command] = &quot;delete &quot; + @[User::save_table]" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\dim load\delete dim item"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{8947582B-D27D-4EE0-8F3C-7C39AF9CB476}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="delete dim item"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{97E77830-5F31-4978-AF18-6E4202D0494F}"
+              SQLTask:SqlStmtSourceType="Variable"
+              SQLTask:SqlStatementSource="User::delete_command" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\dim load\load dim item"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{02760FBF-B9C4-4BF4-98F2-1A91AD45CE73}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="load dim item"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\dim load\load dim item\Derived unitprice"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="Derived unitprice"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\dim load\load dim item\Derived unitprice.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\dim load\load dim item\Derived unitprice.Inputs[Derived Column Input].Columns[unitprice]"
+                          cachedDataType="numeric"
+                          cachedName="unitprice"
+                          cachedPrecision="18"
+                          cachedScale="2"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[unitprice]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\dim load\load dim item\Derived unitprice.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Output].Columns[unitprice_cat]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="6"
+                          lineageId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Output].Columns[unitprice_cat]"
+                          name="unitprice_cat"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[unitprice]} &lt;= 13 ? "low" : #{Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[unitprice]} &lt; 32 ? "middle" : "high"</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">unitprice &lt;= 13 ? "low" : unitprice &lt; 32 ? "middle" : "high"</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\dim load\load dim item\Derived unitprice.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\dim load\load dim item\dim stockitems"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="dim stockitems"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[dim_stockitem]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable">User::save_table</property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">1</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\dim load\load dim item\dim stockitems.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[LocalHost.test]"
+                      connectionManagerRefId="Package.ConnectionManagers[LocalHost.test]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[stockitemid]"
+                          cachedDataType="i4"
+                          cachedName="stockitemid"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[stockitemid]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[stockitemid]" />
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[brand]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="brand"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[brand]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[brand]" />
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[size]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="size"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[size]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[size]" />
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[validfrom]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="validfrom"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[validfrom]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[validfrom]" />
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[stockitemname]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="stockitemname"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[itemname]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[stockitemname]" />
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[packagetypename]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="packagetypename"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[package]"
+                          lineageId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Match Output].Columns[packagetypename]" />
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[unitprice_cat]"
+                          cachedDataType="wstr"
+                          cachedLength="6"
+                          cachedName="unitprice_cat"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[unitprice]"
+                          lineageId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Output].Columns[unitprice_cat]" />
+                        <inputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].Columns[unitprice]"
+                          cachedDataType="numeric"
+                          cachedName="unitprice"
+                          cachedPrecision="18"
+                          cachedScale="2"
+                          externalMetadataColumnId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[unitprice_num]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[unitprice]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[dw_stockitemid]"
+                          dataType="i4"
+                          name="dw_stockitemid" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[stockitemid]"
+                          dataType="i4"
+                          name="stockitemid" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[itemname]"
+                          dataType="wstr"
+                          length="100"
+                          name="itemname" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[color]"
+                          dataType="wstr"
+                          length="20"
+                          name="color" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[package]"
+                          dataType="wstr"
+                          length="50"
+                          name="package" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[brand]"
+                          dataType="wstr"
+                          length="50"
+                          name="brand" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[unitprice_num]"
+                          dataType="numeric"
+                          name="unitprice_num"
+                          precision="18"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[unitprice]"
+                          dataType="wstr"
+                          length="50"
+                          name="unitprice" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[size]"
+                          dataType="wstr"
+                          length="20"
+                          name="size" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[suppliername]"
+                          dataType="wstr"
+                          length="100"
+                          name="suppliername" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[suppliercity]"
+                          dataType="wstr"
+                          length="50"
+                          name="suppliercity" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[validfrom]"
+                          dataType="dbTimeStamp2"
+                          name="validfrom"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input].ExternalColumns[validto]"
+                          dataType="dbTimeStamp"
+                          name="validto" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\dim load\load dim item\dim stockitems.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\dim stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\dim stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\dim stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\dim load\load dim item\Lookup package type"
+                  componentClassID="Microsoft.Lookup"
+                  contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+                  description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+                  name="Lookup package type"
+                  usesDispositions="true"
+                  version="6">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the SQL statement that generates the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from [stg].[packagetypes]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommandParam"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select * from [stg].[packagetypes]) [refTable]
+where [refTable].[packagetypeid] = ?</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the type of connection used to access the reference dataset."
+                      name="ConnectionType"
+                      typeConverter="LookupConnectionType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the cache type of the lookup table."
+                      name="CacheType"
+                      typeConverter="CacheType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                      name="NoMatchBehavior"
+                      typeConverter="LookupNoMatchBehavior">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                      name="NoMatchCachePercentage">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                      name="MaxMemoryUsage">25</property>
+                    <property
+                      dataType="System.Int64"
+                      description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                      name="MaxMemoryUsage64">25</property>
+                    <property
+                      dataType="System.String"
+                      description="Indicates whether to reference metadata in an XML format."
+                      name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="packagetypeid" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="packagetypename" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                      name="ParameterMap">#{Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[outerpackageid]};</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                      name="TreatDuplicateKeysAsError">false</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\dim load\load dim item\Lookup package type.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[LocalHost.test]"
+                      connectionManagerRefId="Package.ConnectionManagers[LocalHost.test]"
+                      description="Connection manager used to access lookup data."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\dim load\load dim item\Lookup package type.Inputs[Lookup Input]"
+                      name="Lookup Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\dim load\load dim item\Lookup package type.Inputs[Lookup Input].Columns[outerpackageid]"
+                          cachedDataType="i4"
+                          cachedName="outerpackageid"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[outerpackageid]">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table that a column joins."
+                              name="JoinToReferenceColumn">packagetypeid</property>
+                            <property
+                              dataType="System.Null"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn" />
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Match Output]"
+                      errorOrTruncationOperation="Lookup"
+                      errorRowDisposition="IgnoreFailure"
+                      exclusionGroup="1"
+                      name="Lookup Match Output"
+                      synchronousInputId="Package\dim load\load dim item\Lookup package type.Inputs[Lookup Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Match Output].Columns[packagetypename]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Copy Column"
+                          length="50"
+                          lineageId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Match Output].Columns[packagetypename]"
+                          name="packagetypename"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn">packagetypename</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup No Match Output]"
+                      description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                      exclusionGroup="1"
+                      name="Lookup No Match Output"
+                      synchronousInputId="Package\dim load\load dim item\Lookup package type.Inputs[Lookup Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Lookup Error Output"
+                      synchronousInputId="Package\dim load\load dim item\Lookup package type.Inputs[Lookup Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\dim load\load dim item\stg stockitems"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="stg stockitems"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[stg].[stockitems]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\dim load\load dim item\stg stockitems.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[LocalHost.test]"
+                      connectionManagerRefId="Package.ConnectionManagers[LocalHost.test]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[stockitemid]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[stockitemid]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[stockitemid]"
+                          name="stockitemid"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[outerpackageid]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[outerpackageid]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[outerpackageid]"
+                          name="outerpackageid"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[supplierid]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[supplierid]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[supplierid]"
+                          name="supplierid"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[colorid]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[colorid]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[colorid]"
+                          name="colorid"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[stockitemname]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[stockitemname]"
+                          length="100"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[stockitemname]"
+                          name="stockitemname"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[brand]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[brand]"
+                          length="50"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[brand]"
+                          name="brand"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[unitprice]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[unitprice]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[unitprice]"
+                          name="unitprice"
+                          precision="18"
+                          scale="2"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[size]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[size]"
+                          length="20"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[size]"
+                          name="size"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[validfrom]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[validfrom]"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].Columns[validfrom]"
+                          name="validfrom"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[stockitemid]"
+                          dataType="i4"
+                          name="stockitemid" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[outerpackageid]"
+                          dataType="i4"
+                          name="outerpackageid" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[supplierid]"
+                          dataType="i4"
+                          name="supplierid" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[colorid]"
+                          dataType="i4"
+                          name="colorid" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[stockitemname]"
+                          dataType="wstr"
+                          length="100"
+                          name="stockitemname" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[brand]"
+                          dataType="wstr"
+                          length="50"
+                          name="brand" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[unitprice]"
+                          dataType="numeric"
+                          name="unitprice"
+                          precision="18"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[size]"
+                          dataType="wstr"
+                          length="20"
+                          name="size" />
+                        <externalMetadataColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output].ExternalColumns[validfrom]"
+                          dataType="dbTimeStamp2"
+                          name="validfrom"
+                          scale="7" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[stockitemid]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[stockitemid]"
+                          name="stockitemid" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[outerpackageid]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[outerpackageid]"
+                          name="outerpackageid" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[supplierid]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[supplierid]"
+                          name="supplierid" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[colorid]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[colorid]"
+                          name="colorid" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[stockitemname]"
+                          dataType="wstr"
+                          length="100"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[stockitemname]"
+                          name="stockitemname" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[brand]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[brand]"
+                          name="brand" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[unitprice]"
+                          dataType="numeric"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[unitprice]"
+                          name="unitprice"
+                          precision="18"
+                          scale="2" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[size]"
+                          dataType="wstr"
+                          length="20"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[size]"
+                          name="size" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[validfrom]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[validfrom]"
+                          name="validfrom"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\dim load\load dim item.Paths[Derived Column Output]"
+                  endId="Package\dim load\load dim item\dim stockitems.Inputs[OLE DB Destination Input]"
+                  name="Derived Column Output"
+                  startId="Package\dim load\load dim item\Derived unitprice.Outputs[Derived Column Output]" />
+                <path
+                  refId="Package\dim load\load dim item.Paths[Lookup Match Output]"
+                  endId="Package\dim load\load dim item\Derived unitprice.Inputs[Derived Column Input]"
+                  name="Lookup Match Output"
+                  startId="Package\dim load\load dim item\Lookup package type.Outputs[Lookup Match Output]" />
+                <path
+                  refId="Package\dim load\load dim item.Paths[OLE DB Source Output]"
+                  endId="Package\dim load\load dim item\Lookup package type.Inputs[Lookup Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\dim load\load dim item\stg stockitems.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\dim load.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{6895D82B-4AC1-4137-8541-A17FE07BB1B6}"
+          DTS:From="Package\dim load\delete command"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\dim load\delete dim item" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\dim load.PrecedenceConstraints[Constraint 4]"
+          DTS:CreationName=""
+          DTS:DTSID="{1C4A5FFE-4896-4754-B342-EEE581697F85}"
+          DTS:From="Package\dim load\delete dim item"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 4"
+          DTS:To="Package\dim load\load dim item" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\stg load"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{6A14EF5E-A6EF-4575-AD26-435CDDD3450C}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="stg load">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\stg load\delete stg packagetypes"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{A67B68C1-CEDA-4A2D-A1AD-39D958B66BF4}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="delete stg packagetypes"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{97E77830-5F31-4978-AF18-6E4202D0494F}"
+              SQLTask:SqlStatementSource="delete test.stg.packagetypes" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\stg load\delete stg stockitem"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{FFF93972-DDBD-48A2-B515-6B1D1894947E}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="delete stg stockitem"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{97E77830-5F31-4978-AF18-6E4202D0494F}"
+              SQLTask:SqlStatementSource="delete test.stg.stockitems" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\stg load\load stg packagetypes"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{155E4BF4-5BB5-4CFF-94DA-9913DE4257A9}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="load stg packagetypes"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\stg load\load stg packagetypes\stg packagetypes"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="stg packagetypes"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[stg].[packagetypes]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\stg load\load stg packagetypes\stg packagetypes.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[LocalHost.test]"
+                      connectionManagerRefId="Package.ConnectionManagers[LocalHost.test]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input].Columns[PackageTypeID]"
+                          cachedDataType="i4"
+                          cachedName="PackageTypeID"
+                          externalMetadataColumnId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input].ExternalColumns[packagetypeid]"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[PackageTypeID]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input].Columns[PackageTypeName]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="PackageTypeName"
+                          externalMetadataColumnId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input].ExternalColumns[packagetypename]"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[PackageTypeName]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input].ExternalColumns[packagetypeid]"
+                          dataType="i4"
+                          name="packagetypeid" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input].ExternalColumns[packagetypename]"
+                          dataType="wstr"
+                          length="50"
+                          name="packagetypename" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\stg load\load stg packagetypes\stg packagetypes.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\stg packagetypes.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg packagetypes\stg packagetypes.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\stg packagetypes.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg packagetypes\stg packagetypes.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\stg load\load stg packagetypes\WWI packagetypes"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="WWI packagetypes"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[Warehouse].[PackageTypes]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\stg load\load stg packagetypes\WWI packagetypes.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[LocalHost.WideWorldImporters]"
+                      connectionManagerRefId="Package.ConnectionManagers[LocalHost.WideWorldImporters]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[PackageTypeID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[PackageTypeID]"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[PackageTypeID]"
+                          name="PackageTypeID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[PackageTypeName]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[PackageTypeName]"
+                          length="50"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[PackageTypeName]"
+                          name="PackageTypeName"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          name="LastEditedBy"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[ValidFrom]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[ValidFrom]"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[ValidFrom]"
+                          name="ValidFrom"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[ValidTo]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[ValidTo]"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].Columns[ValidTo]"
+                          name="ValidTo"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[PackageTypeID]"
+                          dataType="i4"
+                          name="PackageTypeID" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[PackageTypeName]"
+                          dataType="wstr"
+                          length="50"
+                          name="PackageTypeName" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          dataType="i4"
+                          name="LastEditedBy" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[ValidFrom]"
+                          dataType="dbTimeStamp2"
+                          name="ValidFrom"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output].ExternalColumns[ValidTo]"
+                          dataType="dbTimeStamp2"
+                          name="ValidTo"
+                          scale="7" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[PackageTypeID]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[PackageTypeID]"
+                          name="PackageTypeID" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[PackageTypeName]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[PackageTypeName]"
+                          name="PackageTypeName" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          name="LastEditedBy" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ValidFrom]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ValidFrom]"
+                          name="ValidFrom"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ValidTo]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ValidTo]"
+                          name="ValidTo"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\stg load\load stg packagetypes.Paths[OLE DB Source Output]"
+                  endId="Package\stg load\load stg packagetypes\stg packagetypes.Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\stg load\load stg packagetypes\WWI packagetypes.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\stg load\load stg stockitem"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{42813FA5-7A3F-48EB-A9EB-8BFAB192BC7E}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="load stg stockitem"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\stg load\load stg stockitem\stg stockitems"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="stg stockitems"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[stg].[stockitems]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\stg load\load stg stockitem\stg stockitems.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[LocalHost.test]"
+                      connectionManagerRefId="Package.ConnectionManagers[LocalHost.test]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[StockItemID]"
+                          cachedDataType="i4"
+                          cachedName="StockItemID"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[stockitemid]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[StockItemID]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[StockItemName]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="StockItemName"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[stockitemname]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[StockItemName]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[SupplierID]"
+                          cachedDataType="i4"
+                          cachedName="SupplierID"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[supplierid]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[SupplierID]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[ColorID]"
+                          cachedDataType="i4"
+                          cachedName="ColorID"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[colorid]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ColorID]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[OuterPackageID]"
+                          cachedDataType="i4"
+                          cachedName="OuterPackageID"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[outerpackageid]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[OuterPackageID]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[Brand]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="Brand"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[brand]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Brand]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[Size]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="Size"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[size]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Size]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[UnitPrice]"
+                          cachedDataType="numeric"
+                          cachedName="UnitPrice"
+                          cachedPrecision="18"
+                          cachedScale="2"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[unitprice]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[UnitPrice]" />
+                        <inputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].Columns[ValidFrom]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="ValidFrom"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[validfrom]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ValidFrom]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[stockitemid]"
+                          dataType="i4"
+                          name="stockitemid" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[outerpackageid]"
+                          dataType="i4"
+                          name="outerpackageid" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[supplierid]"
+                          dataType="i4"
+                          name="supplierid" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[colorid]"
+                          dataType="i4"
+                          name="colorid" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[stockitemname]"
+                          dataType="wstr"
+                          length="100"
+                          name="stockitemname" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[brand]"
+                          dataType="wstr"
+                          length="50"
+                          name="brand" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[unitprice]"
+                          dataType="numeric"
+                          name="unitprice"
+                          precision="18"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[size]"
+                          dataType="wstr"
+                          length="20"
+                          name="size" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input].ExternalColumns[validfrom]"
+                          dataType="dbTimeStamp2"
+                          name="validfrom"
+                          scale="7" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\stg load\load stg stockitem\stg stockitems.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\stg stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\stg stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\stg stockitems.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\stg load\load stg stockitem\WWI stockitems"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="WWI stockitems"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[Warehouse].[StockItems]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\stg load\load stg stockitem\WWI stockitems.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[LocalHost.WideWorldImporters]"
+                      connectionManagerRefId="Package.ConnectionManagers[LocalHost.WideWorldImporters]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[StockItemID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[StockItemID]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[StockItemID]"
+                          name="StockItemID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[StockItemName]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[StockItemName]"
+                          length="100"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[StockItemName]"
+                          name="StockItemName"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[SupplierID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[SupplierID]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[SupplierID]"
+                          name="SupplierID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ColorID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[ColorID]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ColorID]"
+                          name="ColorID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[UnitPackageID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[UnitPackageID]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[UnitPackageID]"
+                          name="UnitPackageID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[OuterPackageID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[OuterPackageID]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[OuterPackageID]"
+                          name="OuterPackageID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Brand]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Brand]"
+                          length="50"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Brand]"
+                          name="Brand"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Size]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Size]"
+                          length="20"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Size]"
+                          name="Size"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[LeadTimeDays]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[LeadTimeDays]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[LeadTimeDays]"
+                          name="LeadTimeDays"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[QuantityPerOuter]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[QuantityPerOuter]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[QuantityPerOuter]"
+                          name="QuantityPerOuter"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[IsChillerStock]"
+                          dataType="bool"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[IsChillerStock]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[IsChillerStock]"
+                          name="IsChillerStock"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Barcode]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Barcode]"
+                          length="50"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Barcode]"
+                          name="Barcode"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[TaxRate]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[TaxRate]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[TaxRate]"
+                          name="TaxRate"
+                          precision="18"
+                          scale="3"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[UnitPrice]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[UnitPrice]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[UnitPrice]"
+                          name="UnitPrice"
+                          precision="18"
+                          scale="2"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[RecommendedRetailPrice]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[RecommendedRetailPrice]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[RecommendedRetailPrice]"
+                          name="RecommendedRetailPrice"
+                          precision="18"
+                          scale="2"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[TypicalWeightPerUnit]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[TypicalWeightPerUnit]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[TypicalWeightPerUnit]"
+                          name="TypicalWeightPerUnit"
+                          precision="18"
+                          scale="3"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[MarketingComments]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[MarketingComments]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[MarketingComments]"
+                          name="MarketingComments"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[InternalComments]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[InternalComments]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[InternalComments]"
+                          name="InternalComments"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Photo]"
+                          dataType="image"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Photo]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Photo]"
+                          name="Photo"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[CustomFields]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[CustomFields]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[CustomFields]"
+                          name="CustomFields"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Tags]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Tags]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[Tags]"
+                          name="Tags"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[SearchDetails]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[SearchDetails]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[SearchDetails]"
+                          name="SearchDetails"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          name="LastEditedBy"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ValidFrom]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[ValidFrom]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ValidFrom]"
+                          name="ValidFrom"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ValidTo]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[ValidTo]"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].Columns[ValidTo]"
+                          name="ValidTo"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[StockItemID]"
+                          dataType="i4"
+                          name="StockItemID" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[StockItemName]"
+                          dataType="wstr"
+                          length="100"
+                          name="StockItemName" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[SupplierID]"
+                          dataType="i4"
+                          name="SupplierID" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[ColorID]"
+                          dataType="i4"
+                          name="ColorID" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[UnitPackageID]"
+                          dataType="i4"
+                          name="UnitPackageID" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[OuterPackageID]"
+                          dataType="i4"
+                          name="OuterPackageID" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Brand]"
+                          dataType="wstr"
+                          length="50"
+                          name="Brand" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Size]"
+                          dataType="wstr"
+                          length="20"
+                          name="Size" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[LeadTimeDays]"
+                          dataType="i4"
+                          name="LeadTimeDays" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[QuantityPerOuter]"
+                          dataType="i4"
+                          name="QuantityPerOuter" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[IsChillerStock]"
+                          dataType="bool"
+                          name="IsChillerStock" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Barcode]"
+                          dataType="wstr"
+                          length="50"
+                          name="Barcode" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[TaxRate]"
+                          dataType="numeric"
+                          name="TaxRate"
+                          precision="18"
+                          scale="3" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[UnitPrice]"
+                          dataType="numeric"
+                          name="UnitPrice"
+                          precision="18"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[RecommendedRetailPrice]"
+                          dataType="numeric"
+                          name="RecommendedRetailPrice"
+                          precision="18"
+                          scale="2" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[TypicalWeightPerUnit]"
+                          dataType="numeric"
+                          name="TypicalWeightPerUnit"
+                          precision="18"
+                          scale="3" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[MarketingComments]"
+                          dataType="nText"
+                          name="MarketingComments" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[InternalComments]"
+                          dataType="nText"
+                          name="InternalComments" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Photo]"
+                          dataType="image"
+                          name="Photo" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[CustomFields]"
+                          dataType="nText"
+                          name="CustomFields" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[Tags]"
+                          dataType="nText"
+                          name="Tags" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[SearchDetails]"
+                          dataType="nText"
+                          name="SearchDetails" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          dataType="i4"
+                          name="LastEditedBy" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[ValidFrom]"
+                          dataType="dbTimeStamp2"
+                          name="ValidFrom"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output].ExternalColumns[ValidTo]"
+                          dataType="dbTimeStamp2"
+                          name="ValidTo"
+                          scale="7" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[StockItemID]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[StockItemID]"
+                          name="StockItemID" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[StockItemName]"
+                          dataType="wstr"
+                          length="100"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[StockItemName]"
+                          name="StockItemName" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[SupplierID]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[SupplierID]"
+                          name="SupplierID" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ColorID]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ColorID]"
+                          name="ColorID" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[UnitPackageID]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[UnitPackageID]"
+                          name="UnitPackageID" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[OuterPackageID]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[OuterPackageID]"
+                          name="OuterPackageID" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Brand]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Brand]"
+                          name="Brand" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Size]"
+                          dataType="wstr"
+                          length="20"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Size]"
+                          name="Size" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[LeadTimeDays]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[LeadTimeDays]"
+                          name="LeadTimeDays" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[QuantityPerOuter]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[QuantityPerOuter]"
+                          name="QuantityPerOuter" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[IsChillerStock]"
+                          dataType="bool"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[IsChillerStock]"
+                          name="IsChillerStock" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Barcode]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Barcode]"
+                          name="Barcode" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[TaxRate]"
+                          dataType="numeric"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[TaxRate]"
+                          name="TaxRate"
+                          precision="18"
+                          scale="3" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[UnitPrice]"
+                          dataType="numeric"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[UnitPrice]"
+                          name="UnitPrice"
+                          precision="18"
+                          scale="2" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[RecommendedRetailPrice]"
+                          dataType="numeric"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[RecommendedRetailPrice]"
+                          name="RecommendedRetailPrice"
+                          precision="18"
+                          scale="2" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[TypicalWeightPerUnit]"
+                          dataType="numeric"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[TypicalWeightPerUnit]"
+                          name="TypicalWeightPerUnit"
+                          precision="18"
+                          scale="3" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[MarketingComments]"
+                          dataType="nText"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[MarketingComments]"
+                          name="MarketingComments" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[InternalComments]"
+                          dataType="nText"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[InternalComments]"
+                          name="InternalComments" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Photo]"
+                          dataType="image"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Photo]"
+                          name="Photo" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[CustomFields]"
+                          dataType="nText"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[CustomFields]"
+                          name="CustomFields" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Tags]"
+                          dataType="nText"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[Tags]"
+                          name="Tags" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[SearchDetails]"
+                          dataType="nText"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[SearchDetails]"
+                          name="SearchDetails" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          name="LastEditedBy" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ValidFrom]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ValidFrom]"
+                          name="ValidFrom"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ValidTo]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ValidTo]"
+                          name="ValidTo"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\stg load\load stg stockitem.Paths[OLE DB Source Output]"
+                  endId="Package\stg load\load stg stockitem\stg stockitems.Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\stg load\load stg stockitem\WWI stockitems.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\stg load.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{B06A2C85-9935-4B00-B075-0937CC4FA97D}"
+          DTS:From="Package\stg load\delete stg stockitem"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\stg load\load stg stockitem" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\stg load.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{E497BF89-DC42-468F-90D0-3B35492C36A7}"
+          DTS:From="Package\stg load\load stg stockitem"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\stg load\delete stg packagetypes" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\stg load.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{3EA655A7-4B3E-486D-AEB2-246FA1FB5564}"
+          DTS:From="Package\stg load\delete stg packagetypes"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\stg load\load stg packagetypes" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{6C06006E-A687-4061-A1CD-8DDE3E91F337}"
+      DTS:Expression="@[$Package::dev_mode]==1"
+      DTS:From="Package\stg load"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\dev mode" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{C390E9A1-658C-4B06-82EA-21B14F12598B}"
+      DTS:From="Package\dev mode"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\dim load" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="192.8,41.6"
+          Id="Package\stg load\delete stg packagetypes"
+          TopLeft="5.9142859818984,171.5" />
+        <EdgeLayout
+          Id="Package\stg load.PrecedenceConstraints[Constraint 1]"
+          TopLeft="101.914285981898,125.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,46"
+              Start="0,0"
+              End="0,38.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,38.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\stg load.PrecedenceConstraints[Constraint 2]"
+          TopLeft="101.664285981898,213.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,27"
+              Start="0,0"
+              End="0,19.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,19.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="174.4,41.6"
+          Id="Package\stg load\delete stg stockitem"
+          TopLeft="17.9142859818984,5.5" />
+        <EdgeLayout
+          Id="Package\stg load.PrecedenceConstraints[Constraint]"
+          TopLeft="103.164285981898,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,36"
+              Start="0,0"
+              End="0,28.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,28.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="184,41.6"
+          Id="Package\stg load\load stg packagetypes"
+          TopLeft="8.9142859818984,240.5" />
+        <NodeLayout
+          Size="164.8,41.6"
+          Id="Package\stg load\load stg stockitem"
+          TopLeft="18.9142859818984,83.5" />
+        <ContainerLayout
+          HeaderHeight="43.2"
+          IsExpanded="False"
+          PanelSize="204.8,336.8"
+          Size="140,43.2"
+          Id="Package\stg load"
+          TopLeft="264.285718786473,209.529414703277" />
+        <NodeLayout
+          Size="152,41.6"
+          Id="Package\dim load\delete dim item"
+          TopLeft="27.7071497390467,76.5147078530186" />
+        <EdgeLayout
+          Id="Package\dim load.PrecedenceConstraints[Constraint 4]"
+          TopLeft="105.525006950328,118.114707853019">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,52.1352941980823"
+              Start="0,0"
+              End="0,44.6352941980823">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,44.6352941980823" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="143.2,41.6"
+          Id="Package\dim load\load dim item"
+          TopLeft="35.7428641616083,170.250002051101" />
+        <NodeLayout
+          Size="156.8,41.6"
+          Id="Package\dim load\delete command"
+          TopLeft="32.6571474187229,5.5" />
+        <EdgeLayout
+          Id="Package\dim load.PrecedenceConstraints[Constraint]"
+          TopLeft="107.382148578885,47.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,29.4147078530186"
+              Start="0,0"
+              End="0,21.9147078530186">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,21.9147078530186" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="False"
+          PanelSize="244,275.2"
+          Size="244,43.2"
+          Id="Package\dim load"
+          TopLeft="235.535718296864,474.617651793784" />
+        <NodeLayout
+          Size="124.8,41.6"
+          Id="Package\dev mode"
+          TopLeft="270.178576029685,336.091179299231" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="333.432147408079,252.729414703277">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,83.3617645959542"
+              Start="0,0"
+              End="0,75.8617645959542">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,75.8617645959542" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="332.578576029685,377.691179299231">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="24.9571422671789,96.9264724945529"
+              Start="0,0"
+              End="24.9571422671789,89.4264724945529">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,44.4632362472765" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,44.4632362472765"
+                    Point2="0,48.4632362472765"
+                    Point3="4,48.4632362472765" />
+                  <mssgle:LineSegment
+                    End="20.9571422671789,48.4632362472765" />
+                  <mssgle:CubicBezierSegment
+                    Point1="20.9571422671789,48.4632362472765"
+                    Point2="24.9571422671789,48.4632362472765"
+                    Point3="24.9571422671789,52.4632362472765" />
+                  <mssgle:LineSegment
+                    End="24.9571422671789,89.4264724945529" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\dim load\load dim item">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="145.6,41.6"
+          Id="Package\dim load\load dim item\stg stockitems"
+          TopLeft="86,32" />
+        <NodeLayout
+          Size="148.8,41.6"
+          Id="Package\dim load\load dim item\dim stockitems"
+          TopLeft="92,284" />
+        <NodeLayout
+          Size="159.2,41.6"
+          Id="Package\dim load\load dim item\Derived unitprice"
+          TopLeft="86,198" />
+        <NodeLayout
+          Size="179.2,41.6"
+          Id="Package\dim load\load dim item\Lookup package type"
+          TopLeft="76,116" />
+        <EdgeLayout
+          Id="Package\dim load\load dim item.Paths[Lookup Match Output]"
+          TopLeft="165.5,158">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,40"
+              Start="0,0"
+              End="0,32.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,32.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-48.19138671875,10.4453125,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\dim load\load dim item.Paths[Derived Column Output]"
+          TopLeft="166,240">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-8,10.25,16,16"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\dim load\load dim item.Paths[OLE DB Source Output]"
+          TopLeft="162.25,74">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,42"
+              Start="0,0"
+              End="0,34.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-8,9.25,16,16"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\dim load\load dim item\stg stockitems">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\dim load\load dim item\dim stockitems">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\dim load\load dim item\Lookup package type">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[stg].[packagetypes]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\stg load\load stg packagetypes">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="170,42"
+          Id="Package\stg load\load stg packagetypes\WWI packagetypes"
+          TopLeft="68,57" />
+        <NodeLayout
+          Size="161,42"
+          Id="Package\stg load\load stg packagetypes\stg packagetypes"
+          TopLeft="70,181" />
+        <EdgeLayout
+          Id="Package\stg load\load stg packagetypes.Paths[OLE DB Source Output]"
+          TopLeft="151.75,99">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,82"
+              Start="0,0"
+              End="0,74.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,74.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\stg load\load stg packagetypes\stg packagetypes">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\stg load\load stg packagetypes\WWI packagetypes">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\stg load\load stg stockitem">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="155.2,41.6"
+          Id="Package\stg load\load stg stockitem\WWI stockitems"
+          TopLeft="50,19" />
+        <NodeLayout
+          Size="145.6,41.6"
+          Id="Package\stg load\load stg stockitem\stg stockitems"
+          TopLeft="62,134" />
+        <EdgeLayout
+          Id="Package\stg load\load stg stockitem.Paths[OLE DB Source Output]"
+          TopLeft="131.25,61">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,73"
+              Start="0,0"
+              End="0,65.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,65.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\stg load\load stg stockitem\stg stockitems">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\stg load\load stg stockitem\WWI stockitems">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

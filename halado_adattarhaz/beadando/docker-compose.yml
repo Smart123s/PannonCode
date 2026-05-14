@@ -1,0 +1,43 @@
+version: '3.8'
+
+networks:
+  dw_internal_network:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: dw_postgres
+    hostname: dw_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: warehouse_metadata
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql
+    networks:
+      - dw_internal_network
+    restart: unless-stopped
+
+  superset:
+    image: apache/superset:latest
+    container_name: dw_superset
+    hostname: dw_bi
+    user: root
+    entrypoint: >
+      sh -c "pip install psycopg2-binary && /usr/bin/run-server.sh"
+    environment:
+      SUPERSET_SECRET_KEY: 'ez_egy_nagyon_titkos_es_hosszu_kulcs_a_projekthez_2026'
+      SQLALCHEMY_DATABASE_URI: 'postgresql+psycopg2://admin:password123@dw_db:5432/warehouse_metadata'
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./superset_home:/app/superset_home
+    networks:
+      - dw_internal_network
+    depends_on:
+      - postgres
+    restart: unless-stopped
