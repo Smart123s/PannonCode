@@ -1,0 +1,17 @@
+We have a bakery, and we have to bake cakes to our customers. There are five different cake types, each requiring a different amount of the ingredients.
+
+Cake #1 requires 300 grams of flour, 200 grams of butter, 100 grams of sugar and 3 eggs, and it has a price of 6€.
+
+Cake #2 requires 400 grams of flour, 150 grams of butter, no sugar and 6 eggs, and it has a price of 7€.
+
+Cake #3 requires 360 grams of flour, 250 grams of butter, 250 grams of sugar and 5 eggs, its price is 8€.
+
+Cake #4 requires 550 grams of flour, 280 grams of butter, 280 grams of sugar, 6 eggs, its price is 9€.
+
+Cake #5 requires 600 grams of flour, 300 grams of butter, 350 grams of sugar, 8 eggs, and its price is 11€.
+
+We have a storage of 50 kgs of flour, 30 kgs of sugar, 5 kgs of butter and 100 eggs for this purpose. Of course, cakes require more ingrediends, but we may assume that those are available in unlimited amounts. We cannot gain more ingrediendts, and we don't care about leftovers.
+
+What is the maximum of the total price of the baked cakes if we use these ingredients?
+
+Note: Production amounts of cakes are integers, so we cannot bake "half a cake" for example. For this reason, the original model file must be changed, and the corresponding decision variables must have the "integer" limitation added.
