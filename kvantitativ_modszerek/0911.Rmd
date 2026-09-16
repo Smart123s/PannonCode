@@ -1,0 +1,19 @@
+változók definiálása
+
+```{r}
+x<-c(1,2,3,4,5)
+```
+
+```{r}
+x<-as.factor(x) # faktor változóként
+
+table(x)
+```
+
+```{r}
+x<-c(1:10000)
+mean(x)
+sd(x)
+
+mean(sample(x,100))
+```
