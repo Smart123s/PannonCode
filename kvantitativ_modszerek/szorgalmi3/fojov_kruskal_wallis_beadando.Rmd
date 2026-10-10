@@ -1,0 +1,152 @@
+---
+title: "Varianciaelemzés és Kruskal-Wallis-próba összehasonlítása"
+subtitle: A főállásból származó jövedelem vizsgálata foglalkozási csoportok szerint
+output:
+  html_document:
+    toc: true
+    df_print: paged
+  html_notebook:
+    toc: true
+    number_sections: true
+---
+
+# Bevezetés
+
+A feladatban azt vizsgálom, hogy van-e különbség a főállásból származó havi nettó jövedelem között a különböző foglalkozási csoportokban.
+
+A függő változó a `fojov`, amely a főállásból származó havi nettó jövedelmet tartalmazza ezer forintban. A csoportosító változó a `fogl4`, amely négy foglalkozási csoportot különböztet meg.
+
+Először megnézem az egyutas varianciaelemzés (ANOVA) eredményét és annak feltételeit. Mivel a normalitás feltétele nem teljesül, az elemzést Kruskal-Wallis-próbával is elvégzem. A végén összehasonlítom a két eljárás eredményét.
+
+# 1. Az adatok beolvasása és előkészítése
+
+```{r setup, message=FALSE, warning=FALSE}
+# Szükséges csomagok
+library(haven)
+
+# Az SPSS adatfájl beolvasása
+adat <- read_sav("fojov.sav", user_na = TRUE)
+
+# Az SPSS-ben megadott hiányzó értékek NA értékké alakítása
+adat <- zap_missing(adat)
+
+# A jövedelem numerikus változó, a foglalkozási csoport pedig faktor legyen
+adat$fojov <- as.numeric(zap_labels(adat$fojov))
+adat$fogl4 <- as_factor(adat$fogl4)
+
+# Csak a két vizsgált változót tartom meg, és elhagyom a hiányzó sorokat
+elemzes <- data.frame(
+  fojov = adat$fojov,
+  csoport = adat$fogl4
+)
+
+elemzes <- na.omit(elemzes)
+elemzes$csoport <- droplevels(elemzes$csoport)
+
+# A felhasznált minta nagysága és a csoportok
+dim(elemzes)
+table(elemzes$csoport)
+```
+
+Az elemzésben 1504 megfigyelés maradt. A négy csoport a szakképzetlen fizikai, a szakképzett fizikai, az egyszerű szellemi és a vezető értelmiségi csoport.
+
+# 2. Leíró statisztikák
+
+Mielőtt elvégzem a próbákat, megnézem a csoportok átlagát, mediánját és szórását. Az ANOVA főleg a csoportátlagok közötti különbséget vizsgálja, a Kruskal-Wallis-próba pedig rangokon alapul, ezért a mediánokat is érdemes figyelembe venni.
+
+```{r leiro-statisztikak}
+# Csoportonkénti leíró statisztikák
+leiro <- data.frame(
+  csoport = levels(elemzes$csoport),
+  n = as.vector(table(elemzes$csoport)),
+  atlag = as.vector(tapply(elemzes$fojov, elemzes$csoport, mean)),
+  median = as.vector(tapply(elemzes$fojov, elemzes$csoport, median)),
+  szoras = as.vector(tapply(elemzes$fojov, elemzes$csoport, sd))
+)
+
+leiro$atlag <- round(leiro$atlag, 2)
+leiro$median <- round(leiro$median, 2)
+leiro$szoras <- round(leiro$szoras, 2)
+
+knitr::kable(leiro, col.names = c("Foglalkozási csoport", "N", "Átlag", "Medián", "Szórás"))
+```
+
+A jövedelem átlaga és mediánja minden következő foglalkozási csoportban magasabb. A mediánok rendre 8, 11, 12 és 16 ezer Ft. A vezető értelmiségi csoportban a legmagasabb mind az átlag, mind a medián.
+
+A szórások is eléggé különböznek, és az átlagok több csoportban nagyobbak a mediánoknál. Ez arra utal, hogy a jövedelmek eloszlása nem szimmetrikus, illetve nagyobb kiugró értékek is előfordulnak.
+
+```{r boxplot}
+# A csoportok eloszlásának szemléltetése
+boxplot(
+  fojov ~ csoport,
+  data = elemzes,
+  main = "Havi nettó jövedelem foglalkozási csoportok szerint",
+  xlab = "Foglalkozási csoport",
+  ylab = "Jövedelem (ezer Ft)",
+  las = 2
+)
+```
+
+A boxploton is látszanak a kiugró értékek, valamint az, hogy a négy csoport eloszlása és szóródása nem teljesen egyforma.
+
+# 3. Az ANOVA feltételeinek ellenőrzése
+
+Az egyutas ANOVA egyik fontos feltétele, hogy a modell maradékai közelítőleg normális eloszlásúak legyenek. Ezt Shapiro-Wilk-próbával és Q-Q ábrával ellenőrzöm.
+
+## 3.1. Normalitás
+
+```{r normalitas}
+# Egyutas ANOVA modell
+anova_modell <- aov(fojov ~ csoport, data = elemzes)
+
+# A modell maradékai
+maradek <- residuals(anova_modell)
+
+# Q-Q ábra
+qqnorm(maradek)
+qqline(maradek)
+
+# Shapiro-Wilk normalitásvizsgálat
+shapiro.test(maradek)
+```
+
+A Shapiro-Wilk-próba nullhipotézise az, hogy a vizsgált adatok normális eloszlásból származnak. Ha a p-érték 0,05-nél kisebb, akkor a normalitás feltételét elutasítjuk.
+
+Az eredményben `W = 0,58`, a p-érték pedig 0,001-nél kisebb. Ez alapján a maradékok eloszlása nem tekinthető normálisnak. A Q-Q ábrán is látható eltérés az egyenestől, főleg a szélső értékeknél.
+
+# 4. Egyutas varianciaelemzés
+
+Az ANOVA nullhipotézise szerint a négy foglalkozási csoport átlagos jövedelme megegyezik. Az alternatív hipotézis szerint legalább egy csoport átlaga eltér a többitől.
+
+```{r anova}
+summary(anova_modell)
+```
+
+Az ANOVA eredménye `F(3, 1500) = 58,41`, `p < 0,001`. Ez szignifikáns eredmény, ezért a nullhipotézist elutasítom. Az ANOVA alapján van különbség a négy foglalkozási csoport átlagos jövedelme között.
+
+Viszont az előző részben látható volt, hogy a normalitás feltétele nem teljesül, ezért ezt az eredményt érdemes a Kruskal-Wallis-próbával is ellenőrizni.
+
+# 5. Kruskal-Wallis-próba
+
+A Kruskal-Wallis-próba független csoportok összehasonlítására használható nemparaméteres eljárás. A próba nem igényli a függő változó normális eloszlását. Nem közvetlenül az átlagokkal, hanem az adatok rangjaival számol.
+
+A nullhipotézis szerint a csoportok rangeloszlása megegyezik. Ha a p-érték kisebb 0,05-nél, akkor legalább egy csoport eltér a többitől.
+
+```{r kruskal-wallis}
+kruskal.test(fojov ~ csoport, data = elemzes)
+```
+
+A Kruskal-Wallis-próba eredménye `H(3) = 260,30`, `p < 0,001`. Ez alapján a nullhipotézist elutasítom. A foglalkozási csoportok jövedelmi eloszlása között szignifikáns különbség van.
+
+Ez az eredmény ugyanabba az irányba mutat, mint az ANOVA eredménye: a foglalkozási csoportok között valóban van jövedelmi különbség.
+
+# 7. Az ANOVA és a Kruskal-Wallis-próba összehasonlítása
+
+A két fő próba eredménye összességében megegyezik:
+
+| Próba | Próbaérték | p-érték | Következtetés |
+|:--|:--|:--|:--|
+| Egyutas ANOVA | F(3, 1500) = 58,41 | < 0,001 | A csoportátlagok között van különbség. |
+| Kruskal-Wallis | H(3) = 260,30 | < 0,001 | A csoportok rangeloszlása között van különbség. |
+
+Mindkét eljárás szignifikáns különbséget mutat a foglalkozási csoportok között. Mivel a normalitás feltétele nem teljesült, ebben az esetben a Kruskal-Wallis-próba megfelelőbb választás a csoportok összehasonlítására.

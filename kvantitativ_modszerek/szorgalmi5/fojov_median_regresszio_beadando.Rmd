@@ -1,0 +1,118 @@
+---
+title: "Medián regresszió-elemzés"
+subtitle: A jövedelmet befolyásoló tényezők vizsgálata
+output:
+  html_document:
+    toc: true
+    df_print: paged
+  html_notebook:
+    fig_caption: true
+    highlight: haddock
+    theme: lumen
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
+---
+
+**Feladat:** Vizsgálja meg medián regresszió-elemzés segítségével, hogy mely tényezők hatnak a jövedelemre. Olyan modellt keressen, amely esetén a multikollinearitás hatása elhanyagolható. Hasonlítsa össze az eredményeket az órai vizsgálatok eredményeivel!
+
+# Szükséges függvénykönyvtárak
+
+```{r,warning=FALSE,message=FALSE}
+library(foreign)  # SPSS állomány beolvasása
+library(quantreg) # kvantilis regresszió
+library(car)      # VIF mutató
+library(knitr)    # táblázatok megjelenítése
+```
+
+# Adatok betöltése
+
+```{r,warning=FALSE,message=FALSE}
+data <- read.spss("fojov.sav", to.data.frame = TRUE, use.value.labels = FALSE)
+data <- na.omit(data)
+```
+
+A mediánregresszióhoz ugyanazokat a változókat használom kiindulásként, mint a regressziós órán a bővített modellben: `neme`, `kor`, `iskoszt`, `teltip` és `fogl4`.
+
+# Medián regresszió
+
+A kvantilis regresszióban a `tau = 0.5` beállítás a mediánt jelenti. Így nem az átlagos, hanem a medián jövedelmet vizsgáljuk.
+
+```{r,warning=FALSE,message=FALSE}
+modell1 <- rq(
+  fojov ~ neme + kor + iskoszt + teltip + fogl4,
+  tau = 0.5,
+  data = data
+)
+
+summary(modell1)
+```
+
+A teljes modellben a nem együtthatója negatív, a többi változóé pozitív. Ez az órai lineáris regresszió eredményével azonos irányú kapcsolatokat mutat.
+
+# Multikollinearitás vizsgálata
+
+A multikollinearitást az órán használt VIF mutatóval vizsgálom. A VIF a magyarázó változók egymás közötti kapcsolatát méri, ezért ugyanazokkal a változókkal lineáris modellt adok meg.
+
+```{r,warning=FALSE,message=FALSE}
+vif_modell <- lm(
+  fojov ~ neme + kor + iskoszt + teltip + fogl4,
+  data = data
+)
+
+vif(vif_modell)
+```
+
+A VIF értéke az `iskoszt` és a `fogl4` esetében 2 fölé kerül. Ez megegyezik az órai eredménnyel: az iskolázottság és a foglalkozási kategória egymással is kapcsolatban áll, ezért a kettő együttes szerepeltetése multikollinearitást okozhat.
+
+Az órai anyag alapján ilyenkor az egyik változó elhagyható. Megnézem a két lehetséges lineáris modell korrigált determinációs együtthatóját, és azt a változót tartom meg, amelyikkel a modell magyarázóképessége nagyobb.
+
+```{r,warning=FALSE,message=FALSE}
+modell_isk <- lm(fojov ~ neme + kor + iskoszt + teltip, data = data)
+modell_fogl <- lm(fojov ~ neme + kor + fogl4 + teltip, data = data)
+
+osszehasonlitas <- data.frame(
+  modell = c("iskoszt szerepel", "fogl4 szerepel"),
+  korrigalt_R2 = c(summary(modell_isk)$adj.r.squared,
+                   summary(modell_fogl)$adj.r.squared)
+)
+
+kable(osszehasonlitas, digits = 3,
+      col.names = c("Modell", "Korrigált R-négyzet"))
+```
+
+Az `iskoszt` változót tartalmazó modell korrigált $R^2$ értéke nagyobb, ezért a végső mediánregressziós modellben az `iskoszt` marad, a `fogl4` változót elhagyom.
+
+# Végső modell
+
+```{r,warning=FALSE,message=FALSE}
+modell2 <- rq(
+  fojov ~ neme + kor + iskoszt + teltip,
+  tau = 0.5,
+  data = data
+)
+
+summary(modell2)
+```
+
+A végső modell multikollinearitását is ellenőrzöm.
+
+```{r,warning=FALSE,message=FALSE}
+vif_modell2 <- lm(
+  fojov ~ neme + kor + iskoszt + teltip,
+  data = data
+)
+
+vif(vif_modell2)
+```
+
+A VIF értékek ebben a modellben alacsonyak, ezért a multikollinearitás hatása elhanyagolható.
+
+A mediánregresszió alapján a nem együtthatója negatív, míg a kor, az elvégzett iskolai osztályok száma és a településtípus együtthatója pozitív. A változók szignifikánsak, vagyis a jövedelem mediánjával mindegyikük kapcsolatban áll.
+
+# Összehasonlítás az órai regresszióval
+
+Az órai lineáris regresszióban is azt kaptuk, hogy a nők várható jövedelme alacsonyabb, míg az életkor, az iskolázottság és a nagyobb településtípus pozitívan kapcsolódik a jövedelemhez. A mediánregresszió tehát az összefüggések irányában ugyanarra a következtetésre vezet.
+
+A különbség az, hogy az órai lineáris regressziónál a normalitás és a szóráshomogenitás feltétele nem teljesült. A mediánregresszió alkalmazása ezért indokolt. A multikollinearitás problémáját az `iskoszt` és a `fogl4` közül az egyik változó elhagyásával kezeltem; a végső modellben az `iskoszt` maradt.

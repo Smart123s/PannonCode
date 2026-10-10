@@ -1,0 +1,253 @@
+---
+title: "A jövedelemre ható tényezők vizsgálata"
+subtitle: "Regresszió- és varianciaelemzés a B_01.sav adatállományon"
+output:
+  html_document:
+    toc: yes
+    number_sections: true
+  html_notebook:
+    toc: yes
+    number_sections: true
+---
+
+# A feladat célja
+
+A feladatban azt vizsgálom meg, hogy a `B_01.sav` adatállományban szereplő gyermekkori életkörülmények közül melyek mutatnak kapcsolatot a főállásból származó havi nettó jövedelemmel.
+
+A vizsgált változók:
+
+- `fojov`: főállásból származó havi nettó jövedelem, ezer Ft-ban,
+- `gyvillan`: volt-e villany a gyermekkori lakásban (0 = nem volt, 1 = volt),
+- `gyhanyfo`: hány fő élt a gyermekkori háztartásban,
+- `gyfutlen`: aludt-e valaki fűtetlen szobában (0 = nem, 1 = igen),
+- `gyehes2`: éhezett-e gyermekkorában (0 = nem, 1 = igen).
+
+A `sorsz` változó csak azonosító, ezért azt nem használom magyarázó változóként.
+
+A számszerű magyarázó változót regresszióban, a kétkategóriás változókat pedig regresszióban és varianciaanalízissel is megvizsgálom. A végén megnézem a magyarázó változók egymás közötti korrelációját is.
+
+# Csomagok és adatok beolvasása
+
+```{r, warning=FALSE, message=FALSE}
+library(foreign)
+library(knitr)
+library(car)
+library(gvlma)
+```
+
+```{r}
+data <- read.spss("B_01.sav", to.data.frame = TRUE, use.value.labels = FALSE)
+
+# A további kód egyszerűbb, ha kisbetűs változóneveket használunk.
+names(data) <- tolower(names(data))
+
+# A 999 a jövedelemnél "nem tudja", ezért hiányzó értékként kezeljük.
+data$fojov[data$fojov == 999] <- NA
+
+# Csak az elemzéshez szükséges változók maradnak.
+elemzes <- data[, c("fojov", "gyvillan", "gyhanyfo", "gyfutlen", "gyehes2")]
+elemzes <- elemzes[complete.cases(elemzes), ]
+
+nrow(elemzes)
+```
+
+Az elemzésben **2865 teljes megfigyelés** használható.
+
+A varianciaanalízishez a 0/1 kódolású változókból faktorváltozókat készítek.
+
+```{r}
+elemzes$gyvillan_f <- factor(elemzes$gyvillan,
+                             levels = c(0, 1),
+                             labels = c("nem volt", "volt"))
+
+elemzes$gyfutlen_f <- factor(elemzes$gyfutlen,
+                             levels = c(0, 1),
+                             labels = c("nem", "igen"))
+
+elemzes$gyehes2_f <- factor(elemzes$gyehes2,
+                            levels = c(0, 1),
+                            labels = c("nem", "igen"))
+```
+
+# Regresszióelemzés
+
+A többváltozós regresszióban egyszerre szerepeltetem a négy magyarázó változót. A kétkategóriás változók 0/1 kódolásúak, ezért regresszióban is használhatók.
+
+```{r}
+fit <- lm(fojov ~ gyvillan + gyhanyfo + gyfutlen + gyehes2,
+          data = elemzes)
+summary(fit)
+```
+
+A regressziós modell szignifikáns: az F-próba p-értéke 0,05 alatt van. A modell magyarázóképessége ugyanakkor alacsony, az $R^2$ értéke körülbelül **0,033**, vagyis a jövedelem eltéréseinek mintegy 3,3%-át magyarázzák a modellben szereplő változók.
+
+A becsült együtthatók alapján:
+
+- a `gyvillan` együtthatója pozitív és szignifikáns ($\beta \approx 2,70$, $p<0,001$). Azoknál, akiknek a gyermekkori lakásában volt villany, átlagosan magasabb jövedelem figyelhető meg;
+- a `gyhanyfo` együtthatója negatív és szignifikáns ($\beta \approx -0,28$, $p\approx0,001$). A nagyobb gyermekkori háztartás kisebb várható jövedelemmel jár együtt;
+- a `gyfutlen` együtthatója nem szignifikáns ($p>0,05$);
+- a `gyehes2` együtthatója szintén nem szignifikáns ($p>0,05$).
+
+Ez azt jelenti, hogy a többi változó hatása mellett a regressziós modellben elsősorban a gyermekkori villanyellátás és a háztartás létszáma mutat önálló kapcsolatot a jövedelemmel.
+
+# A regresszió feltételeinek vizsgálata
+
+## A reziduumok várható értéke
+
+Konstanst tartalmazó lineáris regressziónál a reziduumok átlaga gyakorlatilag nulla.
+
+```{r}
+mean(resid(fit))
+```
+
+Ez a feltétel teljesül.
+
+## Normalitás
+
+A normalitást a regresszió reziduumain Shapiro-Wilk-próbával vizsgálom.
+
+A nullhipotézis szerint a reziduumok normális eloszlást követnek.
+
+```{r}
+shapiro.test(resid(fit))
+```
+
+A p-érték 0,05 alatt van, ezért a normalitás feltétele **nem teljesül**. A jövedelemadatok erősen jobbra ferdék, és kiugróan magas értékek is előfordulnak.
+
+## Szóráshomogenitás
+
+Az órai regressziós vizsgálathoz hasonlóan a `gvlma` csomaggal ellenőrzöm a modell feltételeit.
+
+```{r}
+gvmodel <- gvlma(fit)
+summary(gvmodel)
+```
+
+A heteroszkedaszticitásra vonatkozó eredmény alapján a hibatagok varianciája nem tekinthető állandónak, ezért a szóráshomogenitás feltétele **nem teljesül megfelelően**.
+
+## Multikollinearitás
+
+A magyarázó változók közötti túl erős kapcsolatot VIF-mutatóval vizsgálom.
+
+```{r}
+vif(fit)
+sqrt(vif(fit)) > 2
+```
+
+A VIF-értékek mind alacsonyak, körülbelül 1,1 körüliek. Ez alapján a multikollinearitás hatása **elhanyagolható**.
+
+## Diagnosztikai ábrák
+
+```{r}
+plot(fit)
+```
+
+Az ábrák is azt mutatják, hogy a reziduumok eloszlása nem normális, és néhány kiugró megfigyelés is található. Ez összhangban van a formális vizsgálatok eredményével.
+
+Összességében tehát a regressziós modell normalitási és szóráshomogenitási feltétele nem teljesül, a multikollinearitás viszont nem jelent problémát. Emiatt a regressziós eredményeket óvatosan kell értelmezni.
+
+# Varianciaanalízis
+
+A három kétkategóriás gyermekkori életkörülmény esetében egyutas varianciaanalízissel is megvizsgálom, hogy eltér-e a jövedelem a csoportok között.
+
+## Villany a gyermekkori lakásban
+
+```{r}
+aggregate(fojov ~ gyvillan_f, data = elemzes, FUN = mean)
+
+anova_villany <- aov(fojov ~ gyvillan_f, data = elemzes)
+summary(anova_villany)
+```
+
+A villany nélküli gyermekkori lakásban élők átlagos jövedelme körülbelül **8,03 ezer Ft**, míg azoké, akiknél volt villany, körülbelül **11,22 ezer Ft**. A különbség szignifikáns ($p<0,001$).
+
+## Fűtetlen szobában alvás
+
+```{r}
+aggregate(fojov ~ gyfutlen_f, data = elemzes, FUN = mean)
+
+anova_futetlen <- aov(fojov ~ gyfutlen_f, data = elemzes)
+summary(anova_futetlen)
+```
+
+Azok átlagos jövedelme, akik gyermekkorukban nem aludtak fűtetlen szobában, körülbelül **10,51 ezer Ft**, míg az igen választ adóknál körülbelül **9,04 ezer Ft**. A különbség szignifikáns ($p<0,01$).
+
+## Gyermekkori éhezés
+
+```{r}
+aggregate(fojov ~ gyehes2_f, data = elemzes, FUN = mean)
+
+anova_ehezes <- aov(fojov ~ gyehes2_f, data = elemzes)
+summary(anova_ehezes)
+```
+
+Azok átlagos jövedelme, akik nem éheztek gyermekkorukban, körülbelül **10,92 ezer Ft**, az éhezésről beszámolóknál pedig körülbelül **9,62 ezer Ft**. A különbség szintén szignifikáns ($p<0,001$).
+
+# A varianciaanalízis feltételei
+
+A varianciaanalízisnél a normalitást a modellek reziduumain vizsgálom.
+
+```{r}
+shapiro.test(resid(anova_villany))
+shapiro.test(resid(anova_futetlen))
+shapiro.test(resid(anova_ehezes))
+```
+
+Mindhárom esetben 0,05 alatti p-értéket kapunk, ezért a normalitás feltétele **egyik varianciaanalízisnél sem teljesül**.
+
+A varianciák homogenitását Levene-próbával vizsgálom.
+
+```{r}
+leveneTest(fojov ~ gyvillan_f, data = elemzes)
+leveneTest(fojov ~ gyfutlen_f, data = elemzes)
+leveneTest(fojov ~ gyehes2_f, data = elemzes)
+```
+
+A Levene-próbák p-értékei 0,05 alatt vannak, ezért a csoportok szórásai sem tekinthetők homogénnek. A varianciaanalízis két fontos alkalmazási feltétele tehát sérül.
+
+A varianciaanalízis eredményeit emiatt szintén óvatosan kell értelmezni.
+
+# A magyarázó változók korrelációja
+
+Mivel a magyarázó változók között kétkategóriás és diszkrét változók is vannak, az órai korrelációs vizsgálathoz hasonlóan Kendall-féle rangkorrelációt használok.
+
+```{r}
+magyarazok <- elemzes[, c("gyvillan", "gyhanyfo", "gyfutlen", "gyehes2")]
+round(cor(magyarazok, method = "kendall"), 3)
+```
+
+A kapcsolat szignifikanciáját páronként is ellenőrzöm.
+
+```{r}
+valtozok <- names(magyarazok)
+parok <- combn(valtozok, 2)
+
+for (i in 1:ncol(parok)) {
+  x <- magyarazok[[parok[1, i]]]
+  y <- magyarazok[[parok[2, i]]]
+  teszt <- cor.test(x, y, method = "kendall", exact = FALSE)
+  cat(parok[1, i], "-", parok[2, i],
+      ": tau =", round(unname(teszt$estimate), 3),
+      ", p =", format.pval(teszt$p.value, digits = 3), "\n")
+}
+```
+
+A nagy elemszám miatt valamennyi változópár között statisztikailag kimutatható kapcsolat van, de ezek erőssége nem nagy.
+
+A legerősebb kapcsolatok:
+
+- `gyvillan` és `gyehes2`: $\tau\approx-0,282$;
+- `gyvillan` és `gyhanyfo`: $\tau\approx-0,240$;
+- `gyhanyfo` és `gyehes2`: $\tau\approx0,230$.
+
+A negatív előjel azt jelenti, hogy ahol jobb volt a gyermekkori lakás villanyellátása, ott ritkább volt az éhezés és általában kisebb volt a háztartás létszáma. A többi kapcsolat is gyenge. Ez összhangban van a regresszió VIF-eredményével: a magyarázó változók között van kapcsolat, de nem olyan erős, hogy komoly multikollinearitást okozzon.
+
+# A regressziós és varianciaanalízis eredmények összehasonlítása
+
+A két módszer nem teljesen ugyanazt vizsgálja. A varianciaanalízisek külön-külön hasonlítják össze a csoportok átlagjövedelmét, míg a többváltozós regresszióban a magyarázó változók egyszerre szerepelnek.
+
+A varianciaanalízis szerint mindhárom kétkategóriás változónál szignifikáns jövedelmi különbség van. A regresszióban azonban a többi tényező hatását is figyelembe véve csak a `gyvillan` és a `gyhanyfo` marad szignifikáns. A `gyfutlen` és a `gyehes2` önálló regressziós hatása már nem mutatható ki.
+
+Ennek egyik oka az lehet, hogy a gyermekkori hátrányokat mérő változók egymással is kapcsolatban állnak. Például az éhezés, a villany hiánya, a nagyobb háztartás és a fűtetlen szobában alvás részben ugyanannak a kedvezőtlenebb gyermekkori élethelyzetnek különböző jellemzői.
+
+A legfontosabb következtetés, hogy a vizsgált tényezők közül a **gyermekkori villanyellátás** és a **gyermekkori háztartás létszáma** mutat a többváltozós regresszióban is önálló kapcsolatot a későbbi jövedelemmel. Ugyanakkor sem a regresszió, sem a varianciaanalízis alkalmazási feltételei nem teljesülnek maradéktalanul, ezért az eredmények értelmezésénél ezt figyelembe kell venni.

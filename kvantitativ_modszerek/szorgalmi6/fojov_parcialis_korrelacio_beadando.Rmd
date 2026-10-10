@@ -1,0 +1,113 @@
+---
+title: "Parciális korreláció-elemzés"
+subtitle: A demográfiai jellemzők és a jövedelem kapcsolata
+output:
+  html_document:
+    toc: true
+    df_print: paged
+  html_notebook:
+    fig_caption: true
+    highlight: haddock
+    theme: lumen
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
+---
+
+**Feladat:** Vizsgálja meg parciális korreláció segítségével, hogy milyen kapcsolat mutatható ki a demográfiai jellemzők és jövedelem között! Hasonlítsa össze az eredményeket a regressziós és a korrelációs eredményekkel!
+
+A korrelációs elemzésben két változó kapcsolatát vizsgáljuk. A parciális korrelációnál azt nézzük meg, hogy két változó között milyen kapcsolat marad, ha a többi bevont változó hatását kiszűrjük.
+
+# Szükséges függvénykönyvtárak
+
+```{r,warning=FALSE,message=FALSE}
+library(foreign) # SPSS állomány beolvasása
+library(knitr)   # táblázatok megjelenítése
+library(ppcor)   # parciális korreláció
+```
+
+# Adatok betöltése
+
+```{r,warning=FALSE,message=FALSE}
+data <- read.spss("fojov.sav", to.data.frame = TRUE, use.value.labels = FALSE)
+```
+
+Az összehasonlíthatóság miatt ugyanazokat a változókat használom, amelyek a regressziós órán a bővített modellben szerepeltek. Az iskolázottságot az `iskoszt` változóval mérem. A `befisk` szintén az iskolázottságot írja le, de alacsonyabb mérési szinten, ezért a regressziós órai megoldáshoz hasonlóan ezt most nem teszem külön a vizsgálatba.
+
+```{r,warning=FALSE,message=FALSE}
+resdata <- data[, c("fojov", "neme", "kor", "iskoszt", "teltip", "fogl4")]
+resdata <- na.omit(resdata)
+
+nrow(resdata)
+```
+
+# Korrelációs eredmények
+
+Az órai anyagban a normalitás nem teljesült, és több változó sorrendi mérési szintű. Emiatt az összehasonlításhoz a Kendall-féle rangkorrelációt használom.
+
+```{r,warning=FALSE,message=FALSE}
+kendall <- cor(resdata, method = "kendall")
+kable(kendall, digits = 2)
+```
+
+A jövedelemmel vett egyszerű Kendall-korrelációkat külön is kiíratom.
+
+```{r,warning=FALSE,message=FALSE}
+valtozok <- c("neme", "kor", "iskoszt", "teltip", "fogl4")
+
+egyszeru <- data.frame(
+  valtozo = valtozok,
+  kendall = as.numeric(kendall["fojov", valtozok])
+)
+
+kable(egyszeru, digits = 3,
+      col.names = c("Változó", "Kendall-korreláció a jövedelemmel"))
+```
+
+A kétváltozós eredmények alapján az iskolázottság és a foglalkozási kategória mutatja a legerősebb pozitív kapcsolatot a jövedelemmel. A nem kapcsolata negatív, míg az életkor és a településtípus kapcsolata pozitív.
+
+# Parciális korreláció
+
+A parciális korrelációnál minden változó és a jövedelem kapcsolatából kiszűrjük a többi bevont változó hatását. A Kendall-módszert itt is megtartom.
+
+```{r,warning=FALSE,message=FALSE}
+parc <- pcor(resdata, method = "kendall")
+
+parc_eredmeny <- data.frame(
+  valtozo = valtozok,
+  egyszeru_kendall = as.numeric(kendall["fojov", valtozok]),
+  parcialis_kendall = as.numeric(parc$estimate["fojov", valtozok]),
+  p_ertek = as.numeric(parc$p.value["fojov", valtozok])
+)
+
+kable(parc_eredmeny, digits = 3,
+      col.names = c("Változó", "Egyszerű Kendall", "Parciális Kendall", "p-érték"))
+```
+
+A parciális korreláció alapján a legerősebb kapcsolat a **nem és a jövedelem** között marad. A parciális Kendall-együttható értéke `r round(parc_eredmeny$parcialis_kendall[parc_eredmeny$valtozo == "neme"], 3)`. Mivel a férfiak kódja 1, a nőké 2, a negatív előjel azt mutatja, hogy a nőkhöz alacsonyabb jövedelem kapcsolódik akkor is, ha a többi változó hatását kiszűrjük.
+
+A **foglalkozási kategória** parciális korrelációja `r round(parc_eredmeny$parcialis_kendall[parc_eredmeny$valtozo == "fogl4"], 3)`, az **iskolai osztályok számáé** `r round(parc_eredmeny$parcialis_kendall[parc_eredmeny$valtozo == "iskoszt"], 3)`. Mindkét kapcsolat pozitív, de lényegesen gyengébb, mint a kétváltozós korrelációban. Ez arra utal, hogy a sima korrelációban mért kapcsolat egy része a többi demográfiai jellemzővel való együttjárásból származott.
+
+Az **életkor** parciális korrelációja `r round(parc_eredmeny$parcialis_kendall[parc_eredmeny$valtozo == "kor"], 3)`, a **településtípusé** pedig `r round(parc_eredmeny$parcialis_kendall[parc_eredmeny$valtozo == "teltip"], 3)`. Ezek pozitív, de laza kapcsolatok.
+
+A p-értékek alapján 5%-os szignifikanciaszinten a vizsgált öt változó mindegyikének parciális kapcsolata szignifikáns a jövedelemmel.
+
+# Összehasonlítás a regressziós eredményekkel
+
+A regressziós órán a bővített modellben ugyanezek a magyarázó változók szerepeltek:
+
+```{r,warning=FALSE,message=FALSE}
+fit <- lm(fojov ~ neme + kor + iskoszt + teltip + fogl4, data = resdata)
+summary(fit)
+```
+
+A regressziós modellben a nem együtthatója negatív, a kor, az iskolai osztályok száma, a településtípus és a foglalkozási kategória együtthatója pozitív. Ez az irány megegyezik a parciális korreláció eredményeivel.
+
+A regressziós órán azt is láttuk, hogy az `iskoszt` és a `fogl4` között kapcsolat van, ezért a multikollinearitás problémát okozhat. A parciális korrelációban a többi változó hatásának kiszűrése után mindkét változó jövedelemmel való kapcsolata gyengébb lett. Ez jól látszik, ha az egyszerű és a parciális Kendall-együtthatókat egymás mellé tesszük.
+
+# Következtetés
+
+Az egyszerű korreláció és a parciális korreláció ugyanazokat a fő irányokat mutatja, de a kapcsolatok erőssége megváltozik, amikor kiszűrjük a többi változó hatását. A foglalkozási kategória és az iskolázottság egyszerű korrelációja viszonylag erősebb, parciális kapcsolatuk viszont jóval kisebb. A nem negatív kapcsolata a kiszűrés után is megmarad, és abszolút értékben ez a legerősebb parciális kapcsolat.
+
+A regressziós eredményekkel is hasonló következtetés adódik: a női nem alacsonyabb, míg a magasabb életkor, iskolázottság, településtípus és foglalkozási kategória magasabb jövedelemmel jár együtt. A parciális korreláció ugyanakkor nem regressziós együtthatót vagy magyarázott hányadot ad, hanem azt mutatja meg, hogy két változó kapcsolata milyen erős a többi változó hatásának kiszűrése után.

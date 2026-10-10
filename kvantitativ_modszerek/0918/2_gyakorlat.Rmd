@@ -1,0 +1,347 @@
+# TechGadget Ltd. – Átfogó Statisztikai Gyakorlat
+
+R-ben: Hipotézisvizsgálat, t-próba, F-próba, Kontingencia táblák, Nem parametrikus próbák
+
+---
+
+## 1. A projekt háttérsztorija
+
+A TechGadget Ltd. egy e-kereskedelmi startup. A cég Európa-szerte árul elektronikai termékeket (okostelefonok, laptopok, okosórák, fülhallgatók, tablet) 3 fő régióban: Nyugat-Európa, Közép-Európa és Kelet-Európa.
+
+Adatbázis paraméterei: 1200 tranzakció, 800 vevő, 50 termék, 3 kampány a 2026. január-június közötti időszakból.
+
+---
+
+A. Hipotézisvizsgálat (Általános)
+Feladat A1: Régiók közötti árazási különbségek
+Van-e szignifikáns különbség a Nyugat-Európa és Kelet-Európa régiók átlagos eladási árai között?
+
+H0: mu_Nyugat = mu_Kelet
+
+H1: mu_Nyugat != mu_Kelet
+
+alpha = 0.05
+
+Lépések:
+
+Adatok szűrése és ábrázolása (boxplot, hisztogram).
+
+Normálitás ellenőrzése (Shapiro-Wilk teszt, Q-Q plot, Jarque-Bera próba).
+
+Varianciák egyenlőségének tesztelése (F-próba).
+
+A feltételeknek megfelelő t-próba elvégzése.
+
+```{r}
+# 1. Adatelőkészítés és vizualizáció
+west_prices <- full_data %>% filter(region == "Nyugat-Európa") %>% pull(total_price)
+east_prices <- full_data %>% filter(region == "Kelet-Európa") %>% pull(total_price)
+
+boxplot(total_price ~ region, data = full_data %>% filter(region %in% c("Nyugat-Európa", "Kelet-Európa")),
+        main = "Eladási érték: Nyugat-Európa vs Kelet-Európa", xlab = "Régió", ylab = "EUR")
+
+# 2. Normálitásvizsgálat
+par(mfrow = c(1, 2))
+qqnorm(west_prices, main = "Q-Q Plot: Nyugat-Európa")
+qqline(west_prices)
+qqnorm(east_prices, main = "Q-Q Plot: Kelet-Európa")
+qqline(east_prices)
+par(mfrow = c(1, 1))
+
+shapiro.test(west_prices)
+shapiro.test(east_prices)
+
+library(tseries)
+jarque.bera.test(west_prices)
+jarque.bera.test(east_prices)
+
+# 3. Varianciapróba
+var.test(west_prices, east_prices)
+
+# 4. t-próba (Welch t-próba, ha a feltételek sérülnek)
+t.test(west_prices, east_prices, var.equal = FALSE)
+```
+
+Feladat A2: Nemek vásárlási gyakorisága
+Vásárolnak-e a férfiak és nők különböző gyakorisággal?
+
+H0: A vásárlási gyakoriság eloszlása azonos a nemek között.
+
+H1: A vásárlási gyakoriság eloszlása eltérő.
+
+alpha = 0.01
+
+Lépések:
+
+Kontingencia tábla létrehozása és vizualizáció (mozaikdiagram).
+
+Khí-négyzet próba elvégzése.
+
+Cramer's V mutató kiszámítása az asszociáció erősségének mérésére.
+
+```{r}
+# 1. Kontingencia tábla és ábrázolás
+frequency_table <- table(full_data$nem, full_data$vasarlasi_gyakorisag)
+mosaicplot(frequency_table, main = "Nem vs Vásárlási gyakoriság", color = TRUE)
+
+# 2. Khí-négyzet próba
+chi_test_a2 <- chisq.test(frequency_table)
+chi_test_a2
+
+# 3. Cramer's V
+n_obs <- sum(frequency_table)
+min_dim <- min(dim(frequency_table))
+cramers_v <- sqrt(chi_test_a2$statistic / (n_obs * (min_dim - 1)))
+cramers_v
+```
+
+Feladat A3: Hűséges vevők átlagos eladási értéke
+Vásárolnak-e a hűséges vevők átlagosan többet, mint a nem hűséges vevők?
+
+H0: mu_hűséges = mu_nem_hűséges
+
+H1: mu_hűséges > mu_nem_hűséges (egyirányú próba)
+
+alpha = 0.05
+
+Lépések:
+
+Csoportosítás és leíró vizualizáció.
+
+Normálitás és variancia-egyenlőség ellenőrzése.
+
+Egyirányú kétmintás t-próba elvégzése.
+
+```{r}
+# 1. Adatelőkészítés
+loyal_prices <- full_data %>% filter(huses_vevo == TRUE) %>% pull(total_price)
+non_loyal_prices <- full_data %>% filter(huses_vevo == FALSE) %>% pull(total_price)
+
+boxplot(total_price ~ huses_vevo, data = full_data, names = c("Nem hűséges", "Hűséges"))
+
+# 2. Normálitás és varianciavizsgálat
+par(mfrow = c(1, 2))
+qqnorm(loyal_prices, main = "Q-Q Plot: Hűséges")
+qqline(loyal_prices)
+qqnorm(non_loyal_prices, main = "Q-Q Plot: Nem hűséges")
+qqline(non_loyal_prices)
+par(mfrow = c(1, 1))
+
+shapiro.test(loyal_prices)
+shapiro.test(non_loyal_prices)
+
+jarque.bera.test(loyal_prices)
+jarque.bera.test(non_loyal_prices)
+
+var.test(loyal_prices, non_loyal_prices)
+
+# 3. Egyirányú t-próba
+t.test(loyal_prices, non_loyal_prices, alternative = "greater", var.equal = FALSE)
+```
+
+B. t-próba (Egy- és Kétmintás)
+Feladat B1: Okostelefonok vs Laptopok átlagárazása
+Van-e szignifikáns különbség az okostelefonok és laptopok átlagos eladási árai között?
+
+alpha = 0.05
+
+Lépések:
+
+Az eladások szűrése a két kategóriára.
+
+Feltételek ellenőrzése (Shapiro-Wilk, Q-Q plot, Jarque-Bera, F-próba).
+
+t-próba vagy Wilcoxon-próba elvégzése a feltételek teljesülésétől függően.
+
+```{r}
+# 1. Adatelőkészítés
+smartphone_prices <- full_data %>% filter(category == "Okostelefon") %>% pull(total_price)
+laptop_prices <- full_data %>% filter(category == "Laptop") %>% pull(total_price)
+
+boxplot(total_price ~ category, data = full_data %>% filter(category %in% c("Okostelefon", "Laptop")))
+
+# 2. Normálitásvizsgálatok
+par(mfrow = c(1, 2))
+qqnorm(smartphone_prices, main = "Q-Q Plot: Okostelefon")
+qqline(smartphone_prices)
+qqnorm(laptop_prices, main = "Q-Q Plot: Laptop")
+qqline(laptop_prices)
+par(mfrow = c(1, 1))
+
+shapiro.test(smartphone_prices)
+shapiro.test(laptop_prices)
+
+jarque.bera.test(smartphone_prices)
+jarque.bera.test(laptop_prices)
+
+var.test(smartphone_prices, laptop_prices)
+
+# 3. Hipotézispróba
+t.test(smartphone_prices, laptop_prices)
+wilcox.test(smartphone_prices, laptop_prices)
+```
+
+Feladat B2: Kampány hatása az eladásokra
+Növelte-e a kampányban való részvétel szignifikánsan az átlagos eladási értéket?
+
+H0: mu_kampány = mu_nem_kampány
+
+H1: mu_kampány > mu_nem_kampány
+
+alpha = 0.05
+
+Lépések:
+
+Kampányos és nem kampányos tranzakciók szétválasztása.
+
+Normálitás ellenőrzése (Q-Q plot, Jarque-Bera, Shapiro-Wilk).
+
+Egyirányú t-próba futtatása.
+
+```{r}
+# 1. Adatelőkészítés
+campaign_prices <- full_data %>% filter(!is.na(campaign_id)) %>% pull(total_price)
+no_campaign_prices <- full_data %>% filter(is.na(campaign_id)) %>% pull(total_price)
+
+# 2. Normálitásvizsgálat
+par(mfrow = c(1, 2))
+qqnorm(campaign_prices, main = "Q-Q Plot: Kampány")
+qqline(campaign_prices)
+qqnorm(no_campaign_prices, main = "Q-Q Plot: Nem kampány")
+qqline(no_campaign_prices)
+par(mfrow = c(1, 1))
+
+shapiro.test(campaign_prices)
+shapiro.test(no_campaign_prices)
+
+jarque.bera.test(campaign_prices)
+jarque.bera.test(no_campaign_prices)
+
+# 3. Hipotézispróba
+t.test(campaign_prices, no_campaign_prices, alternative = "greater")
+```
+
+Feladat B3: Szállítási költség régiónként
+Van-e különbség Közép-Európa és Kelet-Európa szállítási költségei között?
+
+alpha = 0.10
+
+Lépések:
+
+Adatok szűrése a két régióra.
+
+Feltételek vizsgálata (Q-Q plot, Jarque-Bera, Shapiro-Wilk, F-próba).
+
+Kétmintás t-próba.
+
+```{r}
+# 1. Adatelőkészítés
+ce_shipping <- full_data %>% filter(region == "Közép-Európa") %>% pull(shipping_cost)
+ee_shipping <- full_data %>% filter(region == "Kelet-Európa") %>% pull(shipping_cost)
+
+# 2. Normálitás ellenőrzése
+par(mfrow = c(1, 2))
+qqnorm(ce_shipping, main = "Q-Q Plot: Közép-Európa")
+qqline(ce_shipping)
+qqnorm(ee_shipping, main = "Q-Q Plot: Kelet-Európa")
+qqline(ee_shipping)
+par(mfrow = c(1, 1))
+
+shapiro.test(ce_shipping)
+shapiro.test(ee_shipping)
+
+jarque.bera.test(ce_shipping)
+jarque.bera.test(ee_shipping)
+
+var.test(ce_shipping, ee_shipping)
+
+# 3. t-próba
+t.test(ce_shipping, ee_shipping, var.equal = TRUE, conf.level = 0.90)
+```
+
+D. Kontingencia táblák
+Feladat D1: Nem és fizetési mód
+Van-e összefüggés a vevő neme és a választott fizetési mód között?
+
+alpha = 0.05
+
+Lépések:
+
+Kontingencia tábla elkészítése.
+
+Khí-négyzet próba elvégzése.
+
+Cramer's V mutató kiszámítása.
+
+```{r}
+# 1. Kontingencia tábla
+tab_d1 <- table(full_data$nem, full_data$payment_method)
+tab_d1
+
+# 2. Khí-négyzet próba
+chi_d1 <- chisq.test(tab_d1)
+chi_d1
+
+# 3. Cramer's V
+n_d1 <- sum(tab_d1)
+min_d1 <- min(dim(tab_d1))
+sqrt(chi_d1$statistic / (n_d1 * (min_d1 - 1)))
+```
+
+Feladat D2: Hűséges vevők és régió
+Van-e összefüggés a hűséges vevő státusz és a régió között?
+
+alpha = 0.05
+
+Lépések:
+
+Kontingencia tábla összeállítása.
+
+Khí-négyzet teszt futtatása.
+
+```{r}
+# 1. Kontingencia tábla
+tab_d2 <- table(full_data$region, full_data$huses_vevo)
+tab_d2
+
+# 2. Khí-négyzet próba
+chisq.test(tab_d2)
+```
+
+E. Nem parametrikus próbák
+Feladat E1: Elégedettségi pontok összehasonlítása (Wilcoxon-próba)
+Van-e szignifikáns különbség az elégedettségi pontok között okostelefonok és laptopok esetében?
+
+alpha = 0.05
+
+Lépések:
+
+Elégedettségi adatok kinyerése a két kategóriára.
+
+Normálitás ellenőrzése (Q-Q plot, Jarque-Bera, Shapiro-Wilk) a nem parametrikus teszt indoklásához.
+
+Mann-Whitney U teszt (Wilcoxon rank-sum test) elvégzése.
+
+```{r}
+# 1. Adatelőkészítés
+sat_phone <- full_data %>% filter(category == "Okostelefon") %>% pull(satisfaction_score)
+sat_laptop <- full_data %>% filter(category == "Laptop") %>% pull(satisfaction_score)
+
+# 2. Normálitás ellenőrzése
+par(mfrow = c(1, 2))
+qqnorm(sat_phone, main = "Q-Q Plot: Okostelefon elégedettség")
+qqline(sat_phone)
+qqnorm(sat_laptop, main = "Q-Q Plot: Laptop elégedettség")
+qqline(sat_laptop)
+par(mfrow = c(1, 1))
+
+shapiro.test(sat_phone)
+shapiro.test(sat_laptop)
+
+jarque.bera.test(sat_phone)
+jarque.bera.test(sat_laptop)
+
+# 3. Wilcoxon-próba
+wilcox.test(sat_phone, sat_laptop)
+```
+

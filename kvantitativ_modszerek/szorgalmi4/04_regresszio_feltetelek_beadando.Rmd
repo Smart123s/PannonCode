@@ -1,0 +1,100 @@
+---
+title: "A regresszió feltételeinek vizsgálata"
+subtitle: "y ~ x kétváltozós regresszió"
+output:
+  html_document:
+    toc: yes
+    number_sections: true
+    theme: lumen
+---
+
+# A feladat célja
+
+A feladatban az `xy.xlsx` adatállományban található `x` és `y` változó kapcsolatát vizsgálom kétváltozós lineáris regresszióval. Ezután megnézem, hogy a regresszió feltételei közül melyek vizsgálhatók a rendelkezésre álló elemszám mellett.
+
+# Szükséges csomagok
+
+```{r, warning=FALSE, message=FALSE}
+library(readxl)
+library(knitr)
+```
+
+# Adatok beolvasása
+
+```{r}
+data <- read_xlsx("xy.xlsx")
+kable(data)
+```
+
+Az adatállományban összesen `r nrow(data)` megfigyelés található. Ez nagyon kis elemszám, ezért a regresszió feltételeinek vizsgálatánál ezt figyelembe kell venni.
+
+# A regressziós modell
+
+A vizsgált modell:
+
+$$
+y = \beta_0 + \beta_1 x + u
+$$
+
+ahol `y` a függő változó, `x` a magyarázó változó, `u` pedig a hibatag.
+
+```{r}
+fit <- lm(y ~ x, data = data)
+summary(fit)
+```
+
+A regresszió eredménye alapján a modell szignifikáns, mert az F-próbához tartozó p-érték 0,05-nél kisebb. Kétváltozós regresszió esetén ugyanerre az eredményre jutunk az `x` változó együtthatójának t-próbájával is.
+
+Az `x` változó regressziós együtthatója pozitív, tehát az `x` növekedésével a becsült `y` értéke is nő. A modell determinációs együtthatója körülbelül 0,904, vagyis a modell az `y` változó szóródásának körülbelül 90,4%-át magyarázza.
+
+# A regresszió feltételeinek vizsgálata
+
+Az órai anyag alapján a lineáris regresszió fő feltételei a következők:
+
+1. a hibatag várható értéke 0;
+2. a hibatag varianciája állandó, vagyis nincs heteroszkedaszticitás;
+3. a hibatagok függetlenek egymástól;
+4. az `x` változó és a hibatag független;
+5. a hibatag normális eloszlást követ.
+
+## A hibatag várható értéke
+
+Konstanst tartalmazó lineáris regressziónál a reziduumok átlaga az illesztésből adódóan gyakorlatilag nulla.
+
+```{r}
+mean(resid(fit))
+```
+
+A kapott érték kerekítési hibától eltekintve 0, ezért ez a feltétel teljesül.
+
+## A normalitás vizsgálata
+
+Az órai anyag szerint a reziduumok normalitását Shapiro-Wilk-próbával lehet vizsgálni, azonban ehhez legalább 30 megfigyelés szükséges ahhoz, hogy a vizsgálat megbízható legyen.
+
+A jelen adatállományban csak `r nrow(data)` megfigyelés van, ezért a Shapiro-Wilk-próbát **nem végzem el**. Ilyen kis elemszám mellett az eredményből nem lehetne megfelelő biztonsággal következtetni a normalitás teljesülésére.
+
+## A szóráshomogenitás vizsgálata
+
+A regresszió másik fontos feltétele, hogy a hibatag varianciája állandó legyen. Az órai anyag szerint ezt statisztikai próbákkal is lehet vizsgálni, de a jelen esetben mindössze `r nrow(data)` megfigyelés áll rendelkezésre.
+
+Ilyen kis elemszám mellett a reziduumok szóródására vonatkozó formális vizsgálat eredménye nem lenne megbízható, ezért itt nem végzek külön homogenitási próbát. A reziduumábrát viszont meg lehet nézni, de az órai példa alapján ilyen kevés adatpontból az ábra sem alkalmas biztos következtetés levonására.
+
+```{r}
+plot(fit)
+```
+
+## A hibatagok függetlensége
+
+Az autokorreláció elsősorban idősoros adatoknál jelent problémát. A jelen adatállomány nem idősor, ezért ezt a feltételt külön teszttel nem vizsgálom.
+
+## Az x és a hibatag függetlensége
+
+Az órai anyag szerint ez a feltétel akkor tekinthető teljesülőnek, ha az `x` nem véletlen változóként szerepel, illetve a kapcsolat megfelelően lineáris. Erre ebben a kis mintában külön statisztikai tesztet nem végzünk.
+
+# Következtetés
+
+A `y ~ x` lineáris regresszió kiszámítható a hat megfigyelésből. A modell és az `x` változó is szignifikáns, és a determinációs együttható magas, körülbelül 90,4%.
+
+A regresszió feltételeinek ellenőrzése azonban az elemszám miatt csak korlátozottan lehetséges. A reziduumok átlaga az illesztésből következően közel nulla. A normalitást az órán tanult Shapiro-Wilk-próbával ilyen kis minta mellett nem vizsgáljuk, mert az órai anyag legalább 30 megfigyelést ír elő. A szóráshomogenitás formális vizsgálata és a grafikus ellenőrzés sem adna megbízható eredményt mindössze hat adatpontból. Az autokorreláció vizsgálata pedig nem indokolt, mert nem idősoros adatokkal dolgozunk.
+
+Ezért bár a regressziós kapcsolat erősnek és szignifikánsnak látszik, a regresszió alkalmazhatósági feltételeinek teljesülését ilyen kis elemszám mellett nem lehet megfelelően igazolni, így az eredményt óvatosan kell értelmezni.

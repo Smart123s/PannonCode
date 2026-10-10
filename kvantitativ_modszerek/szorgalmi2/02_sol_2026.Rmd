@@ -1,0 +1,272 @@
+---
+title: "Kereszttábla-elemzés, korrespondencia elemzés – 2026-os frissítés"
+output:
+  html_document:
+    highlight: haddock
+    theme: lumen
+    toc: yes
+    number_sections: true
+    toc_float:
+      collapsed: no
+  html_notebook:
+    fig_caption: yes
+    highlight: haddock
+    theme: lumen
+    toc: yes
+    number_sections: true
+    toc_float:
+      collapsed: no
+  pdf_document:
+    keep_tex: yes
+    latex_engine: lualatex
+    toc: yes
+    number_sections: true
+  word_document:
+    toc: yes
+---
+
+**Feladat:** Végezzük el a kereszttábla-elemzést a friss, 2026. II. negyedévi KSH-foglalkoztatási adatokon, vizsgáljuk meg a nem és a foglalkozás típusa közötti kapcsolatot, majd hasonlítsuk össze az eredményt az órai, 1990-es adatokkal.
+
+A megoldás a feltöltött órai `02_sol.Rmd` felépítéséből indul ki. A friss adatokat a mellékelt `ksh_2026_Q2.xlsx` állomány tartalmazza.
+Oké, közben feltűnt, hogy csak HTML-t lehet leadni Moodle-ben. Szóval csak azt adom le :)
+
+Munkamenet
+
+1. Szükséges függvénykönyvtárak beolvasása
+2. Adatok beolvasása
+3. A 2026. II. negyedévi kereszttábla elemzése
+4. Összehasonlítás az 1990-es órai adatokkal
+
+# Szükséges függvénykönyvtárak beolvasása
+
+```{r, warning=FALSE, message=FALSE}
+library(readxl) # Excel állományok beolvasása
+library(gmodels) # Kereszttáblák kiszámítása
+library(vcd) # Eredmények vizualizálása
+```
+
+# Adatok beolvasása
+
+A friss adatok forrása a KSH STADAT **20.2.1.15. A foglalkoztatottak száma foglalkozási főcsoport szerint, nemenként, negyedévente – FEOR'08** táblája. A felhasznált időszak **2026. II. negyedév**, a KSH tábla frissítési dátuma **2026. augusztus 14.** A mértékegység ezer fő.
+
+Forrás: https://www.ksh.hu/stadat_files/mun/hu/mun0113.html
+
+A mai FEOR'08-főcsoportok nem azonosak az órai, 1990-es `Szakmunkás – Betanított munkás – Segédmunkás – Szellemi` kategóriákkal. Emiatt kétféle összehasonlítást végzünk:
+
+- a **2026-os részletes kereszttáblát** a mai FEOR'08-főcsoportokkal elemezzük;
+- az **1990–2026 közötti változást** a mindkét időpontban értelmezhetőbb **fizikai–szellemi** összevonással hasonlítjuk össze.
+
+```{r, warning=FALSE, message=FALSE}
+# A beadandóval együtt leadott forrásállomány beolvasása
+adat2026_raw <- read_xlsx("ksh_2026_Q2.xlsx", sheet = "2026_Q2")
+adat1990_raw <- read_xlsx("ksh_2026_Q2.xlsx", sheet = "1990_orai")
+
+# 2026: a részletes elemzéshez használt hét fő csoport.
+# Az utolsó két oszlop (Fizikai összesen, Összesen) itt összesítő adat,
+# ezért nem tesszük bele a részletes kereszttáblába.
+data <- as.data.frame(adat2026_raw[, 2:8])
+rownames(data) <- adat2026_raw$Nem
+colnames(data) <- c(
+  "Szellemi",
+  "Kereskedelmi/szolgáltatási",
+  "Mezőgazdasági",
+  "Ipari/építőipari",
+  "Gépkezelő/összeszerelő",
+  "Egyszerű",
+  "Fegyveres"
+)
+
+# Az órai, 1990-es adatok a mellékelt forrásfájl külön munkalapján vannak.
+data1990 <- as.data.frame(adat1990_raw[, 2:5])
+rownames(data1990) <- adat1990_raw$Nem
+colnames(data1990) <- c(
+  "Szakmunkás",
+  "Betanított munkás",
+  "Segédmunkás",
+  "Szellemi"
+)
+
+# Ellenőrzés
+round(data, 1)
+round(data1990, 1)
+```
+
+# Kereszttábla elemzése
+
+A kereszttábla-elemzés esetén először kiszámítjuk a független esetet, amelyet úgy kapunk, hogy egy kereszttábla sorösszegének és oszlopösszegének szorzatát osztjuk a teljes összeggel. Képlettel a független eset:
+
+$$
+f^*_{ij}=\frac{\sum_{j:=1}^cf_{ij}\cdot\sum_{i:=0}^rf_{ij}}{\sum_{i:=1}^r\sum_{j:=1}^cf_{ij}}
+$$
+
+ahol $r$ a sorok, $c$ az oszlopok száma, $f_{ij}$ a tényleges megfigyelés, míg $f^*_{ij}$ a függetlenség feltételezése melletti gyakoriság.
+
+A $\chi^2$ mutató adja meg a független esettől való összes relatív négyzetes eltérést:
+
+$$
+\chi^2=\sum_{i:=1}^c\sum_{j:=1}^r\frac{(f^*_{ij}-f_{ij})^2}{f^*_{ij}}
+$$
+
+A viszonyítási mérőszámok, vagy más néven asszociatív együtthatók, a $\chi^2$ mutató 0–1-re normált változatai.
+
+Cramer-féle asszociációs mutató:
+
+$$
+V=\sqrt{\frac{\chi^2}{N\min\{(r-1),(c-1)\}}}
+$$
+
+Csuprov-féle kontingencia mutató:
+
+$$
+T=\sqrt{\frac{\chi^2}{N\sqrt{(r-1)(c-1)}}}
+$$
+
+Az órai értelmezési skálát megtartva:
+
+$$
+V=0:\text{ függetlenség}\\
+0<V\leq0{,}25:\text{ nagyon laza kapcsolat}\\
+0{,}25<V\leq0{,}5:\text{ laza kapcsolat}\\
+0{,}5<V\leq0{,}75:\text{ szoros kapcsolat}\\
+0{,}75<V<1:\text{ nagyon szoros kapcsolat}\\
+V=1:\text{ függvénykapcsolat}
+$$
+
+## Kereszttábla kiíratása – 2026. II. negyedév
+
+```{r, warning=FALSE, message=FALSE}
+ct2026 <- CrossTable(
+  as.matrix(data),
+  expected = TRUE,
+  digits = 2,
+  resid = TRUE
+)
+
+assocstats(as.matrix(data))
+
+# A későbbi szöveges értékeléshez külön is kiszámítjuk a próbát és Cramer V-t.
+chi2026 <- chisq.test(as.matrix(data), correct = FALSE)
+V2026 <- sqrt(
+  as.numeric(chi2026$statistic) /
+    (sum(as.matrix(data)) * min(nrow(data) - 1, ncol(data) - 1))
+)
+
+# Sor- és oszlopszázalékok
+rowpct2026 <- prop.table(as.matrix(data), 1) * 100
+colpct2026 <- prop.table(as.matrix(data), 2) * 100
+
+round(rowpct2026, 1)
+round(colpct2026, 1)
+round(chi2026$stdres, 2)
+```
+
+**Eredmény 2026-ra:** a nem és a foglalkozás típusa között az órai skála alapján **laza kapcsolat** mutatható ki. Cramer-féle $V = `r round(V2026, 3)`$, a Pearson-féle $\chi^2 = `r round(as.numeric(chi2026$statistic), 2)`$ (df = `r as.numeric(chi2026$parameter)`, p `r ifelse(chi2026$p.value < 0.001, "< 0,001", paste0("= ", format(round(chi2026$p.value, 3), decimal.mark = ",")))`).
+
+A kapcsolat iránya a reziduumok és a százalékok alapján jól értelmezhető:
+
+- a **férfiak erősen felülreprezentáltak az ipari és építőipari** foglalkozásokban; e csoport `r round(colpct2026["Férfi", "Ipari/építőipari"], 1)`%-a férfi;
+- a **férfiak felülreprezentáltak a gépkezelői/összeszerelői** foglalkozásokban is; a csoport `r round(colpct2026["Férfi", "Gépkezelő/összeszerelő"], 1)`%-a férfi;
+- a **nők felülreprezentáltak a szellemi foglalkozásokban**; a szellemi foglalkozásúak `r round(colpct2026["Nő", "Szellemi"], 1)`%-a nő;
+- a **kereskedelmi és szolgáltatási foglalkozásokban** szintén női többség látható (`r round(colpct2026["Nő", "Kereskedelmi/szolgáltatási"], 1)`%);
+- az **egyszerű, szakképzettséget nem igénylő foglalkozások** nemi megoszlása közel kiegyenlített.
+
+A klasszikus $\chi^2$-próba p-értékét itt óvatosan kell értelmezni, mert a KSH-tábla a lakossági munkaerő-felmérésből származó, súlyozott és ezer főben közölt becsléseket tartalmaz. A kapcsolat mintázatának és Cramer V értékének leíró értelmezése ettől még jól használható az órai módszerrel.
+
+## Eredmények kirajzolása – 2026
+
+```{r, warning=FALSE, message=FALSE, fig.width=12, fig.height=7}
+assoc(
+  as.matrix(data),
+  main = "Foglalkozási típusok nemek szerinti vizsgálata – 2026. II. negyedév",
+  shade = TRUE
+)
+```
+
+# Összehasonlítás az 1990-es órai adatokkal
+
+A feltöltött órai állomány 1990-es adatai a következő táblát adják:
+
+```{r}
+round(data1990, 1)
+
+chi1990 <- chisq.test(as.matrix(data1990), correct = FALSE)
+V1990 <- sqrt(
+  as.numeric(chi1990$statistic) /
+    (sum(as.matrix(data1990)) * min(nrow(data1990) - 1, ncol(data1990) - 1))
+)
+V1990
+```
+
+Az 1990-es táblában Cramer-féle $V = `r round(V1990, 3)`$, tehát az órai értékelés szerint szintén **laza kapcsolat** volt. A korabeli mintázat szerint a férfiak a szakmunkások, míg a nők a szellemi foglalkozásúak között voltak felülreprezentálva, ami megfelel az eredeti órai megállapításnak.
+
+Mivel a részletes foglalkozási kategóriák időközben megváltoztak, a két részletes Cramer V értéket nem célszerű közvetlenül egymáshoz viszonyítani. A hosszú távú összehasonlítást ezért **fizikai–szellemi** bontásban végezzük el.
+
+```{r}
+# 1990: fizikai = szakmunkás + betanított + segédmunkás
+broad1990 <- cbind(
+  Fizikai = rowSums(data1990[, c("Szakmunkás", "Betanított munkás", "Segédmunkás")]),
+  Szellemi = data1990[, "Szellemi"]
+)
+
+# 2026: a KSH által közölt összesítő oszlopok közvetlen használata
+broad2026 <- cbind(
+  Fizikai = adat2026_raw$`Fizikai foglalkozások összesen`,
+  Szellemi = adat2026_raw$`Szellemi foglalkozások összesen`
+)
+rownames(broad2026) <- adat2026_raw$Nem
+
+pct1990 <- prop.table(broad1990, 1) * 100
+pct2026 <- prop.table(broad2026, 1) * 100
+
+chi_broad_1990 <- chisq.test(broad1990, correct = FALSE)
+chi_broad_2026 <- chisq.test(broad2026, correct = FALSE)
+
+V_broad_1990 <- sqrt(as.numeric(chi_broad_1990$statistic) / sum(broad1990))
+V_broad_2026 <- sqrt(as.numeric(chi_broad_2026$statistic) / sum(broad2026))
+
+osszehasonlitas <- data.frame(
+  Mutató = c(
+    "Férfiak – szellemi (%)",
+    "Nők – szellemi (%)",
+    "Férfiak – fizikai (%)",
+    "Nők – fizikai (%)",
+    "Cramer V (fizikai–szellemi)"
+  ),
+  `1990-es órai adat` = c(
+    pct1990["Férfi", "Szellemi"],
+    pct1990["Nő", "Szellemi"],
+    pct1990["Férfi", "Fizikai"],
+    pct1990["Nő", "Fizikai"],
+    V_broad_1990
+  ),
+  `2026 II. negyedév` = c(
+    pct2026["Férfi", "Szellemi"],
+    pct2026["Nő", "Szellemi"],
+    pct2026["Férfi", "Fizikai"],
+    pct2026["Nő", "Fizikai"],
+    V_broad_2026
+  ),
+  check.names = FALSE
+)
+
+knitr::kable(osszehasonlitas, digits = 1)
+```
+
+## Válasz a házi feladat kérdéseire
+
+### Milyen összefüggés látható a nem és a foglalkoztatás típusa között?
+
+2026. II. negyedévében továbbra is **szignifikáns és az órai skála szerint laza kapcsolat** látható a nem és a foglalkozás típusa között. A kapcsolat nem azt jelenti, hogy a nem egyértelműen meghatározza a foglalkozást, hanem azt, hogy egyes foglalkozási csoportokban a férfiak és a nők aránya érdemben eltér a függetlenség esetén várható aránytól.
+
+A mai adatokban a férfiak különösen az **ipari és építőipari**, valamint a **gépkezelői/összeszerelői** csoportokban felülreprezentáltak. A nők a **szellemi**, továbbá a **kereskedelmi és szolgáltatási** foglalkozásokban felülreprezentáltak. Ez azt mutatja, hogy a foglalkozási szerkezetben ma is jelen van a nemek szerinti elkülönülés.
+
+### Mi és hogyan változott meg az 1990-es felmérések óta?
+
+A legfontosabb változás a foglalkoztatási szerkezet **szellemi foglalkozások felé történő eltolódása mindkét nemnél**:
+
+- a férfiaknál a szellemi foglalkozások aránya `r round(pct1990["Férfi", "Szellemi"], 1)`%-ról `r round(pct2026["Férfi", "Szellemi"], 1)`%-ra nőtt, vagyis `r round(pct2026["Férfi", "Szellemi"] - pct1990["Férfi", "Szellemi"], 1)` százalékponttal;
+- a nőknél ugyanez az arány `r round(pct1990["Nő", "Szellemi"], 1)`%-ról `r round(pct2026["Nő", "Szellemi"], 1)`%-ra nőtt, vagyis `r round(pct2026["Nő", "Szellemi"] - pct1990["Nő", "Szellemi"], 1)` százalékponttal;
+- ezzel párhuzamosan a fizikai foglalkozások aránya mindkét nemnél csökkent.
+
+A széles, fizikai–szellemi bontásban Cramer V `r round(V_broad_1990, 3)`-ról `r round(V_broad_2026, 3)`-ra változott. Ez **kismértékű gyengülést** jelez a nem és a nagyon tágan értelmezett foglalkozástípus közötti kapcsolatban. A nemek közötti különbség azonban nem tűnt el: 2026-ban is jóval nagyobb a szellemi foglalkozások aránya a nők, míg a fizikai foglalkozások aránya a férfiak körében.
+
