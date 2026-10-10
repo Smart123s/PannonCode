@@ -1,0 +1,101 @@
+https://chatgpt.com/share/e/6a9dab05-10fc-83eb-ae81-e2a753cadc79
+Pannon Egyetem ChatGPT Worskspace-en belül érhető csak el a link.
+
+----------------------------
+
+Promptok:
+
+A beadandó célja, hogy a hallgatók önállóan készítsenek egy Blazor&#x20;
+Web App (.NET 9+) alapú webalkalmazást, amelyben a kurus során tanult&#x20;
+technikákat alkalmazzák: kétirányú adatközlés, űrlapok és érvényesítés,&#x20;
+útvonalválasztás, állapotkezelés, eseményvisszahívás, templated&#x20;
+komponensek, Razor osztálykönyvtárak, JS-függvényhívások és&#x20;
+CRUD-műveletek.
+
+Az alábbi feladatok példák a különböző nehézségi szintekre (2–5). A&#x20;
+konkrét megvalósítás ettől eltérhet, ha a készített alkalmazás hasonló&#x20;
+funkcionalitást és komplexitást mutat.
+
+**I. Egyszerű komponens + kétirányú adatközlés (2-es szint)**
+
+**Feladat: Számológép**
+
+- Készíts egy oldalt, amelyen alapműveletek végezhetők (összeadás, kivonás, szorzás, osztás).
+- Használj kétirányú adatközlést (`@bind`) a beviteli mezőkhöz.
+- A számítás eredménye azonnal jelenjen meg komponensen belül.
+- Tiszta komponensstruktúra + minimális CSS.
+
+**Fejlesztési fókusz:** komponensek, `@bind`, eseménykezelés, form inputok.
+
+**II. Űrlapok, validáció, eseményvisszahívás (3-as szint)**
+
+**Feladat: Egyszerű névjegyzék**
+
+- Hozz létre egy űrlapot név, email és telefonszám rögzítésére.
+- Az űrlapot validáld (`DataAnnotations`), és jelenítsd meg a hibákat.
+- A mentett bejegyzéseket listázd, biztosíts törlési lehetőséget.
+- Külön komponensek: `ContactForm`, `ContactList`.
+- Az űrlap sikeres mentéskor **eseményvisszahívással** frissíti a listát.
+
+**Fejlesztési fókusz:** űrlapok, validáció, eseményvisszahívás, CRUD (in-memory).
+
+**III. Szervizek, útvonalválasztás, állapotkezelés (4-es szint)**
+
+**Feladat: Mini feladatlista (To-Do)**
+
+- Feladatok listázása, új feladat felvitele, törlés, készre állítás.
+- Az adatokat **szervizben (Scoped service)** tárold, ne komponensen belül.
+- Külön oldalak:
+  - `/tasks` – lista
+  - `/tasks/add` – új feladat űrlap
+- A feladatok állapotát a rendszer őrizze meg a navigációk között is.
+- Bónuszfeladat: lapozás és/vagy szűrés megvalósítása.
+
+**Fejlesztési fókusz:** dependency injection, routing, állapotmegosztás komponensek között.
+
+**IV. Összetett alkalmazás: JS interop + RCL + templated komponensek (5-ös szint)**
+
+**Feladat: Időjárás előrejelző**
+
+- Külső API-ból lekérdezi az időjárást (pl. OpenWeather vagy mock JSON).
+- Eredmény megjelenítése kártyákon (komponens: `WeatherCard`).
+- **JS interop**: kis grafikon (Chart.js) vagy helymeghatározás lekérése.
+- **Razor Class Library**: a kártyakomponenst külön RCL-be tedd.
+- **Templated component**: a kártyák tartalma paraméterezhető legyen.
+- **Állapotkezelés**: kedvenc városok mentése cookie-ba / szolgáltatásba.
+
+**Fejlesztési fókusz:** JS interop, RCL, templated komponensek, szolgáltatások, állapotperzisztencia.
+
+
+
+Ezt a beadandót készítsd el nekem. Ha jól értem, akkor elég csak az időjárás jelentős feladatot, ha a többi feladatban elvárt technológiai megoldásokat is használod. Ha valami természetesen nem megy bele, akkor engedd el, nem gond, ha egy-kettő kimarad.
+
+--------------
+
+PS C:\Users\tombo\git\IdojarasBeadando> dotnet restore
+Restore succeeded with 1 warning(s) in 0.1s
+    C:\Program Files\dotnet\sdk\10.0.400\NuGet.targets(198,5): warning Unable to find a project to restore!
+
+Build succeeded with 1 warning(s) in 0.2s
+PS C:\Users\tombo\git\IdojarasBeadando> dotnet run --project src/WeatherStudentApp/WeatherStudentApp.csproj
+Using launch settings from src\WeatherStudentApp\Properties\launchSettings.json...
+Building...
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\Components\Pages\Weather.razor(36,9): warning RZ2012: Component 'WeatherCard' expects a value for the parameter 'ChildContent', but a value may not have been provided.
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\Components\Pages\Weather.razor(54,13): error RZ9996: Unrecognized child content inside component 'WeatherCard'. The component 'WeatherCard' accepts child content through the following top-level items: 'Header', 'ChildContent', 'Actions'.
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\Components\Pages\Home.razor(14,78): error CS1056: Unexpected character '\'
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\Components\Pages\Favorites.razor(29,78): error CS1056: Unexpected character '\'
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Components\Pages\Favorites_razor.g.cs(165,15): error CS1026: ) expected
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Components\Pages\Home_razor.g.cs(137,15): error CS1026: ) expected
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\Components\Pages\About.razor(17,19): error CS0103: The name 'bind' does not exist in the current context
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\Components\Pages\Home.razor(14,67): error CS1501: No overload for method 'NavigateTo' takes 0 arguments
+C:\Users\tombo\git\IdojarasBeadando\src\WeatherStudentApp\Components\Pages\Favorites.razor(29,67): error CS1501: No overload for method 'NavigateTo' takes 0 arguments
+                                                                                                                                                                                                                                                                                                  
+The build failed. Fix the build errors and run again.
+PS C:\Users\tombo\git\IdojarasBeadando>
+
+Did you even try if the app compiles?
+
+
+-----------
+
+use .net 10

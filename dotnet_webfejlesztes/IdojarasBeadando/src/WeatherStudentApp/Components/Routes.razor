@@ -1,0 +1,16 @@
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Az oldal nem található</PageTitle>
+        <LayoutView Layout="typeof(MainLayout)">
+            <section class="panel narrow-panel">
+                <h1>404</h1>
+                <p>A keresett oldal nem található.</p>
+                <a class="button primary" href="/weather">Vissza az időjáráshoz</a>
+            </section>
+        </LayoutView>
+    </NotFound>
+</Router>

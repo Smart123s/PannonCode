@@ -1,0 +1,35 @@
+.weather-card-component {
+    height: 100%;
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid #dbe4ef;
+    background: rgba(255, 255, 255, .94);
+    box-shadow: 0 14px 38px rgba(15, 23, 42, .06);
+}
+
+.weather-card-header {
+    padding: 20px 20px 12px;
+}
+
+.weather-card-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.weather-card-header p {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.weather-card-content {
+    padding: 12px 20px 20px;
+}
+
+.weather-card-actions {
+    padding: 0 20px 20px;
+}
+
+.templated-list-item {
+    min-width: 0;
+}

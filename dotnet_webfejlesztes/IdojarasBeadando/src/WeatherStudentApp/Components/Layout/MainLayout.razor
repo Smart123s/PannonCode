@@ -1,0 +1,30 @@
+@inherits LayoutComponentBase
+
+<div class="app-shell">
+    <header class="topbar">
+        <div class="topbar-inner">
+            <NavLink class="brand" href="/weather">
+                <span class="brand-mark">☁</span>
+                <span>
+                    <strong>WeatherLab</strong>
+                    <small>Blazor beadandó</small>
+                </span>
+            </NavLink>
+
+            <nav class="nav-links" aria-label="Fő navigáció">
+                <NavLink href="/weather" Match="NavLinkMatch.Prefix">Időjárás</NavLink>
+                <NavLink href="/favorites">Kedvencek</NavLink>
+                <NavLink href="/about">Technológiák</NavLink>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        @Body
+    </main>
+
+    <footer class="footer">
+        <span>WeatherLab · .NET 10 Blazor Web App</span>
+        <span>Adatforrás: Open-Meteo</span>
+    </footer>
+</div>

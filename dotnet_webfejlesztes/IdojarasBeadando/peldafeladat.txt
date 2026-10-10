@@ -1,0 +1,71 @@
+A beadandó célja, hogy a hallgatók önállóan készítsenek egy Blazor Web App (.NET 9+) alapú webalkalmazást, amelyben a kurzus során tanult technikákat alkalmazzák: kétirányú adatközlés, űrlapok és érvényesítés, útvonalválasztás, állapotkezelés, eseményvisszahívás, templated komponensek, Razor osztálykönyvtárak, JS-függvényhívások és CRUD-műveletek.
+
+Az alábbi feladatok példák a különböző nehézségi szintekre (2–5). A konkrét megvalósítás ettől eltérhet, ha a készített alkalmazás hasonló funkcionalitást és komplexitást mutat.
+
+I. Egyszerű komponens + kétirányú adatközlés (2-es szint)
+
+Feladat: Számológép
+
+    Készíts egy oldalt, amelyen alapműveletek végezhetők (összeadás, kivonás, szorzás, osztás).
+
+    Használj kétirányú adatközlést (@bind) a beviteli mezőkhöz.
+
+    A számítás eredménye azonnal jelenjen meg komponensen belül.
+
+    Tiszta komponensstruktúra + minimális CSS.
+
+Fejlesztési fókusz: komponensek, @bind, eseménykezelés, form inputok.
+
+II. Űrlapok, validáció, eseményvisszahívás (3-as szint)
+
+Feladat: Egyszerű névjegyzék
+
+    Hozz létre egy űrlapot név, email és telefonszám rögzítésére.
+
+    Az űrlapot validáld (DataAnnotations), és jelenítsd meg a hibákat.
+
+    A mentett bejegyzéseket listázd, biztosíts törlési lehetőséget.
+
+    Külön komponensek: ContactForm, ContactList.
+
+    Az űrlap sikeres mentéskor eseményvisszahívással frissíti a listát.
+
+Fejlesztési fókusz: űrlapok, validáció, eseményvisszahívás, CRUD (in-memory).
+
+III. Szervizek, útvonalválasztás, állapotkezelés (4-es szint)
+
+Feladat: Mini feladatlista (To-Do)
+
+    Feladatok listázása, új feladat felvitele, törlés, készre állítás.
+
+    Az adatokat szervizben (Scoped service) tárold, ne komponensen belül.
+
+    Külön oldalak:
+
+        /tasks – lista
+
+        /tasks/add – új feladat űrlap
+
+    A feladatok állapotát a rendszer őrizze meg a navigációk között is.
+
+    Bónuszfeladat: lapozás és/vagy szűrés megvalósítása.
+
+Fejlesztési fókusz: dependency injection, routing, állapotmegosztás komponensek között.
+
+IV. Összetett alkalmazás: JS interop + RCL + templated komponensek (5-ös szint)
+
+Feladat: Időjárás előrejelző
+
+    Külső API-ból lekérdezi az időjárást (pl. OpenWeather vagy mock JSON).
+
+    Eredmény megjelenítése kártyákon (komponens: WeatherCard).
+
+    JS interop: kis grafikon (Chart.js) vagy helymeghatározás lekérése.
+
+    Razor Class Library: a kártyakomponenst külön RCL-be tedd.
+
+    Templated component: a kártyák tartalma paraméterezhető legyen.
+
+    Állapotkezelés: kedvenc városok mentése cookie-ba / szolgáltatásba.
+
+Fejlesztési fókusz: JS interop, RCL, templated komponensek, szolgáltatások, állapotperzisztencia.

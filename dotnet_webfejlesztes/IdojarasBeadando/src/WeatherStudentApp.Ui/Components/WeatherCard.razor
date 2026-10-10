@@ -1,0 +1,37 @@
+<article class="weather-card-component">
+    <header class="weather-card-header">
+        @if (Header is not null)
+        {
+            @Header
+        }
+        else
+        {
+            <div>
+                <h3>@Title</h3>
+                @if (!string.IsNullOrWhiteSpace(Subtitle))
+                {
+                    <p>@Subtitle</p>
+                }
+            </div>
+        }
+    </header>
+
+    <div class="weather-card-content">
+        @ChildContent
+    </div>
+
+    @if (Actions is not null)
+    {
+        <footer class="weather-card-actions">
+            @Actions
+        </footer>
+    }
+</article>
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string? Subtitle { get; set; }
+    [Parameter] public RenderFragment? Header { get; set; }
+    [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; } = default!;
+    [Parameter] public RenderFragment? Actions { get; set; }
+}

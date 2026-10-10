@@ -1,0 +1,142 @@
+@page "/favorites"
+@implements IDisposable
+@inject FavoriteCityState FavoriteState
+@inject NavigationManager Navigation
+
+<PageTitle>Kedvenc városok</PageTitle>
+
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">CRUD + állapotkezelés</span>
+        <h1>Kedvenc városok</h1>
+        <p>A lista scoped szolgáltatásban él, és localStorage-ba is mentődik.</p>
+    </div>
+</section>
+
+@if (!_ready)
+{
+    <div class="loading-panel">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Kedvencek betöltése…</span>
+    </div>
+}
+else if (FavoriteState.Items.Count == 0)
+{
+    <section class="empty-state panel">
+        <span class="empty-icon">☆</span>
+        <h2>Még nincs kedvenc város</h2>
+        <p>Az Időjárás oldalon egyetlen kattintással hozzáadhatsz városokat.</p>
+        <button class="button primary" @onclick="OpenWeatherPage">Város keresése</button>
+    </section>
+}
+else
+{
+    <div class="favorites-layout">
+        <section>
+            <div class="section-title-row">
+                <div>
+                    <span class="eyebrow">Mentett elemek</span>
+                    <h2>@FavoriteState.Items.Count város</h2>
+                </div>
+            </div>
+
+            <div class="favorite-list">
+                @foreach (var city in FavoriteState.Items.OrderByDescending(x => x.IsPinned).ThenBy(x => x.Nickname))
+                {
+                    <article class="favorite-row @(city.IsPinned ? "pinned" : string.Empty)">
+                        <div>
+                            <div class="favorite-title-line">
+                                <strong>@city.Nickname</strong>
+                                @if (city.IsPinned)
+                                {
+                                    <span class="badge">Kiemelt</span>
+                                }
+                            </div>
+                            <span>@city.Name@(string.IsNullOrWhiteSpace(city.Country) ? string.Empty : $", {city.Country}")</span>
+                            @if (!string.IsNullOrWhiteSpace(city.Notes))
+                            {
+                                <small>@city.Notes</small>
+                            }
+                        </div>
+
+                        <div class="row-actions">
+                            <button class="button ghost" @onclick="() => OpenWeather(city)">Időjárás</button>
+                            <button class="button secondary" @onclick="() => StartEdit(city)">Szerkesztés</button>
+                            <button class="button danger" @onclick="() => DeleteAsync(city.Id)">Törlés</button>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+
+        <aside>
+            @if (_editingCity is not null)
+            {
+                <FavoriteEditor Model="_editingCity" OnSaved="SaveEditAsync" OnCanceled="CancelEdit" />
+            }
+            else
+            {
+                <section class="panel sticky-card">
+                    <span class="eyebrow">Szerkesztés</span>
+                    <h2>Válassz egy várost</h2>
+                    <p class="muted">A becenév, megjegyzés és kiemelés módosítható. Ez adja a CRUD „Update” műveletét.</p>
+                </section>
+            }
+        </aside>
+    </div>
+}
+
+@code {
+    private bool _ready;
+    private FavoriteCity? _editingCity;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        FavoriteState.Changed += OnFavoritesChanged;
+        await FavoriteState.InitializeAsync();
+        _ready = true;
+        StateHasChanged();
+    }
+
+    private void OnFavoritesChanged() => InvokeAsync(StateHasChanged);
+
+    private void StartEdit(FavoriteCity city) => _editingCity = city;
+
+    private void CancelEdit() => _editingCity = null;
+
+    private async Task SaveEditAsync(FavoriteCity city)
+    {
+        await FavoriteState.UpdateAsync(city);
+        _editingCity = null;
+    }
+
+    private async Task DeleteAsync(Guid id)
+    {
+        await FavoriteState.DeleteAsync(id);
+        if (_editingCity?.Id == id)
+        {
+            _editingCity = null;
+        }
+    }
+
+    private void OpenWeatherPage() => Navigation.NavigateTo("/weather");
+
+    private void OpenWeather(FavoriteCity city)
+    {
+        var uri = Navigation.GetUriWithQueryParameters("/weather", new Dictionary<string, object?>
+        {
+            ["city"] = city.Name
+        });
+        Navigation.NavigateTo(uri);
+    }
+
+    public void Dispose()
+    {
+        FavoriteState.Changed -= OnFavoritesChanged;
+    }
+}

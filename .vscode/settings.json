@@ -4,5 +4,6 @@
     "*.ejs": "html",
     "stdio.h": "c",
     "stdlib.h": "c"
-  }
+  },
+  "cmake.sourceDirectory": "C:/Users/tombo/git/PannonCode/prog2_cpp"
 }

@@ -1,0 +1,54 @@
+<section class="panel sticky-card">
+    <span class="eyebrow">Update művelet</span>
+    <h2>Kedvenc szerkesztése</h2>
+
+    <EditForm Model="_editModel" OnValidSubmit="SaveAsync" FormName="favorite-editor">
+        <DataAnnotationsValidator />
+
+        <div class="field">
+            <label for="nickname">Megjelenített név</label>
+            <InputText id="nickname" class="input" @bind-Value="_editModel.Nickname" />
+            <ValidationMessage For="@(() => _editModel.Nickname)" />
+        </div>
+
+        <div class="field">
+            <label for="notes">Megjegyzés</label>
+            <InputTextArea id="notes" class="input textarea" @bind-Value="_editModel.Notes" />
+            <ValidationMessage For="@(() => _editModel.Notes)" />
+        </div>
+
+        <label class="checkbox-row">
+            <InputCheckbox @bind-Value="_editModel.IsPinned" />
+            <span>Kiemelt kedvenc</span>
+        </label>
+
+        <div class="editor-actions">
+            <button class="button primary" type="submit">Mentés</button>
+            <button class="button ghost" type="button" @onclick="CancelAsync">Mégse</button>
+        </div>
+    </EditForm>
+</section>
+
+@code {
+    private FavoriteCity _editModel = new();
+    private Guid _loadedId;
+
+    [Parameter, EditorRequired] public FavoriteCity Model { get; set; } = new();
+    [Parameter] public EventCallback<FavoriteCity> OnSaved { get; set; }
+    [Parameter] public EventCallback OnCanceled { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (Model.Id == _loadedId)
+        {
+            return;
+        }
+
+        _loadedId = Model.Id;
+        _editModel = Model.Copy();
+    }
+
+    private Task SaveAsync() => OnSaved.InvokeAsync(_editModel);
+
+    private Task CancelAsync() => OnCanceled.InvokeAsync();
+}

@@ -1,0 +1,47 @@
+<section class="search-panel panel">
+    <EditForm Model="_model" OnValidSubmit="SubmitAsync" FormName="weather-search">
+        <DataAnnotationsValidator />
+
+        <div class="search-form-row">
+            <div class="field grow">
+                <label for="city">Város neve</label>
+                <InputText id="city"
+                           class="input"
+                           @bind-Value="_model.City"
+                           placeholder="pl. Veszprém" />
+                <ValidationMessage For="@(() => _model.City)" />
+            </div>
+
+            <button class="button primary search-button" type="submit" disabled="@IsBusy">
+                Keresés
+            </button>
+
+            <button class="button secondary search-button" type="button" @onclick="UseLocationAsync" disabled="@IsBusy">
+                📍 Saját helyzet
+            </button>
+        </div>
+    </EditForm>
+</section>
+
+@code {
+    private CitySearchInput _model = new();
+    private string? _lastInitialCity;
+
+    [Parameter] public string InitialCity { get; set; } = string.Empty;
+    [Parameter] public bool IsBusy { get; set; }
+    [Parameter] public EventCallback<string> OnSearch { get; set; }
+    [Parameter] public EventCallback OnUseLocation { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(InitialCity) && InitialCity != _lastInitialCity)
+        {
+            _model.City = InitialCity;
+            _lastInitialCity = InitialCity;
+        }
+    }
+
+    private Task SubmitAsync() => OnSearch.InvokeAsync(_model.City.Trim());
+
+    private Task UseLocationAsync() => OnUseLocation.InvokeAsync();
+}

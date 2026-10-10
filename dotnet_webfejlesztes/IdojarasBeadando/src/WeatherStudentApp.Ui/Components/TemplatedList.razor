@@ -1,0 +1,27 @@
+@typeparam TItem
+
+@if (Items is null || !Items.Any())
+{
+    @if (EmptyTemplate is not null)
+    {
+        @EmptyTemplate
+    }
+}
+else
+{
+    <div class="@CssClass">
+        @foreach (var item in Items)
+        {
+            <div class="templated-list-item">
+                @ItemTemplate(item)
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public IEnumerable<TItem>? Items { get; set; }
+    [Parameter, EditorRequired] public RenderFragment<TItem> ItemTemplate { get; set; } = default!;
+    [Parameter] public RenderFragment? EmptyTemplate { get; set; }
+    [Parameter] public string CssClass { get; set; } = "templated-list";
+}

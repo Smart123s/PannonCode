@@ -1,0 +1,64 @@
+@page "/about"
+
+<PageTitle>Megvalósított technológiák</PageTitle>
+
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Követelmények lefedése</span>
+        <h1>Mit demonstrál a projekt?</h1>
+        <p>Az 5-ös szintű időjárás-feladat mellett az alacsonyabb szintek fontos technikái is megjelennek.</p>
+    </div>
+</section>
+
+<section class="requirements-grid">
+    <article class="panel requirement-card">
+        <span class="requirement-number">01</span>
+        <h2>Kétirányú adatközlés</h2>
+        <p><code>@@bind-Value</code> a városkereső, valamint a kedvencek szerkesztő űrlapjának mezőin.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">02</span>
+        <h2>Űrlap + validáció</h2>
+        <p><code>EditForm</code>, <code>DataAnnotationsValidator</code>, <code>ValidationMessage</code> és DataAnnotations attribútumok.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">03</span>
+        <h2>EventCallback</h2>
+        <p>A <code>CitySearchForm</code> és <code>FavoriteEditor</code> komponensek eseményvisszahívásokkal kommunikálnak a szülővel.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">04</span>
+        <h2>Routing</h2>
+        <p>Külön oldalak: <code>/weather</code>, <code>/favorites</code> és <code>/about</code>.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">05</span>
+        <h2>Scoped state</h2>
+        <p>A <code>FavoriteCityState</code> scoped service megosztja az állapotot az oldalak között.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">06</span>
+        <h2>CRUD</h2>
+        <p>Kedvenc város létrehozása, listázása, szerkesztése és törlése, böngészős perzisztenciával.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">07</span>
+        <h2>Razor Class Library</h2>
+        <p>A <code>WeatherCard</code> és <code>TemplatedList&lt;TItem&gt;</code> külön <code>WeatherStudentApp.Ui</code> RCL projektben található.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">08</span>
+        <h2>Templated component</h2>
+        <p>A generikus <code>TemplatedList&lt;TItem&gt;</code> <code>RenderFragment&lt;TItem&gt;</code> sablont kap a napi kártyákhoz.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">09</span>
+        <h2>JS interop</h2>
+        <p>Böngészős geolocation és <code>localStorage</code> elérés JavaScript függvényhívásokon keresztül.</p>
+    </article>
+    <article class="panel requirement-card">
+        <span class="requirement-number">10</span>
+        <h2>Külső API</h2>
+        <p>Open-Meteo geocoding és forecast végpontok, külön <code>IWeatherService</code> absztrakción keresztül.</p>
+    </article>
+</section>

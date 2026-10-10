@@ -1,0 +1,28 @@
+@page "/"
+@inject NavigationManager Navigation
+
+<PageTitle>WeatherLab</PageTitle>
+
+<section class="hero landing-hero">
+    <div>
+        <span class="eyebrow">Blazor Web App beadandó</span>
+        <h1>Időjárás-előrejelző modern Blazor technikákkal</h1>
+        <p>
+            Városkeresés, 7 napos előrejelzés, böngészős helymeghatározás,
+            kedvencek és teljes CRUD egyetlen alkalmazásban.
+        </p>
+        <button class="button primary" @onclick="OpenWeather">
+            Alkalmazás megnyitása
+        </button>
+    </div>
+
+    <div class="hero-weather" aria-hidden="true">
+        <span class="sun">☀</span>
+        <span class="cloud">☁</span>
+        <span class="degrees">24°</span>
+    </div>
+</section>
+
+@code {
+    private void OpenWeather() => Navigation.NavigateTo("/weather");
+}

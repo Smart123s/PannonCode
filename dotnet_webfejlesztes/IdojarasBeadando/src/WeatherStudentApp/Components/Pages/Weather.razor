@@ -1,0 +1,257 @@
+@page "/weather"
+@inject IWeatherService WeatherService
+@inject FavoriteCityState FavoriteState
+@inject IJSRuntime JS
+
+<PageTitle>Időjárás</PageTitle>
+
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Élő időjárási adatok</span>
+        <h1>Időjárás-előrejelző</h1>
+        <p>Keress egy városra, vagy használd a böngésző helymeghatározását.</p>
+    </div>
+</section>
+
+<CitySearchForm IsBusy="_isBusy"
+                InitialCity="@(_forecast?.CityName ?? string.Empty)"
+                OnSearch="SearchAsync"
+                OnUseLocation="UseCurrentLocationAsync" />
+
+@if (!string.IsNullOrWhiteSpace(_errorMessage))
+{
+    <div class="alert error" role="alert">@_errorMessage</div>
+}
+
+@if (_isBusy)
+{
+    <div class="loading-panel">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Időjárási adatok betöltése…</span>
+    </div>
+}
+else if (_forecast is not null)
+{
+    <section class="weather-overview">
+        <WeatherCard Title="@_forecast.CityName" Subtitle="@_forecast.Country">
+            <Header>
+                <div class="current-header">
+                    <div>
+                        <span class="weather-icon large">@WeatherIcon(_forecast.Current.WeatherCode)</span>
+                    </div>
+                    <div>
+                        <p class="muted">Aktuális időjárás</p>
+                        <h2>@_forecast.CityName</h2>
+                        <p>@WeatherDescription(_forecast.Current.WeatherCode)</p>
+                    </div>
+                    <div class="temperature-block">
+                        <strong>@_forecast.Current.Temperature.ToString("0.#")°C</strong>
+                        <span>Hőérzet: @_forecast.Current.ApparentTemperature.ToString("0.#")°C</span>
+                    </div>
+                </div>
+            </Header>
+
+            <ChildContent>
+                <div class="current-stats">
+                    <div class="stat">
+                        <span>Páratartalom</span>
+                        <strong>@_forecast.Current.RelativeHumidity.ToString("0")%</strong>
+                    </div>
+                    <div class="stat">
+                        <span>Szél</span>
+                        <strong>@_forecast.Current.WindSpeed.ToString("0.#") km/h</strong>
+                    </div>
+                    <div class="stat">
+                        <span>Frissítve</span>
+                        <strong>@_forecast.Current.Time.ToString("HH:mm")</strong>
+                    </div>
+                </div>
+            </ChildContent>
+
+            <Actions>
+                <button class="button secondary" @onclick="AddCurrentToFavoritesAsync" disabled="@IsCurrentFavorite">
+                    @(IsCurrentFavorite ? "✓ Kedvencek között" : "☆ Kedvencekhez adás")
+                </button>
+            </Actions>
+        </WeatherCard>
+    </section>
+
+    <section class="forecast-section">
+        <div class="section-title-row">
+            <div>
+                <span class="eyebrow">Előrejelzés</span>
+                <h2>Következő 7 nap</h2>
+            </div>
+            <span class="muted">@_forecast.Latitude.ToString("0.00"), @_forecast.Longitude.ToString("0.00")</span>
+        </div>
+
+        <TemplatedList Items="_forecast.Daily" CssClass="forecast-grid">
+            <ItemTemplate Context="day">
+                <WeatherCard Title="@FormatDay(day.Date)" Subtitle="@day.Date.ToString("MM.dd.")">
+                    <ChildContent>
+                        <div class="daily-card-body">
+                            <span class="weather-icon">@WeatherIcon(day.WeatherCode)</span>
+                            <p>@WeatherDescription(day.WeatherCode)</p>
+                            <div class="temp-range">
+                                <strong>@day.MaxTemperature.ToString("0")°</strong>
+                                <span>@day.MinTemperature.ToString("0")°</span>
+                            </div>
+                            <small>Csapadék esélye: @day.PrecipitationProbability.ToString("0")%</small>
+                        </div>
+                    </ChildContent>
+                </WeatherCard>
+            </ItemTemplate>
+            <EmptyTemplate>
+                <p>Nincs megjeleníthető előrejelzés.</p>
+            </EmptyTemplate>
+        </TemplatedList>
+    </section>
+}
+else
+{
+    <section class="empty-state panel">
+        <span class="empty-icon">🌦️</span>
+        <h2>Kezdj egy város keresésével</h2>
+        <p>Például: Veszprém, Budapest, Vienna vagy London.</p>
+    </section>
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "city")]
+    public string? CityFromQuery { get; set; }
+
+    private WeatherForecastResult? _forecast;
+    private bool _isBusy;
+    private string? _errorMessage;
+
+    private bool IsCurrentFavorite => _forecast is not null && FavoriteState.Items.Any(x =>
+        string.Equals(x.Name, _forecast.CityName, StringComparison.OrdinalIgnoreCase));
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        await FavoriteState.InitializeAsync();
+        await SearchAsync(string.IsNullOrWhiteSpace(CityFromQuery) ? "Veszprém" : CityFromQuery);
+        StateHasChanged();
+    }
+
+    private async Task SearchAsync(string city)
+    {
+        _errorMessage = null;
+        _isBusy = true;
+        StateHasChanged();
+
+        try
+        {
+            _forecast = await WeatherService.GetForecastAsync(city);
+            if (_forecast is null)
+            {
+                _errorMessage = $"Nem található ilyen település: {city}.";
+            }
+        }
+        catch (HttpRequestException)
+        {
+            _errorMessage = "Az időjárási szolgáltatás jelenleg nem érhető el. Ellenőrizd az internetkapcsolatot.";
+        }
+        catch (TaskCanceledException)
+        {
+            _errorMessage = "Az időjárási szolgáltatás túl lassan válaszolt. Próbáld újra később.";
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private async Task UseCurrentLocationAsync()
+    {
+        _errorMessage = null;
+        _isBusy = true;
+        StateHasChanged();
+
+        try
+        {
+            var position = await JS.InvokeAsync<BrowserPosition>("weatherInterop.getCurrentPosition");
+            _forecast = await WeatherService.GetForecastAsync(
+                position.Latitude,
+                position.Longitude,
+                "Saját helyzet");
+        }
+        catch (JSException)
+        {
+            _errorMessage = "A helymeghatározás nem sikerült. Engedélyezd a böngészőben a helyadatok használatát.";
+        }
+        catch (HttpRequestException)
+        {
+            _errorMessage = "Az időjárási szolgáltatás jelenleg nem érhető el.";
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private async Task AddCurrentToFavoritesAsync()
+    {
+        if (_forecast is null || IsCurrentFavorite)
+        {
+            return;
+        }
+
+        await FavoriteState.CreateAsync(new FavoriteCity
+        {
+            Name = _forecast.CityName,
+            Country = _forecast.Country,
+            Latitude = _forecast.Latitude,
+            Longitude = _forecast.Longitude,
+            Nickname = _forecast.CityName,
+            Notes = ""
+        });
+
+        StateHasChanged();
+    }
+
+    private static string FormatDay(DateOnly date)
+    {
+        var culture = CultureInfo.GetCultureInfo("hu-HU");
+        var text = date.ToDateTime(TimeOnly.MinValue).ToString("dddd", culture);
+        return char.ToUpper(text[0], culture) + text[1..];
+    }
+
+    private static string WeatherIcon(int code) => code switch
+    {
+        0 => "☀️",
+        1 or 2 => "🌤️",
+        3 => "☁️",
+        45 or 48 => "🌫️",
+        51 or 53 or 55 or 56 or 57 => "🌦️",
+        61 or 63 or 65 or 66 or 67 => "🌧️",
+        71 or 73 or 75 or 77 or 85 or 86 => "🌨️",
+        80 or 81 or 82 => "🌦️",
+        95 or 96 or 99 => "⛈️",
+        _ => "🌡️"
+    };
+
+    private static string WeatherDescription(int code) => code switch
+    {
+        0 => "Tiszta égbolt",
+        1 => "Többnyire derült",
+        2 => "Részben felhős",
+        3 => "Borult",
+        45 or 48 => "Ködös",
+        51 or 53 or 55 => "Szitálás",
+        56 or 57 => "Ónos szitálás",
+        61 or 63 or 65 => "Eső",
+        66 or 67 => "Ónos eső",
+        71 or 73 or 75 or 77 => "Havazás",
+        80 or 81 or 82 => "Zápor",
+        85 or 86 => "Hózápor",
+        95 => "Zivatar",
+        96 or 99 => "Zivatar jégesővel",
+        _ => "Változékony idő"
+    };
+}
